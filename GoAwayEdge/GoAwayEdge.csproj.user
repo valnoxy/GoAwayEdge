@@ -1,0 +1,46 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="Current" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <_LastSelectedProfileId>C:\Users\jonas\source\repos\GoAwayEdge\GoAwayEdge\Properties\PublishProfiles\FolderProfile.pubxml</_LastSelectedProfileId>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Update="App.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Pages\Installation.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Pages\InstallationSuccess.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Installer.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Pages\License.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Pages\Settings.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="App.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Pages\Installation.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Pages\InstallationSuccess.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Installer.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Pages\License.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Pages\Settings.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+  </ItemGroup>
+</Project>

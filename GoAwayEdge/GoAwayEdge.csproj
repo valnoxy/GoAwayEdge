@@ -1,0 +1,32 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<OutputType>WinExe</OutputType>
+		<TargetFramework>net7.0-windows</TargetFramework>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+		<PublishSingleFile>true</PublishSingleFile>
+		<SelfContained>false</SelfContained>
+		<RuntimeIdentifier>win-x64</RuntimeIdentifier>
+		<PublishReadyToRun>true</PublishReadyToRun>
+		<UseWPF>true</UseWPF>
+		<AssemblyName>GoAwayEdge</AssemblyName>
+		<Company>Exploitox</Company>
+		<Authors>valnoxy</Authors>
+		<Version>1.0.0.5</Version>
+		<Copyright>Copyright (c) 2018 - 2022 Exploitox. All rights reserved.</Copyright>
+		<PackageProjectUrl>https://github.com/valnoxy/GoAwayEdge</PackageProjectUrl>
+		<RepositoryUrl>https://github.com/valnoxy/GoAwayEdge</RepositoryUrl>
+		<StartupObject>GoAwayEdge.App</StartupObject>
+		<ApplicationIcon>GoAwayEdge.ico</ApplicationIcon>
+	</PropertyGroup>
+
+	<ItemGroup>
+	  <Content Include="GoAwayEdge.ico" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <PackageReference Include="WPF-UI" Version="2.0.3" />
+	</ItemGroup>
+	
+</Project>
