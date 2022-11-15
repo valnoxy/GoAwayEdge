@@ -55,7 +55,7 @@
                     </Grid>
                 </ui:CardControl.Header>
             </ui:CardControl>
-            <ui:InfoBar Margin="0,10,0,0" Title="Note" Message="Currently only search terms will be redirected to your selected search engine." Severity="Informational" IsClosable="false" IsOpen="true"/>
+            <!--<ui:InfoBar Margin="0,10,0,0" Title="Note" Message="Currently only search terms will be redirected to your selected search engine." Severity="Informational" IsClosable="false" IsOpen="true"/>-->
         </StackPanel>
 
         <StackPanel Margin="0,10,0,0">
