@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Go away Edge - IFEO Method
  * by valnoxy (valnoxy.dev)
  * ----------------------------------
@@ -13,6 +13,8 @@
 using GoAwayEdge.Common;
 using System.Diagnostics;
 using System.Security.Principal;
+using System.Text;
+using System.Web;
 using System.Windows;
 
 namespace GoAwayEdge
@@ -161,8 +163,25 @@ namespace GoAwayEdge
 
         private static string DotSlash(string url)
         {
-            url = url.Replace("%3A", ":");
-            url = url.Replace("%2F", "/");
+            //url = url.Replace("%3A", ":");
+            //url = url.Replace("%2F", "/");
+
+            string newUrl;
+            while ((newUrl = Uri.UnescapeDataString(url)) != url)
+                url = newUrl;
+
+            try // Decode base64 string from url
+            {
+                Uri uri = new Uri(url);
+                var query = HttpUtility.ParseQueryString(uri.Query).Get("url");
+                var decoded = Encoding.UTF8.GetString(Convert.FromBase64String(query));
+                if (decoded != null)
+                {
+                    return decoded;
+                }
+            }
+            catch {;}
+
             return url;
         }
         

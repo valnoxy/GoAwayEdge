@@ -4,7 +4,7 @@
 <p align="center">
     Redirect all Edge calls to your favorite browser! 
     <br />
-    <strong>Version: </strong>1.0.0.5
+    <strong>Version: </strong>1.0.1
     <br />
     <br />
     <a href="https://github.com/valnoxy/GoAwayEdge/releases"><strong>Download now »</strong></a>
@@ -18,8 +18,12 @@
 
 ![-----------------------------------------------------](https://dl.exploitox.de/t440p-oc/rainbow.png)
 
+![Download counter](https://img.shields.io/github/downloads/valnoxy/GoAwayEdge/total.svg)
+![License](https://img.shields.io/github/license/valnoxy/GoAwayEdge)
+![version](https://img.shields.io/github/v/release/valnoxy/GoAwayEdge)
+
 ## 🔔 Information
-Don't like MS Edge? Me neither. Redirect all Edge calls (like Windows Search) to your favorite browser! 
+Don't like MS Edge? Me neither. Redirect all Edge calls (like Windows Search and Widgets) to your favorite browser! 
 
 ## 🔧 Usage
 1. Download the latest version from [GitHub](https://github.com/valnoxy/GoAwayEdge/releases).

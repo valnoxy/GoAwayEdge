@@ -1,7 +1,4 @@
 ﻿using System.Windows;
-using System.Windows.Controls;
-using GoAwayEdge.Pages;
-using Wpf.Ui;
 
 namespace GoAwayEdge
 {
@@ -13,7 +10,6 @@ namespace GoAwayEdge
         internal static Installer? ContentWindow;
         private static Pages.License _licensePage;
         private static Pages.Settings _settingPage;
-        internal Pages.InstallationSuccess _installationSuccessPage;
         
         public Installer()
         {
@@ -48,7 +44,6 @@ namespace GoAwayEdge
                     _settingPage = new Pages.Settings();
                     FrameWindow.Content = _settingPage;
                     break;
-
                 default:
                     break;
             }
