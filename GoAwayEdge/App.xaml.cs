@@ -1,4 +1,4 @@
-﻿/*
+/*
  * Go away Edge - IFEO Method
  * by valnoxy (valnoxy.dev)
  * ----------------------------------
@@ -27,7 +27,7 @@ namespace GoAwayEdge
 
         public void Application_Startup(object sender, StartupEventArgs e)
         {
-            if (e.Args.Length == 0)
+            if (e.Args.Length == 0) // Opens Installer
             {
                 if (IsAdministrator() == false)
                 {
@@ -45,11 +45,16 @@ namespace GoAwayEdge
                 installer.ShowDialog();
                 Environment.Exit(0);
             }
-
+            
             string[] args = e.Args;
             Output.WriteLine("Please go away Edge!");
             Output.WriteLine("Hooked into process via IFEO successfully.");
             var argumentJoin = string.Join(",", args);
+
+#if DEBUG
+            Clipboard.SetText(argumentJoin);
+            MessageBox.Show("The following args was redirected (copied to clipboard):\n\n" + argumentJoin, "Go away Edge", MessageBoxButton.OK, MessageBoxImage.Information);
+#endif
             Output.WriteLine("Command line args:\n\n" + argumentJoin + "\n", ConsoleColor.Gray);
 
             // Filter command line args
@@ -75,6 +80,17 @@ namespace GoAwayEdge
                         _ => SearchEngine.Google // Fallback search engine
                     };
                 }
+
+                if (e.Args.Length == 2 && arg.Contains("msedge.exe")) // Opens Edge normally
+                {
+                    Process p = new Process();
+                    p.StartInfo.FileName = "msedge_ifeo.exe";
+                    p.StartInfo.Arguments = "";
+                    p.StartInfo.UseShellExecute = true;
+                    p.StartInfo.RedirectStandardOutput = false;
+                    p.Start();
+                    Environment.Exit(0);
+                }
             }
 
             // Open URL in default browser
@@ -90,7 +106,7 @@ namespace GoAwayEdge
                 p.StartInfo.RedirectStandardOutput = false;
                 p.Start();
             }
-
+            
             Environment.Exit(0);
         }
 

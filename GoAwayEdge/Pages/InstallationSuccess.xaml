@@ -13,7 +13,7 @@
                HorizontalAlignment="Center" 
                FontSize="30" 
                Foreground="{DynamicResource TextFillColorPrimaryBrush}"/>
-        <Label Content="Simply open Edge or this Installer, if you want to customize GoAwayEdge again." 
+        <Label Content="Simply open this Installer, if you want to customize GoAwayEdge again." 
                Foreground="{DynamicResource TextFillColorPrimaryBrush}"
                Margin="0,15,0,0"
                FontSize="14"

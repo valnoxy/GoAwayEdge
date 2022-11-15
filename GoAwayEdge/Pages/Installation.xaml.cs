@@ -1,20 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using GoAwayEdge.Common;
 using Microsoft.Win32;
 using Path = System.IO.Path;
@@ -122,6 +110,18 @@ namespace GoAwayEdge.Pages
                 return;
             }
 
+            // Create non-IFEO injected copy of msedge.exe
+            try
+            {
+                File.Copy(msEdge, Path.Combine(Path.GetDirectoryName(msEdge),"msedge_ifeo.exe"), true);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Installation failed!\n{ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                Environment.Exit(1);
+                return;
+            }
+
             // Switch FrameWindow content to InstallationSuccess
             worker.ReportProgress(100, "");
         }
@@ -167,7 +167,6 @@ namespace GoAwayEdge.Pages
             // Switch FrameWindow content to InstallationSuccess
             worker.ReportProgress(100, "");
         }
-
 
         private void applyBackgroundWorker_ProgressChanged(object? sender, ProgressChangedEventArgs e)
         {
