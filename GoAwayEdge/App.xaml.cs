@@ -35,10 +35,15 @@ namespace GoAwayEdge
                 {
                     // Restart program and run as admin
                     var exeName = System.Diagnostics.Process.GetCurrentProcess().MainModule?.FileName;
-                    ProcessStartInfo startInfo = new ProcessStartInfo(exeName);
-                    startInfo.Verb = "runas";
-                    startInfo.UseShellExecute = true;
-                    System.Diagnostics.Process.Start(startInfo);
+                    if (exeName != null)
+                    {
+                        var startInfo = new ProcessStartInfo(exeName)
+                        {
+                            Verb = "runas",
+                            UseShellExecute = true
+                        };
+                        System.Diagnostics.Process.Start(startInfo);
+                    }
                     Application.Current.Shutdown();
                     return;
                 }
@@ -52,16 +57,85 @@ namespace GoAwayEdge
             Output.WriteLine("Please go away Edge!");
             Output.WriteLine("Hooked into process via IFEO successfully.");
             var argumentJoin = string.Join(",", args);
-
+            
 #if DEBUG
             Clipboard.SetText(argumentJoin);
-            MessageBox.Show("The following args was redirected (copied to clipboard):\n\n" + argumentJoin, "Go away Edge", MessageBoxButton.OK, MessageBoxImage.Information);
+            MessageBox.Show("The following args was redirected (copied to clipboard):\n\n" + argumentJoin, "GoAwayEdge", MessageBoxButton.OK, MessageBoxImage.Information);
 #endif
             Output.WriteLine("Command line args:\n\n" + argumentJoin + "\n", ConsoleColor.Gray);
 
             // Filter command line args
             foreach (var arg in args)
             {
+                if (arg.Contains("-ToastActivated"))
+                {
+                    // Clicked on Toast notification, ignore it.
+                    Environment.Exit(0);
+                }
+                if (arg.Contains("--update"))
+                {
+                    var statusEnv = Common.Updater.InitEnv();
+                    if (statusEnv == false) Environment.Exit(1);
+
+                    // Validate IFEO bínary
+                    var binaryStatus = Common.Updater.ValidateIfeoBinary();
+                    switch (binaryStatus)
+                    {
+                        case 0: // validated
+                            break;
+                        case 1: // failed validation
+                            if (IsAdministrator() == false)
+                            {
+                                var result = MessageBox.Show("The IFEO exclusion file needs to be updated. Update now?", "GoAwayEdge", MessageBoxButton.YesNo, MessageBoxImage.Information);
+                                if (result == MessageBoxResult.Yes)
+                                {
+                                    // Restart program and run as admin
+                                    var exeName = System.Diagnostics.Process.GetCurrentProcess().MainModule?.FileName;
+                                    if (exeName != null)
+                                    {
+                                        var startInfo = new ProcessStartInfo(exeName)
+                                        {
+                                            Verb = "runas",
+                                            UseShellExecute = true,
+                                            Arguments = "--update"
+                                        };
+                                        System.Diagnostics.Process.Start(startInfo);
+                                    }
+                                    Application.Current.Shutdown();
+                                    return;
+                                }
+                                Environment.Exit(0);
+                            }
+                            Updater.ModifyIfeoBinary(ModifyAction.Update);
+                            break;
+                        case 2: // missing
+                            if (IsAdministrator() == false)
+                            {
+                                var result = MessageBox.Show("The IFEO exclusion file is missing and need to be copied. Copy now?", "GoAwayEdge", MessageBoxButton.YesNo, MessageBoxImage.Information);
+                                if (result == MessageBoxResult.Yes)
+                                {
+                                    // Restart program and run as admin
+                                    var exeName = System.Diagnostics.Process.GetCurrentProcess().MainModule?.FileName;
+                                    if (exeName != null)
+                                    {
+                                        var startInfo = new ProcessStartInfo(exeName)
+                                        {
+                                            Verb = "runas",
+                                            UseShellExecute = true,
+                                            Arguments = "--update"
+                                        };
+                                        System.Diagnostics.Process.Start(startInfo);
+                                    }
+                                    Application.Current.Shutdown();
+                                    return;
+                                }
+                                Environment.Exit(0);
+                            }
+                            Updater.ModifyIfeoBinary(ModifyAction.Create);
+                            break;
+                    }
+                    Environment.Exit(0);
+                }
                 if (arg.Contains("microsoft-edge:"))
                 {
                     _url = arg;
@@ -83,16 +157,15 @@ namespace GoAwayEdge
                     };
                 }
 
-                if (e.Args.Length == 2 && arg.Contains("msedge.exe")) // Opens Edge normally
-                {
-                    Process p = new Process();
-                    p.StartInfo.FileName = "msedge_ifeo.exe";
-                    p.StartInfo.Arguments = "";
-                    p.StartInfo.UseShellExecute = true;
-                    p.StartInfo.RedirectStandardOutput = false;
-                    p.Start();
-                    Environment.Exit(0);
-                }
+                if (e.Args.Length != 2 || !arg.Contains("msedge.exe")) continue; // Opens Edge normally
+                
+                var p = new Process();
+                p.StartInfo.FileName = "msedge_ifeo.exe";
+                p.StartInfo.Arguments = "";
+                p.StartInfo.UseShellExecute = true;
+                p.StartInfo.RedirectStandardOutput = false;
+                p.Start();
+                Environment.Exit(0);
             }
 
             // Open URL in default browser
@@ -101,7 +174,7 @@ namespace GoAwayEdge
                 var parsed = ParsingUrl(_url);
                 Output.WriteLine("Opening URL in default browser:\n\n" + parsed + "\n", ConsoleColor.Gray);
 
-                Process p = new Process();
+                var p = new Process();
                 p.StartInfo.FileName = parsed;
                 p.StartInfo.Arguments = "";
                 p.StartInfo.UseShellExecute = true;
@@ -172,7 +245,7 @@ namespace GoAwayEdge
 
             try // Decode base64 string from url
             {
-                Uri uri = new Uri(url);
+                var uri = new Uri(url);
                 var query = HttpUtility.ParseQueryString(uri.Query).Get("url");
                 var decoded = Encoding.UTF8.GetString(Convert.FromBase64String(query));
                 if (decoded != null)
@@ -187,8 +260,8 @@ namespace GoAwayEdge
         
         private static bool IsAdministrator()
         {
-            WindowsIdentity identity = WindowsIdentity.GetCurrent();
-            WindowsPrincipal principal = new WindowsPrincipal(identity);
+            var identity = WindowsIdentity.GetCurrent();
+            var principal = new WindowsPrincipal(identity);
             return principal.IsInRole(WindowsBuiltInRole.Administrator);
         }
     }

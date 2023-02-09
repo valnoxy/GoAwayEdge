@@ -5,6 +5,7 @@ using System.Windows;
 using System.Windows.Controls;
 using GoAwayEdge.Common;
 using Microsoft.Win32;
+using Microsoft.Win32.TaskScheduler;
 using Path = System.IO.Path;
 
 namespace GoAwayEdge.Pages
@@ -14,14 +15,12 @@ namespace GoAwayEdge.Pages
     /// </summary>
     public partial class Installation : UserControl
     {
-        private BackgroundWorker applyBackgroundWorker;
-
         public Installation()
         {
             InitializeComponent();
 
             // Background worker for deployment
-            applyBackgroundWorker = new BackgroundWorker();
+            var applyBackgroundWorker = new BackgroundWorker();
             applyBackgroundWorker.WorkerReportsProgress = true;
             applyBackgroundWorker.WorkerSupportsCancellation = true;
             if (Common.Configuration.Uninstall)
@@ -32,27 +31,22 @@ namespace GoAwayEdge.Pages
             {
                 applyBackgroundWorker.DoWork += Install;
             }
-            applyBackgroundWorker.ProgressChanged += applyBackgroundWorker_ProgressChanged;
+            applyBackgroundWorker.ProgressChanged += ApplyBackgroundWorker_ProgressChanged;
             applyBackgroundWorker.RunWorkerAsync();
         }
 
-        private void Install(object sender, DoWorkEventArgs e)
+        private static void Install(object? sender, DoWorkEventArgs e)
         {
-            BackgroundWorker worker = sender as BackgroundWorker;
+            var worker = sender as BackgroundWorker;
 
             // Create installation directory
-            var InstDir = Path.Combine(
+            var instDir = Path.Combine(
                 Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles),
                 "valnoxy",
                 "GoAwayEdge");
-            Directory.CreateDirectory(InstDir);
+            Directory.CreateDirectory(instDir);
 
-            bool status = false;
-
-            if (Path.GetDirectoryName(System.Diagnostics.Process.GetCurrentProcess().MainModule.FileName) == InstDir)
-                status = CopyItself(Path.Combine(InstDir, "GoAwayEdge.exe"), false);
-            else status = CopyItself(Path.Combine(InstDir, "GoAwayEdge.exe"), true);
-            
+            var status = CopyItself(Path.Combine(instDir, "GoAwayEdge.exe"), Path.GetDirectoryName(Process.GetCurrentProcess().MainModule?.FileName) != instDir);
             if (status == false)
             {
                 MessageBox.Show("Installation failed! Please try again.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
@@ -61,8 +55,8 @@ namespace GoAwayEdge.Pages
             }
 
             // Apply IFEO registry key
-            string msEdge = "";
-            string engine = "";
+            var msEdge = "";
+            var engine = "";
             msEdge = Common.Configuration.Channel switch
             {
                 EdgeChannel.Stable => Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86),
@@ -92,16 +86,16 @@ namespace GoAwayEdge.Pages
             {
                 var key = Microsoft.Win32.Registry.LocalMachine.OpenSubKey(
                     @"SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options", true);
-                key.CreateSubKey("msedge.exe");
-                key = key.OpenSubKey("msedge.exe", true);
-                key.SetValue("UseFilter", 1, RegistryValueKind.DWord);
+                key?.CreateSubKey("msedge.exe");
+                key = key?.OpenSubKey("msedge.exe", true);
+                key?.SetValue("UseFilter", 1, RegistryValueKind.DWord);
 
-                key.CreateSubKey("0");
-                key = key.OpenSubKey("0", true);
-                key.SetValue("Debugger", Path.Combine(InstDir, $"GoAwayEdge.exe -se{engine}"));
-                key.SetValue("FilterFullPath", msEdge);
+                key?.CreateSubKey("0");
+                key = key?.OpenSubKey("0", true);
+                key?.SetValue("Debugger", Path.Combine(instDir, $"GoAwayEdge.exe -se{engine}"));
+                key?.SetValue("FilterFullPath", msEdge);
 
-                key.Close();
+                key?.Close();
             }
             catch (Exception ex)
             {
@@ -122,25 +116,41 @@ namespace GoAwayEdge.Pages
                 return;
             }
 
+            // Create Task Schedule for IFEO update 
+            try
+            {
+                var ts = new TaskService();
+                var td = ts.NewTask();
+                td.RegistrationInfo.Description = "Checks validation between Edge and IFEO binary.";
+                td.Triggers.Add(new LogonTrigger { Delay = TimeSpan.FromMinutes(5) });
+                td.Actions.Add(new ExecAction(Path.Combine(instDir, "GoAwayEdge.exe"), "--update", instDir));
+                ts.RootFolder.RegisterTaskDefinition(@"valnoxy\GoAwayEdge\GoAwayEdge IFEO Validation", td);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Installation failed!\n{ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                Environment.Exit(1);
+                return;
+            }
+
+
             // Switch FrameWindow content to InstallationSuccess
-            worker.ReportProgress(100, "");
+            worker?.ReportProgress(100, "");
         }
 
-        private void Uninstall(object sender, DoWorkEventArgs e)
+        private static void Uninstall(object? sender, DoWorkEventArgs e)
         {
-            BackgroundWorker worker = sender as BackgroundWorker;
+            var worker = sender as BackgroundWorker;
 
             // Remove installation directory
-            var InstDir = Path.Combine(
+            var instDir = Path.Combine(
                 Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles),
                 "valnoxy",
                 "GoAwayEdge");
 
-            bool status = false;
-
             try
             {
-                var dir = new DirectoryInfo(InstDir);
+                var dir = new DirectoryInfo(instDir);
                 dir.Delete(true);
             }
             catch (Exception ex) 
@@ -154,8 +164,8 @@ namespace GoAwayEdge.Pages
             {
                 var key = Microsoft.Win32.Registry.LocalMachine.OpenSubKey(
                     @"SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options", true);
-                key.DeleteSubKeyTree("msedge.exe");
-                key.Close();
+                key?.DeleteSubKeyTree("msedge.exe");
+                key?.Close();
             }
             catch (Exception ex)
             {
@@ -164,22 +174,32 @@ namespace GoAwayEdge.Pages
                 return;
             }
 
+            try
+            {
+                var ts = new TaskService();
+                ts.RootFolder.DeleteTask("valnoxy\\GoAwayEdge\\GoAwayEdge IFEO Validation");
+            }
+            catch
+            {
+                // ignore
+            }
+
             // Switch FrameWindow content to InstallationSuccess
-            worker.ReportProgress(100, "");
+            worker?.ReportProgress(100, "");
         }
 
-        private void applyBackgroundWorker_ProgressChanged(object? sender, ProgressChangedEventArgs e)
+        private static void ApplyBackgroundWorker_ProgressChanged(object? sender, ProgressChangedEventArgs e)
         {
             if (e.ProgressPercentage == 100)
             {
-                Installer.ContentWindow.FrameWindow.NavigationService.Navigate(new InstallationSuccess());
+                Installer.ContentWindow?.FrameWindow.NavigationService.Navigate(new InstallationSuccess());
             }
         }
 
         public static bool CopyItself(string pathTo, bool overwrite = false)
         {
-            string fileName = String.Concat(Process.GetCurrentProcess().ProcessName, ".exe");
-            string filePath = Path.Combine(Environment.CurrentDirectory, fileName);
+            var fileName = string.Concat(Process.GetCurrentProcess().ProcessName, ".exe");
+            var filePath = Path.Combine(Environment.CurrentDirectory, fileName);
             try
             {
                 if (overwrite) System.IO.File.Copy(filePath, pathTo, true);
