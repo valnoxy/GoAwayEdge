@@ -4,7 +4,7 @@
 <p align="center">
     Redirect all Edge calls to your favorite browser! 
     <br />
-    <strong>Version: </strong>1.0.2
+    <strong>Version: </strong>1.1.0
     <br />
     <br />
     <a href="https://github.com/valnoxy/GoAwayEdge/releases"><strong>Download now »</strong></a>
