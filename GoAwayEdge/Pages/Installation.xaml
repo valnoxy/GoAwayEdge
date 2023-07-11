@@ -9,11 +9,11 @@
              d:DesignHeight="450" d:DesignWidth="800">
     <StackPanel>
         <ui:SymbolIcon Symbol="Apps24" FontSize="80" />
-        <Label Content="Installation in progress ..." 
+        <Label Content="{StaticResource SetupProgressTitle}" 
                HorizontalAlignment="Center" 
                FontSize="30" 
                Foreground="{DynamicResource TextFillColorPrimaryBrush}"/>
-        <Label Content="Please wait until the installation completes." 
+        <Label Content="{StaticResource SetupProgressDescription}" 
                Foreground="{DynamicResource TextFillColorPrimaryBrush}"
                Margin="0,15,0,0"
                FontSize="14"

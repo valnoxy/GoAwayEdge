@@ -1,18 +1,17 @@
 ﻿using System.Windows;
-using System.Windows.Controls;
 
 namespace GoAwayEdge.Pages
 {
     /// <summary>
     /// Interaktionslogik für License.xaml
     /// </summary>
-    public partial class License : UserControl
+    public partial class License
     {
         public License()
         {
             InitializeComponent();
 
-            string license = @"MIT License
+            const string license = @"MIT License
 
 Copyright (c) 2023 valnoxy
 
@@ -40,11 +39,11 @@ SOFTWARE.
 
         private void AcceptLicenseRb_Click(object sender, RoutedEventArgs e)
         {
-            Installer.ContentWindow.NextBtn.IsEnabled = true;
+            Installer.ContentWindow!.NextBtn.IsEnabled = true;
         }
         private void DeclineLicenseRb_Click(object sender, RoutedEventArgs e)
         {
-            Installer.ContentWindow.NextBtn.IsEnabled = false;
+            Installer.ContentWindow!.NextBtn.IsEnabled = false;
         }
     }
 }

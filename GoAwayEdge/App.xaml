@@ -9,6 +9,8 @@
             <ResourceDictionary.MergedDictionaries>
                 <ui:ThemesDictionary Theme="Dark" />
                 <ui:ControlsDictionary />
+                <ResourceDictionary Source="/GoAwayEdge;component/Localization/ResourceDictionary.xaml"/>
+                <ResourceDictionary Source="/GoAwayEdge;component/Localization/ResourceDictionary.de-DE.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>

@@ -56,7 +56,6 @@ namespace GoAwayEdge.Pages
 
             // Apply IFEO registry key
             var msEdge = "";
-            var engine = "";
             msEdge = Common.Configuration.Channel switch
             {
                 EdgeChannel.Stable => Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86),
@@ -70,21 +69,9 @@ namespace GoAwayEdge.Pages
                 _ => msEdge
             };
 
-            engine = Common.Configuration.Search switch
-            {
-                SearchEngine.Ask => "Ask",
-                SearchEngine.Bing => "Bing",
-                SearchEngine.DuckDuckGo => "DuckDuckGo",
-                SearchEngine.Ecosia => "Ecisua",
-                SearchEngine.Google => "Google",
-                SearchEngine.Yahoo => "Yahoo",
-                SearchEngine.Yandex => "Yandex",
-                _ => engine
-            };
-
             try
             {
-                var key = Microsoft.Win32.Registry.LocalMachine.OpenSubKey(
+                var key = Registry.LocalMachine.OpenSubKey(
                     @"SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options", true);
                 key?.CreateSubKey("msedge.exe");
                 key = key?.OpenSubKey("msedge.exe", true);
@@ -92,8 +79,24 @@ namespace GoAwayEdge.Pages
 
                 key?.CreateSubKey("0");
                 key = key?.OpenSubKey("0", true);
-                key?.SetValue("Debugger", Path.Combine(instDir, $"GoAwayEdge.exe -se{engine}"));
+                key?.SetValue("Debugger", Path.Combine(instDir, $"GoAwayEdge.exe -se{Configuration.Search}"));
                 key?.SetValue("FilterFullPath", msEdge);
+
+                if (Configuration.Search == SearchEngine.Custom)
+                {
+                    key?.SetValue("CustomQueryUrl", Configuration.CustomQueryUrl);
+                }
+                else
+                {
+                    try
+                    {
+                        key?.DeleteValue("CustomQueryUrl");
+                    }
+                    catch
+                    {
+                        // ignore: never used custom search engine
+                    }
+                }
 
                 key?.Close();
             }
@@ -199,7 +202,7 @@ namespace GoAwayEdge.Pages
         public static bool CopyItself(string pathTo, bool overwrite = false)
         {
             var fileName = string.Concat(Process.GetCurrentProcess().ProcessName, ".exe");
-            var filePath = Path.Combine(Environment.CurrentDirectory, fileName);
+            var filePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, fileName);
             try
             {
                 if (overwrite) System.IO.File.Copy(filePath, pathTo, true);
