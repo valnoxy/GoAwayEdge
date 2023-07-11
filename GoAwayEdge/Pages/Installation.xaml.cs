@@ -199,7 +199,7 @@ namespace GoAwayEdge.Pages
         public static bool CopyItself(string pathTo, bool overwrite = false)
         {
             var fileName = string.Concat(Process.GetCurrentProcess().ProcessName, ".exe");
-            var filePath = Path.Combine(Environment.CurrentDirectory, fileName);
+            var filePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, fileName);
             try
             {
                 if (overwrite) System.IO.File.Copy(filePath, pathTo, true);

@@ -22,7 +22,7 @@ namespace GoAwayEdge
     /// <summary>
     /// Interaktionslogik für App.xaml
     /// </summary>
-    public partial class App : Application
+    public partial class App
     {
         private static string? _url;
         private static SearchEngine _engine = SearchEngine.Google; // Fallback
@@ -34,7 +34,7 @@ namespace GoAwayEdge
                 if (IsAdministrator() == false)
                 {
                     // Restart program and run as admin
-                    var exeName = System.Diagnostics.Process.GetCurrentProcess().MainModule?.FileName;
+                    var exeName = Process.GetCurrentProcess().MainModule?.FileName;
                     if (exeName != null)
                     {
                         var startInfo = new ProcessStartInfo(exeName)
@@ -42,7 +42,7 @@ namespace GoAwayEdge
                             Verb = "runas",
                             UseShellExecute = true
                         };
-                        System.Diagnostics.Process.Start(startInfo);
+                        Process.Start(startInfo);
                     }
                     Application.Current.Shutdown();
                     return;
@@ -60,7 +60,7 @@ namespace GoAwayEdge
             
 #if DEBUG
             Clipboard.SetText(argumentJoin);
-            MessageBox.Show("The following args was redirected (copied to clipboard):\n\n" + argumentJoin, "GoAwayEdge", MessageBoxButton.OK, MessageBoxImage.Information);
+            MessageBox.Show("The following args are redirected (copied to the clipboard):\n\n" + argumentJoin, "GoAwayEdge", MessageBoxButton.OK, MessageBoxImage.Information);
 #endif
             Output.WriteLine("Command line args:\n\n" + argumentJoin + "\n", ConsoleColor.Gray);
 
@@ -74,11 +74,11 @@ namespace GoAwayEdge
                 }
                 if (arg.Contains("--update"))
                 {
-                    var statusEnv = Common.Updater.InitEnv();
+                    var statusEnv = Updater.InitEnv();
                     if (statusEnv == false) Environment.Exit(1);
 
                     // Validate IFEO bínary
-                    var binaryStatus = Common.Updater.ValidateIfeoBinary();
+                    var binaryStatus = Updater.ValidateIfeoBinary();
                     switch (binaryStatus)
                     {
                         case 0: // validated
@@ -90,7 +90,7 @@ namespace GoAwayEdge
                                 if (result == MessageBoxResult.Yes)
                                 {
                                     // Restart program and run as admin
-                                    var exeName = System.Diagnostics.Process.GetCurrentProcess().MainModule?.FileName;
+                                    var exeName = Process.GetCurrentProcess().MainModule?.FileName;
                                     if (exeName != null)
                                     {
                                         var startInfo = new ProcessStartInfo(exeName)
@@ -99,7 +99,7 @@ namespace GoAwayEdge
                                             UseShellExecute = true,
                                             Arguments = "--update"
                                         };
-                                        System.Diagnostics.Process.Start(startInfo);
+                                        Process.Start(startInfo);
                                     }
                                     Application.Current.Shutdown();
                                     return;
@@ -115,7 +115,7 @@ namespace GoAwayEdge
                                 if (result == MessageBoxResult.Yes)
                                 {
                                     // Restart program and run as admin
-                                    var exeName = System.Diagnostics.Process.GetCurrentProcess().MainModule?.FileName;
+                                    var exeName = Process.GetCurrentProcess().MainModule?.FileName;
                                     if (exeName != null)
                                     {
                                         var startInfo = new ProcessStartInfo(exeName)
@@ -124,7 +124,7 @@ namespace GoAwayEdge
                                             UseShellExecute = true,
                                             Arguments = "--update"
                                         };
-                                        System.Diagnostics.Process.Start(startInfo);
+                                        Process.Start(startInfo);
                                     }
                                     Application.Current.Shutdown();
                                     return;
@@ -171,7 +171,7 @@ namespace GoAwayEdge
             // Open URL in default browser
             if (_url != null)
             {
-                var parsed = ParsingUrl(_url);
+                var parsed = ParseUrl(_url);
                 Output.WriteLine("Opening URL in default browser:\n\n" + parsed + "\n", ConsoleColor.Gray);
 
                 var p = new Process();
@@ -185,7 +185,7 @@ namespace GoAwayEdge
             Environment.Exit(0);
         }
 
-        private static string ParsingUrl(string encodedUrl)
+        private static string ParseUrl(string encodedUrl)
         {
             // Remove URI handler with url argument prefix
             encodedUrl = encodedUrl[encodedUrl.IndexOf("http", StringComparison.Ordinal)..];
@@ -207,7 +207,7 @@ namespace GoAwayEdge
             // Replace Search Engine
             encodedUrl = encodedUrl.Replace("https://www.bing.com/search?q=", DefineEngine(_engine));
 
-            Uri uri = new(encodedUrl.ToString());
+            var uri = new Uri(encodedUrl);
             return uri.ToString();
         }
 
@@ -236,9 +236,6 @@ namespace GoAwayEdge
 
         private static string DotSlash(string url)
         {
-            //url = url.Replace("%3A", ":");
-            //url = url.Replace("%2F", "/");
-
             string newUrl;
             while ((newUrl = Uri.UnescapeDataString(url)) != url)
                 url = newUrl;
@@ -247,13 +244,16 @@ namespace GoAwayEdge
             {
                 var uri = new Uri(url);
                 var query = HttpUtility.ParseQueryString(uri.Query).Get("url");
-                var decoded = Encoding.UTF8.GetString(Convert.FromBase64String(query));
-                if (decoded != null)
+                if (query != null)
                 {
+                    var decoded = Encoding.UTF8.GetString(Convert.FromBase64String(query));
                     return decoded;
                 }
             }
-            catch {;}
+            catch
+            {
+                // ignored
+            }
 
             return url;
         }

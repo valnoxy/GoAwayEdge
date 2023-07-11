@@ -1,0 +1,31 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:system="clr-namespace:System;assembly=mscorlib">
+    <system:String x:Key="Title">GoAwayEdge Installer</system:String>
+    <system:String x:Key="Next">Next</system:String>
+    <system:String x:Key="Back">Back</system:String>
+
+    <!-- License -->
+    <system:String x:Key="LicenseNote">Please read the following License. You must accept the terms of the license before continuing with the installation.</system:String>
+    <system:String x:Key="LicenseAccept">I accept this license.</system:String>
+    <system:String x:Key="LicenseDecline">I decline this license.</system:String>
+
+    <!-- Settings -->
+    <system:String x:Key="SettingsTitle">Settings</system:String>
+    <system:String x:Key="SettingsEdgeChannelTitle">Edge Channel</system:String>
+    <system:String x:Key="SettingsEdgeChannelDescription">Select the installed Microsoft Edge Channel.</system:String>
+    <system:String x:Key="SettingsSearchEngineTitle">Search Engine</system:String>
+    <system:String x:Key="SettingsSearchEngineDescription">Select your favorite Search Engine.</system:String>
+    <system:String x:Key="SettingsUninstallTitle">Uninstall</system:String>
+    <system:String x:Key="SettingsUninstallDescription">Uninstall GoAwayEdge and restore Edge functionality.</system:String>
+
+    <!-- Setup in progress -->
+    <system:String x:Key="SetupProgressTitle">Installation in progress ...</system:String>
+    <system:String x:Key="SetupProgressDescription">Please wait until the installation completes.</system:String>
+
+    <!-- Setup finished -->
+    <system:String x:Key="SetupFinishedTitle">Installation completed!</system:String>
+    <system:String x:Key="SetupFinishedDescription">Simply open this Installer, if you want to customize GoAwayEdge again.</system:String>
+    <system:String x:Key="DonateButton">Donate via PayPal</system:String>
+
+</ResourceDictionary>

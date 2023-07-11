@@ -1,0 +1,31 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:system="clr-namespace:System;assembly=mscorlib">
+    <system:String x:Key="Title">GoAwayEdge-Installationsprogramm</system:String>
+    <system:String x:Key="Next">Weiter</system:String>
+    <system:String x:Key="Back">Zurück</system:String>
+
+    <!-- License -->
+    <system:String x:Key="LicenseNote">Bitte lesen Sie die folgende Lizenz. Sie müssen die Lizenzbedingungen akzeptieren, bevor Sie mit der Installation fortfahren können.</system:String>
+    <system:String x:Key="LicenseAccept">Ich akzeptiere diese Lizenz.</system:String>
+    <system:String x:Key="LicenseDecline">Ich lehne diese Lizenz ab.</system:String>
+
+    <!-- Settings -->
+    <system:String x:Key="SettingsTitle">Einstellungen</system:String>
+    <system:String x:Key="SettingsEdgeChannelTitle">Edge Channel</system:String>
+    <system:String x:Key="SettingsEdgeChannelDescription">Wählen Sie den installierten Microsoft Edge Channel aus.</system:String>
+    <system:String x:Key="SettingsSearchEngineTitle">Suchmaschine</system:String>
+    <system:String x:Key="SettingsSearchEngineDescription">Wählen Sie Ihre bevorzugte Suchmaschine.</system:String>
+    <system:String x:Key="SettingsUninstallTitle">Deinstallieren</system:String>
+    <system:String x:Key="SettingsUninstallDescription">Deinstalliere GoAwayEdge und wiederherstelle die Edge-Funktionalität.</system:String>
+
+    <!-- Setup in progress -->
+    <system:String x:Key="SetupProgressTitle">Installation läuft ...</system:String>
+    <system:String x:Key="SetupProgressDescription">Bitte warten Sie, bis die Installation abgeschlossen ist.</system:String>
+
+    <!-- Setup finished -->
+    <system:String x:Key="SetupFinishedTitle">Installation abgeschlossen!</system:String>
+    <system:String x:Key="SetupFinishedDescription">Öffnen Sie das Installationsprogramm, wenn Sie GoAwayEdge erneut anpassen möchten.</system:String>
+    <system:String x:Key="DonateButton">Über PayPal spenden</system:String>
+
+</ResourceDictionary>

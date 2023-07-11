@@ -1,9 +1,8 @@
-﻿using Microsoft.Win32;
-using System;
+﻿using Microsoft.Toolkit.Uwp.Notifications;
+using Microsoft.Win32;
 using System.IO;
-using System.Windows;
-using Microsoft.Toolkit.Uwp.Notifications;
 using System.Security.Cryptography;
+using System.Windows;
 
 namespace GoAwayEdge.Common
 {
@@ -65,20 +64,20 @@ namespace GoAwayEdge.Common
                 return 2;
             }
 
-            var IfeoBinaryPath = (string)key.GetValue("FilterFullPath");
-            if (IfeoBinaryPath == null)
+            var ifeoBinaryPath = (string)key.GetValue("FilterFullPath");
+            if (ifeoBinaryPath == null)
             {
                 Console.WriteLine("FilterFullPath value not found.");
                 return 2;
             }
 
-            if (File.Exists(IfeoBinaryPath))
+            if (File.Exists(ifeoBinaryPath))
             {
-                var EdgeBinaryPath = Path.GetDirectoryName(IfeoBinaryPath) + "\\msedge.exe";
-                IfeoBinaryPath = Path.GetDirectoryName(IfeoBinaryPath) + "\\msedge_ifeo.exe";
+                var edgeBinaryPath = Path.GetDirectoryName(ifeoBinaryPath) + "\\msedge.exe";
+                ifeoBinaryPath = Path.GetDirectoryName(ifeoBinaryPath) + "\\msedge_ifeo.exe";
 
-                var edgeHash = CalculateMD5(EdgeBinaryPath);
-                var ifeoHash = CalculateMD5(IfeoBinaryPath);
+                var edgeHash = CalculateMD5(edgeBinaryPath);
+                var ifeoHash = CalculateMD5(ifeoBinaryPath);
 #if DEBUG
                 if (edgeHash != ifeoHash)
                     MessageBox.Show($"The Edge Hash ({edgeHash}) and Ifeo Hash ({ifeoHash}) are not identical. Validation failed!", "GoAwayEdge", MessageBoxButton.OK, MessageBoxImage.Warning);
@@ -88,7 +87,7 @@ namespace GoAwayEdge.Common
             }
             else
             {
-                Console.WriteLine($"FilterFullPath does not exist: {IfeoBinaryPath}");
+                Console.WriteLine($"FilterFullPath does not exist: {ifeoBinaryPath}");
                 return 2;
             }
         }
@@ -123,14 +122,10 @@ namespace GoAwayEdge.Common
 
         private static string CalculateMD5(string filename)
         {
-            using (var md5 = MD5.Create())
-            {
-                using (var stream = File.OpenRead(filename))
-                {
-                    var hash = md5.ComputeHash(stream);
-                    return BitConverter.ToString(hash).Replace("-", "").ToLowerInvariant();
-                }
-            }
+            using var md5 = MD5.Create();
+            using var stream = File.OpenRead(filename);
+            var hash = md5.ComputeHash(stream);
+            return BitConverter.ToString(hash).Replace("-", "").ToLowerInvariant();
         }
     }
 }

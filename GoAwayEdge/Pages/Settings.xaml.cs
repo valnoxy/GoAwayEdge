@@ -7,7 +7,7 @@ namespace GoAwayEdge.Pages
     /// <summary>
     /// Interaktionslogik für Settings.xaml
     /// </summary>
-    public partial class Settings : UserControl
+    public partial class Settings
     {
         public Settings()
         {
@@ -32,11 +32,11 @@ namespace GoAwayEdge.Pages
 
             Common.Configuration.Uninstall = false;
 
-            var InstDir = Path.Combine(
+            var instDir = Path.Combine(
                 Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles),
                 "valnoxy",
                 "GoAwayEdge");
-            if (Path.GetDirectoryName(System.Diagnostics.Process.GetCurrentProcess().MainModule.FileName) == InstDir)
+            if (Path.GetDirectoryName(Environment.ProcessPath) == instDir)
             {
                 UninstallSwitch.IsEnabled = false;
                 EdgeUninstallNote.Text = "Please use the Installer in order to uninstall GoAwayEdge.";

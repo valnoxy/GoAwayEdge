@@ -13,7 +13,7 @@
 		<AssemblyName>GoAwayEdge</AssemblyName>
 		<Company>Exploitox</Company>
 		<Authors>valnoxy</Authors>
-		<Version>1.0.2.26</Version>
+		<Version>1.1.0.31</Version>
 		<Copyright>Copyright (c) 2018 - 2023 Exploitox. All rights reserved.</Copyright>
 		<PackageProjectUrl>https://github.com/valnoxy/GoAwayEdge</PackageProjectUrl>
 		<RepositoryUrl>https://github.com/valnoxy/GoAwayEdge</RepositoryUrl>
@@ -22,7 +22,17 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+	  <Page Remove="Localization\ResourceDictionary.de-DE.xaml" />
+	  <Page Remove="Localization\ResourceDictionary.xaml" />
+	</ItemGroup>
+
+	<ItemGroup>
 	  <Content Include="GoAwayEdge.ico" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Resource Include="Localization\ResourceDictionary.de-DE.xaml" />
+	  <Resource Include="Localization\ResourceDictionary.xaml" />
 	</ItemGroup>
 
 	<ItemGroup>

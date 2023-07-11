@@ -9,15 +9,15 @@
              d:DesignHeight="450" d:DesignWidth="800">
     <StackPanel>
         <ui:SymbolIcon Symbol="CheckmarkCircle24" FontSize="80" />
-        <Label Content="Installation completed!" 
+        <Label Content="{StaticResource SetupFinishedTitle}"
                HorizontalAlignment="Center" 
                FontSize="30" 
                Foreground="{DynamicResource TextFillColorPrimaryBrush}"/>
-        <Label Content="Simply open this Installer, if you want to customize GoAwayEdge again." 
+        <Label Content="{StaticResource SetupFinishedDescription}" 
                Foreground="{DynamicResource TextFillColorPrimaryBrush}"
                Margin="0,15,0,0"
                FontSize="14"
                HorizontalAlignment="Center"/>
-        <ui:Hyperlink HorizontalAlignment="Center" NavigateUri="https://paypal.me/valnoxy" Content="Donate via PayPal"/>
+        <ui:Hyperlink HorizontalAlignment="Center" NavigateUri="https://paypal.me/valnoxy" Content="{StaticResource DonateButton}"/>
     </StackPanel>
 </UserControl>

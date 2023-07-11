@@ -1,30 +1,37 @@
-﻿using System.Windows;
+﻿using System.Diagnostics;
+using System.Reflection;
+using System.Windows;
+using GoAwayEdge.Pages;
 
 namespace GoAwayEdge
 {
     /// <summary>
     /// Interaktionslogik für Installer.xaml
     /// </summary>
-    public partial class Installer : Wpf.Ui.Controls.UiWindow
+    public partial class Installer
     {
         internal static Installer? ContentWindow;
-        private static Pages.License _licensePage;
-        private static Pages.Settings _settingPage;
+        private static License? _licensePage;
+        private static Settings? _settingPage;
         
         public Installer()
         {
             InitializeComponent();
 
-            Loaded += (sender, args) =>
+            // Set current language model
+            var language = Thread.CurrentThread.CurrentCulture.ToString();
+            var dict = new ResourceDictionary();
+            Debug.WriteLine("Trying to load language: " + language);
+            dict.Source = language switch
             {
-                Wpf.Ui.Appearance.Watcher.Watch(
-                    this,
-                    Wpf.Ui.Appearance.BackgroundType.Mica,
-                    true
-                );
+                "en-US" => new Uri(@"/GoAwayEdge;component/Localization/ResourceDictionary.xaml", UriKind.Relative),
+                "de-DE" => new Uri(@"/GoAwayEdge;component/Localization/ResourceDictionary.de-DE.xaml", UriKind.Relative),
+                _ => new Uri(@"/GoAwayEdge;component/Localization/ResourceDictionary.xaml", UriKind.Relative)
             };
+            Application.Current.Resources.MergedDictionaries.Add(dict);
+            VersionLbl.Content = $"Version {Assembly.GetExecutingAssembly().GetName().Version!}";
 
-            _licensePage = new Pages.License();
+            _licensePage = new License();
             FrameWindow.Content = _licensePage;
             ContentWindow = this;
         }
@@ -33,18 +40,16 @@ namespace GoAwayEdge
         {
             switch (FrameWindow.Content)
             {
-                case Pages.Settings:
+                case Settings:
                     NextBtn.IsEnabled = false;
                     BackBtn.IsEnabled = false;
-                    FrameWindow.Content = new Pages.Installation();
+                    FrameWindow.Content = new Installation();
                     break;
-                case Pages.License:
+                case License:
                     NextBtn.IsEnabled = true;
                     BackBtn.IsEnabled = true;
-                    _settingPage = new Pages.Settings();
+                    _settingPage = new Settings();
                     FrameWindow.Content = _settingPage;
-                    break;
-                default:
                     break;
             }
         }
@@ -53,12 +58,10 @@ namespace GoAwayEdge
         {
             switch (FrameWindow.Content)
             {
-                case Pages.Settings:
+                case Settings:
                     NextBtn.IsEnabled = true;
                     BackBtn.IsEnabled = false;
                     FrameWindow.Content = _licensePage;
-                    break;
-                default:
                     break;
             }
         }
