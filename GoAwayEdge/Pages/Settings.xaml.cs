@@ -1,5 +1,6 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
+using GoAwayEdge.Common;
 using Path = System.IO.Path;
 
 namespace GoAwayEdge.Pages
@@ -18,7 +19,7 @@ namespace GoAwayEdge.Pages
             EdgeChannelBox.Items.Add("Edge Dev");
             EdgeChannelBox.Items.Add("Edge Canary");
             EdgeChannelBox.SelectedIndex = 0;
-            Common.Configuration.Channel = Common.EdgeChannel.Stable;
+            Configuration.Channel = EdgeChannel.Stable;
 
             SearchEngineBox.Items.Add("Google");
             SearchEngineBox.Items.Add("Bing");
@@ -27,39 +28,50 @@ namespace GoAwayEdge.Pages
             SearchEngineBox.Items.Add("Yandex");
             SearchEngineBox.Items.Add("Ecosia");
             SearchEngineBox.Items.Add("Ask");
-            SearchEngineBox.SelectedIndex = 0;
-            Common.Configuration.Search = Common.SearchEngine.Google;
+            SearchEngineBox.Items.Add("Qwant");
 
-            Common.Configuration.Uninstall = false;
+            try
+            {
+                Dispatcher.Invoke(() =>
+                {
+                    var resourceValue = (string)Application.Current.MainWindow!.FindResource("SettingsSearchEngineCustomItem");
+                    SearchEngineBox.Items.Add(!string.IsNullOrEmpty(resourceValue) ? resourceValue : "Custom");
+                });
+            }
+            catch
+            {
+                SearchEngineBox.Items.Add("Custom");
+            }
+
+            SearchEngineBox.SelectedIndex = 0;
+            Configuration.Search = SearchEngine.Google;
+
+            Configuration.Uninstall = false;
 
             var instDir = Path.Combine(
                 Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles),
                 "valnoxy",
                 "GoAwayEdge");
-            if (Path.GetDirectoryName(Environment.ProcessPath) == instDir)
+            
+            if (Path.GetDirectoryName(Environment.ProcessPath) != instDir) return;
+            UninstallSwitch.IsEnabled = false;
+            Dispatcher.Invoke(() =>
             {
-                UninstallSwitch.IsEnabled = false;
-                EdgeUninstallNote.Text = "Please use the Installer in order to uninstall GoAwayEdge.";
-            }
+                var resourceValue = (string)Application.Current.MainWindow.FindResource("SettingsUninstallUseInstaller");
+                EdgeUninstallNote.Text = !string.IsNullOrEmpty(resourceValue) ? resourceValue : "Please use the Installer in order to uninstall GoAwayEdge.";
+            });
         }
 
         private void EdgeChannelBox_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            switch (EdgeChannelBox.SelectedIndex)
+            Configuration.Channel = EdgeChannelBox.SelectedIndex switch
             {
-                case 0:
-                    Common.Configuration.Channel = Common.EdgeChannel.Stable;
-                    break;
-                case 1:
-                    Common.Configuration.Channel = Common.EdgeChannel.Beta;
-                    break;
-                case 2:
-                    Common.Configuration.Channel = Common.EdgeChannel.Dev;
-                    break;
-                case 3:
-                    Common.Configuration.Channel = Common.EdgeChannel.Canary;
-                    break;
-            }
+                0 => EdgeChannel.Stable,
+                1 => EdgeChannel.Beta,
+                2 => EdgeChannel.Dev,
+                3 => EdgeChannel.Canary,
+                _ => EdgeChannel.Stable
+            };
         }
 
         private void SearchEngineBox_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -67,32 +79,47 @@ namespace GoAwayEdge.Pages
             switch (SearchEngineBox.SelectedIndex)
             {
                 case 0:
-                    Common.Configuration.Search = Common.SearchEngine.Google;
+                    Configuration.Search = SearchEngine.Google;
+                    CustomSearchPanel.Visibility = Visibility.Collapsed;
                     break;
                 case 1:
-                    Common.Configuration.Search = Common.SearchEngine.Bing;
+                    Configuration.Search = SearchEngine.Bing;
+                    CustomSearchPanel.Visibility = Visibility.Collapsed;
                     break;
                 case 2:
-                    Common.Configuration.Search = Common.SearchEngine.DuckDuckGo;
+                    Configuration.Search = SearchEngine.DuckDuckGo;
+                    CustomSearchPanel.Visibility = Visibility.Collapsed;
                     break;
                 case 3:
-                    Common.Configuration.Search = Common.SearchEngine.Yahoo;
+                    Configuration.Search = SearchEngine.Yahoo;
+                    CustomSearchPanel.Visibility = Visibility.Collapsed;
                     break;
                 case 4:
-                    Common.Configuration.Search = Common.SearchEngine.Yandex;
+                    Configuration.Search = SearchEngine.Yandex;
+                    CustomSearchPanel.Visibility = Visibility.Collapsed;
                     break;
                 case 5:
-                    Common.Configuration.Search = Common.SearchEngine.Ecosia;
+                    Configuration.Search = SearchEngine.Ecosia;
+                    CustomSearchPanel.Visibility = Visibility.Collapsed;
                     break;
                 case 6:
-                    Common.Configuration.Search = Common.SearchEngine.Ask;
+                    Configuration.Search = SearchEngine.Ask;
+                    CustomSearchPanel.Visibility = Visibility.Collapsed;
+                    break;
+                case 7:
+                    Configuration.Search = SearchEngine.Qwant;
+                    CustomSearchPanel.Visibility = Visibility.Collapsed;
+                    break;
+                case 8:
+                    Configuration.Search = SearchEngine.Custom;
+                    CustomSearchPanel.Visibility = Visibility.Visible;
                     break;
             }
         }
 
         private void UninstallSwitch_OnClick(object sender, RoutedEventArgs e)
         {
-            Common.Configuration.Uninstall = UninstallSwitch.IsChecked.Value;
+            Configuration.Uninstall = UninstallSwitch.IsChecked!.Value;
             if (UninstallSwitch.IsChecked.Value)
             {
                 SearchEngineBox.IsEnabled = false;
@@ -103,6 +130,11 @@ namespace GoAwayEdge.Pages
                 SearchEngineBox.IsEnabled = true;
                 EdgeChannelBox.IsEnabled = true;
             }
+        }
+
+        private void QueryUrlTextBox_OnTextChanged(object sender, TextChangedEventArgs e)
+        {
+            Configuration.CustomQueryUrl = QueryUrlTextBox.Text;
         }
     }
 }

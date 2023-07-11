@@ -36,7 +36,7 @@ namespace GoAwayEdge
             ContentWindow = this;
         }
 
-        internal void ButtonBase_OnClick(object sender, RoutedEventArgs e)
+        internal void NextBtn_OnClick(object sender, RoutedEventArgs e)
         {
             switch (FrameWindow.Content)
             {
@@ -54,7 +54,7 @@ namespace GoAwayEdge
             }
         }
 
-        private void Back_Click(object sender, RoutedEventArgs e)
+        private void BackBtn_OnClick(object sender, RoutedEventArgs e)
         {
             switch (FrameWindow.Content)
             {

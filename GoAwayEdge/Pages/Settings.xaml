@@ -27,7 +27,7 @@
                                 Foreground="{DynamicResource TextFillColorTertiaryBrush}"
                                 Text="{StaticResource SettingsEdgeChannelDescription}" />
                         </StackPanel>
-                        <ComboBox Grid.Column="1" Margin="0,0,16,0" x:Name="EdgeChannelBox" Width="140" SelectionChanged="EdgeChannelBox_OnSelectionChanged"/>
+                        <ComboBox Grid.Column="1" x:Name="EdgeChannelBox" Width="180" SelectionChanged="EdgeChannelBox_OnSelectionChanged"/>
                     </Grid>
                 </ui:CardControl.Header>
             </ui:CardControl>
@@ -51,7 +51,31 @@
                                 Foreground="{DynamicResource TextFillColorTertiaryBrush}"
                                 Text="{StaticResource SettingsSearchEngineDescription}" />
                         </StackPanel>
-                        <ComboBox Grid.Column="1" Margin="0,0,16,0" x:Name="SearchEngineBox" Width="140" SelectionChanged="SearchEngineBox_OnSelectionChanged"/>
+                        <ComboBox Grid.Column="1" x:Name="SearchEngineBox" Width="180" SelectionChanged="SearchEngineBox_OnSelectionChanged"/>
+                    </Grid>
+                </ui:CardControl.Header>
+            </ui:CardControl>
+        </StackPanel>
+
+        <StackPanel Margin="0,10,0,0" x:Name="CustomSearchPanel" Visibility="Collapsed">
+            <ui:CardControl Icon="SearchSettings20">
+                <ui:CardControl.Header>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <StackPanel Grid.Column="0" VerticalAlignment="Center">
+                            <TextBlock
+                                FontSize="13"
+                                FontWeight="Medium"
+                                Text="{StaticResource SettingsCustomSearchEngineTitle}" />
+                            <TextBlock
+                                FontSize="12"
+                                Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                                Text="{StaticResource SettingsCustomSearchEngineDescription}"/>
+                        </StackPanel>
+                        <ui:TextBox Grid.Column="1" Width="300" x:Name="QueryUrlTextBox" TextChanged="QueryUrlTextBox_OnTextChanged" PlaceholderText="https://www.google.com/search?q="/>
                     </Grid>
                 </ui:CardControl.Header>
             </ui:CardControl>
@@ -76,7 +100,7 @@
                                 Text="{StaticResource SettingsUninstallDescription}" 
                                 x:Name="EdgeUninstallNote"/>
                         </StackPanel>
-                        <ui:ToggleSwitch Grid.Column="1" Margin="0,0,16,0" x:Name="UninstallSwitch" Click="UninstallSwitch_OnClick"/>
+                        <ui:ToggleSwitch Grid.Column="1" x:Name="UninstallSwitch" Click="UninstallSwitch_OnClick"/>
                     </Grid>
                 </ui:CardControl.Header>
             </ui:CardControl>

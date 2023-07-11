@@ -16,8 +16,12 @@
     <system:String x:Key="SettingsEdgeChannelDescription">Select the installed Microsoft Edge Channel.</system:String>
     <system:String x:Key="SettingsSearchEngineTitle">Search Engine</system:String>
     <system:String x:Key="SettingsSearchEngineDescription">Select your favorite Search Engine.</system:String>
+    <system:String x:Key="SettingsSearchEngineCustomItem">Custom</system:String>
+    <system:String x:Key="SettingsCustomSearchEngineTitle">Custom Search Engine</system:String>
+    <system:String x:Key="SettingsCustomSearchEngineDescription">Please enter the query URL from the search engine.</system:String>
     <system:String x:Key="SettingsUninstallTitle">Uninstall</system:String>
     <system:String x:Key="SettingsUninstallDescription">Uninstall GoAwayEdge and restore Edge functionality.</system:String>
+    <system:String x:Key="SettingsUninstallUseInstaller">Please use the Installer in order to uninstall GoAwayEdge.</system:String>
 
     <!-- Setup in progress -->
     <system:String x:Key="SetupProgressTitle">Installation in progress ...</system:String>

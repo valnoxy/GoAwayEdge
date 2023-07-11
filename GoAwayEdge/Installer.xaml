@@ -31,8 +31,8 @@
                 <Label Content="Version 1.2.0" VerticalContentAlignment="Bottom" x:Name="VersionLbl"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-                <Button Content="{StaticResource Back}" Margin="0,0,5,0" Click="Back_Click" x:Name="BackBtn" IsEnabled="false"/>
-                <Button Content="{StaticResource Next}" Margin="0,0,5,0" Click="ButtonBase_OnClick" x:Name="NextBtn" IsEnabled="false"/>
+                <Button Content="{StaticResource Back}" Margin="0,0,5,0" Click="BackBtn_OnClick" x:Name="BackBtn" IsEnabled="false"/>
+                <Button Content="{StaticResource Next}" Margin="0,0,5,0" Click="NextBtn_OnClick" x:Name="NextBtn" IsEnabled="false"/>
             </StackPanel>
         </DockPanel>
 

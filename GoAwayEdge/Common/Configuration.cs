@@ -8,7 +8,9 @@
         Yahoo,
         Yandex,
         Ecosia,
-        Ask
+        Ask,
+        Qwant,
+        Custom
     }
 
     internal enum EdgeChannel
@@ -24,6 +26,7 @@
         public static EdgeChannel Channel { get; set; }
         public static SearchEngine Search { get; set; }
         public static bool Uninstall { get; set; }
+        public static string CustomQueryUrl { get; set; }
     }
 
     internal enum ModifyAction

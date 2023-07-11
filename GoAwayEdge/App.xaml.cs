@@ -16,6 +16,7 @@ using System.Security.Principal;
 using System.Text;
 using System.Web;
 using System.Windows;
+using Microsoft.Win32;
 
 namespace GoAwayEdge
 {
@@ -153,15 +154,22 @@ namespace GoAwayEdge
                         "Yandex" => SearchEngine.Yandex,
                         "Ecosia" => SearchEngine.Ecosia,
                         "Ask" => SearchEngine.Ask,
+                        "Qwant" => SearchEngine.Qwant,
+                        "Custom" => SearchEngine.Custom,
                         _ => SearchEngine.Google // Fallback search engine
                     };
                 }
 
-                if (e.Args.Length != 2 || !arg.Contains("msedge.exe")) continue; // Opens Edge normally
-                
+                if (!args.Contains("--profile-directory") && !ContainsParsedData(args) && args.Length != 2) continue; // Start Edge (default browser on this system)
+
+#if DEBUG
+                MessageBox.Show("Microsoft Edge will now start normally via IFEO application.", "GoAwayEdge", MessageBoxButton.OK, MessageBoxImage.Information);
+#endif
+
+                var parsedArgs = args.Skip(2);
                 var p = new Process();
-                p.StartInfo.FileName = "msedge_ifeo.exe";
-                p.StartInfo.Arguments = "";
+                p.StartInfo.FileName = "C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge_ifeo.exe";
+                p.StartInfo.Arguments = string.Join(" ", parsedArgs);
                 p.StartInfo.UseShellExecute = true;
                 p.StartInfo.RedirectStandardOutput = false;
                 p.Start();
@@ -173,7 +181,9 @@ namespace GoAwayEdge
             {
                 var parsed = ParseUrl(_url);
                 Output.WriteLine("Opening URL in default browser:\n\n" + parsed + "\n", ConsoleColor.Gray);
-
+#if DEBUG
+                MessageBox.Show("Opening URL in default browser:\n\n" + parsed + "\n", "GoAwayEdge", MessageBoxButton.OK, MessageBoxImage.Information);
+#endif
                 var p = new Process();
                 p.StartInfo.FileName = parsed;
                 p.StartInfo.Arguments = "";
@@ -183,6 +193,19 @@ namespace GoAwayEdge
             }
             
             Environment.Exit(0);
+        }
+
+        private static bool ContainsParsedData(IEnumerable<string> args)
+        {
+            var contains = false;
+            var engineUrl = DefineEngine(_engine);
+
+            foreach (var arg in args)
+            {
+                if (arg.Contains(engineUrl))
+                    contains = true;
+            }
+            return contains;
         }
 
         private static string ParseUrl(string encodedUrl)
@@ -207,21 +230,38 @@ namespace GoAwayEdge
             // Replace Search Engine
             encodedUrl = encodedUrl.Replace("https://www.bing.com/search?q=", DefineEngine(_engine));
 
+#if DEBUG
+            MessageBox.Show("New Uri: " + encodedUrl, "GoAwayEdge", MessageBoxButton.OK, MessageBoxImage.Information);
+#endif
             var uri = new Uri(encodedUrl);
             return uri.ToString();
         }
 
         private static string DefineEngine(SearchEngine engine)
         {
+            string customQueryUrl = null!;
+            try
+            {
+                var key = Registry.LocalMachine.OpenSubKey(
+                    @"SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\msedge.exe\0", false);
+                customQueryUrl = (string)key?.GetValue("CustomQueryUrl")!;
+            }
+            catch
+            {
+                // ignored
+            }
+
             return engine switch
             {
                 SearchEngine.Google => "https://www.google.com/search?q=",
                 SearchEngine.Bing => "https://www.bing.com/search?q=",
-                SearchEngine.DuckDuckGo => "https://duckduckgo.com/?q=",
+                SearchEngine.DuckDuckGo => "https://duckduckgo.com/?q=}",
                 SearchEngine.Yahoo => "https://search.yahoo.com/search?p=",
                 SearchEngine.Yandex => "https://yandex.com/search/?text=",
                 SearchEngine.Ecosia => "https://www.ecosia.org/search?q=",
                 SearchEngine.Ask => "https://www.ask.com/web?q=",
+                SearchEngine.Qwant => "https://qwant.com/?q=",
+                SearchEngine.Custom => customQueryUrl,
                 _ => "https://www.google.com/search?q="
             };
         }
