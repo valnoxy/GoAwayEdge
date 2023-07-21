@@ -25,6 +25,11 @@
 ## 🔔 Information
 Don't like MS Edge? Me neither. Redirect all Edge calls (like Windows Search and Widgets) to your favorite browser! 
 
+- Redirect Edge calls to other browsers
+- Redirect search queries to other search engines
+- Filter search queries (removes url tracker)
+- Simple usage
+
 ## 🔧 Usage
 1. Download the latest version from [GitHub](https://github.com/valnoxy/GoAwayEdge/releases).
 2. Start the application.
