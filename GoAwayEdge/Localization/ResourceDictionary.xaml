@@ -30,6 +30,8 @@
     <!-- Setup finished -->
     <system:String x:Key="SetupFinishedTitle">Installation completed!</system:String>
     <system:String x:Key="SetupFinishedDescription">Simply open this Installer, if you want to customize GoAwayEdge again.</system:String>
+    <system:String x:Key="UninstallFinishedTitle">Uninstallation completed!</system:String>
+    <system:String x:Key="UninstallFinishedDescription">GoAwayEdge has been successfully removed from the system.</system:String>
     <system:String x:Key="DonateButton">Donate via PayPal</system:String>
 
 </ResourceDictionary>

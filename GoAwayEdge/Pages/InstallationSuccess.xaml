@@ -10,10 +10,12 @@
     <StackPanel>
         <ui:SymbolIcon Symbol="CheckmarkCircle24" FontSize="80" />
         <Label Content="{DynamicResource SetupFinishedTitle}"
+               x:Name="SetupTitle"
                HorizontalAlignment="Center" 
                FontSize="30" 
                Foreground="{DynamicResource TextFillColorPrimaryBrush}"/>
         <Label Content="{DynamicResource SetupFinishedDescription}" 
+               x:Name="SetupDescription"
                Foreground="{DynamicResource TextFillColorPrimaryBrush}"
                Margin="0,15,0,0"
                FontSize="14"
