@@ -4,7 +4,7 @@
 <p align="center">
     Redirect all Edge calls to your favorite browser! 
     <br />
-    <strong>Version: </strong>1.1.0
+    <strong>Version: </strong>1.1.1
     <br />
     <br />
     <a href="https://github.com/valnoxy/GoAwayEdge/releases"><strong>Download now »</strong></a>
@@ -13,6 +13,8 @@
     <a href="https://github.com/valnoxy/GoAwayEdge/issues">Report Bug</a>
     ·
     <a href="https://github.com/valnoxy/GoAwayEdge/discussions/">Discussions</a>
+    ·
+    <a href="https://crowdin.com/project/goawayedge">Help me translate</a>
   </p>
 </p>
 
@@ -21,6 +23,7 @@
 ![Download counter](https://img.shields.io/github/downloads/valnoxy/GoAwayEdge/total.svg)
 ![License](https://img.shields.io/github/license/valnoxy/GoAwayEdge)
 ![version](https://img.shields.io/github/v/release/valnoxy/GoAwayEdge)
+[![Crowdin](https://badges.crowdin.net/goawayedge/localized.svg)](https://crowdin.com/project/goawayedge)
 
 ## 🔔 Information
 Don't like MS Edge? Me neither. Redirect all Edge calls (like Windows Search and Widgets) to your favorite browser! 
@@ -29,6 +32,9 @@ Don't like MS Edge? Me neither. Redirect all Edge calls (like Windows Search and
 - Redirect search queries to other search engines
 - Filter search queries (removes url tracker)
 - Simple usage
+
+## 🖼️ Screenshot
+<img src="https://dl.exploitox.de/goawayedge/GoAwayEdge_Screenshot1.png" alt="GoAwayEdge Setup" width=650>
 
 ## 🔧 Usage
 1. Download the latest version from [GitHub](https://github.com/valnoxy/GoAwayEdge/releases).

@@ -8,7 +8,7 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <StackPanel>
-        <Label FontSize="20" Content="{StaticResource SettingsTitle}" Foreground="{DynamicResource TextFillColorPrimaryBrush}"/>
+        <Label FontSize="20" Content="{DynamicResource SettingsTitle}" Foreground="{DynamicResource TextFillColorPrimaryBrush}"/>
         <StackPanel Margin="0,5,0,0">
             <ui:CardControl Icon="Channel24">
                 <ui:CardControl.Header>
@@ -21,11 +21,11 @@
                             <TextBlock
                                 FontSize="13"
                                 FontWeight="Medium"
-                                Text="{StaticResource SettingsEdgeChannelTitle}" />
+                                Text="{DynamicResource SettingsEdgeChannelTitle}" />
                             <TextBlock
                                 FontSize="12"
                                 Foreground="{DynamicResource TextFillColorTertiaryBrush}"
-                                Text="{StaticResource SettingsEdgeChannelDescription}" />
+                                Text="{DynamicResource SettingsEdgeChannelDescription}" />
                         </StackPanel>
                         <ComboBox Grid.Column="1" x:Name="EdgeChannelBox" Width="180" SelectionChanged="EdgeChannelBox_OnSelectionChanged"/>
                     </Grid>
@@ -45,11 +45,11 @@
                             <TextBlock
                                 FontSize="13"
                                 FontWeight="Medium"
-                                Text="{StaticResource SettingsSearchEngineTitle}" />
+                                Text="{DynamicResource SettingsSearchEngineTitle}" />
                             <TextBlock
                                 FontSize="12"
                                 Foreground="{DynamicResource TextFillColorTertiaryBrush}"
-                                Text="{StaticResource SettingsSearchEngineDescription}" />
+                                Text="{DynamicResource SettingsSearchEngineDescription}" />
                         </StackPanel>
                         <ComboBox Grid.Column="1" x:Name="SearchEngineBox" Width="180" SelectionChanged="SearchEngineBox_OnSelectionChanged"/>
                     </Grid>
@@ -69,11 +69,11 @@
                             <TextBlock
                                 FontSize="13"
                                 FontWeight="Medium"
-                                Text="{StaticResource SettingsCustomSearchEngineTitle}" />
+                                Text="{DynamicResource SettingsCustomSearchEngineTitle}" />
                             <TextBlock
                                 FontSize="12"
                                 Foreground="{DynamicResource TextFillColorTertiaryBrush}"
-                                Text="{StaticResource SettingsCustomSearchEngineDescription}"/>
+                                Text="{DynamicResource SettingsCustomSearchEngineDescription}"/>
                         </StackPanel>
                         <ui:TextBox Grid.Column="1" Width="300" x:Name="QueryUrlTextBox" TextChanged="QueryUrlTextBox_OnTextChanged" PlaceholderText="https://www.google.com/search?q="/>
                     </Grid>
@@ -93,11 +93,11 @@
                             <TextBlock
                                 FontSize="13"
                                 FontWeight="Medium"
-                                Text="{StaticResource SettingsUninstallTitle}" />
+                                Text="{DynamicResource SettingsUninstallTitle}" />
                             <TextBlock
                                 FontSize="12"
                                 Foreground="{DynamicResource TextFillColorTertiaryBrush}"
-                                Text="{StaticResource SettingsUninstallDescription}" 
+                                Text="{DynamicResource SettingsUninstallDescription}" 
                                 x:Name="EdgeUninstallNote"/>
                         </StackPanel>
                         <ui:ToggleSwitch Grid.Column="1" x:Name="UninstallSwitch" Click="UninstallSwitch_OnClick"/>

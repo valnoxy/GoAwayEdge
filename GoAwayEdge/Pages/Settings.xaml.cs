@@ -52,12 +52,14 @@ namespace GoAwayEdge.Pages
                 Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles),
                 "valnoxy",
                 "GoAwayEdge");
-            
+
+            if (!Path.Exists(instDir))
+                UninstallSwitch.IsEnabled = false;
             if (Path.GetDirectoryName(Environment.ProcessPath) != instDir) return;
             UninstallSwitch.IsEnabled = false;
             Dispatcher.Invoke(() =>
             {
-                var resourceValue = (string)Application.Current.MainWindow.FindResource("SettingsUninstallUseInstaller");
+                var resourceValue = (string)Application.Current.MainWindow!.FindResource("SettingsUninstallUseInstaller");
                 EdgeUninstallNote.Text = !string.IsNullOrEmpty(resourceValue) ? resourceValue : "Please use the Installer in order to uninstall GoAwayEdge.";
             });
         }
