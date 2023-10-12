@@ -23,6 +23,10 @@
 
 	<ItemGroup>
 	  <Page Remove="Localization\ResourceDictionary.de-DE.xaml" />
+	  <Page Remove="Localization\ResourceDictionary.es-ES.xaml" />
+	  <Page Remove="Localization\ResourceDictionary.fr-FR.xaml" />
+	  <Page Remove="Localization\ResourceDictionary.it-IT.xaml" />
+	  <Page Remove="Localization\ResourceDictionary.pl-PL.xaml" />
 	  <Page Remove="Localization\ResourceDictionary.xaml" />
 	</ItemGroup>
 
@@ -32,6 +36,10 @@
 
 	<ItemGroup>
 	  <Resource Include="Localization\ResourceDictionary.de-DE.xaml" />
+	  <Resource Include="Localization\ResourceDictionary.es-ES.xaml" />
+	  <Resource Include="Localization\ResourceDictionary.fr-FR.xaml" />
+	  <Resource Include="Localization\ResourceDictionary.it-IT.xaml" />
+	  <Resource Include="Localization\ResourceDictionary.pl-PL.xaml" />
 	  <Resource Include="Localization\ResourceDictionary.xaml" />
 	</ItemGroup>
 

@@ -1,0 +1,36 @@
+﻿<?xml version="1.0"?>
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:system="clr-namespace:System;assembly=mscorlib">
+    <system:String x:Key="Title">Installatore GoAwayEdge</system:String>
+    <system:String x:Key="Next">Avanti</system:String>
+    <system:String x:Key="Back">Indietro</system:String>
+
+    <!-- License -->
+    <system:String x:Key="LicenseNote">Leggere la seguente licenza. È necessario accettare i termini della licenza prima di continuare l'installazione.</system:String>
+    <system:String x:Key="LicenseAccept">Accetto questa licenza.</system:String>
+    <system:String x:Key="LicenseDecline">Rifiuto questa licenza.</system:String>
+
+    <!-- Settings -->
+    <system:String x:Key="SettingsTitle">Impostazioni</system:String>
+    <system:String x:Key="SettingsEdgeChannelTitle">Canale dei bordi</system:String>
+    <system:String x:Key="SettingsEdgeChannelDescription">Selezionare il canale Microsoft Edge installato.</system:String>
+    <system:String x:Key="SettingsSearchEngineTitle">Motore di ricerca</system:String>
+    <system:String x:Key="SettingsSearchEngineDescription">Selezionate il vostro motore di ricerca preferito.</system:String>
+    <system:String x:Key="SettingsSearchEngineCustomItem">Personalizzato</system:String>
+    <system:String x:Key="SettingsCustomSearchEngineTitle">Motore di ricerca personalizzato</system:String>
+    <system:String x:Key="SettingsCustomSearchEngineDescription">Inserire l'URL della query dal motore di ricerca.</system:String>
+    <system:String x:Key="SettingsUninstallTitle">Disinstallare</system:String>
+    <system:String x:Key="SettingsUninstallDescription">Disinstallare GoAwayEdge e ripristinare la funzionalità di Edge.</system:String>
+    <system:String x:Key="SettingsUninstallUseInstaller">Utilizzare il programma di installazione per disinstallare GoAwayEdge.</system:String>
+
+    <!-- Setup in progress -->
+    <system:String x:Key="SetupProgressTitle">Installazione in corso ...</system:String>
+    <system:String x:Key="SetupProgressDescription">Attendere il completamento dell'installazione.</system:String>
+
+    <!-- Setup finished -->
+    <system:String x:Key="SetupFinishedTitle">Installazione completata!</system:String>
+    <system:String x:Key="SetupFinishedDescription">È sufficiente aprire questo programma di installazione per personalizzare nuovamente GoAwayEdge.</system:String>
+    <system:String x:Key="UninstallFinishedTitle">Disinstallazione completata!</system:String>
+    <system:String x:Key="UninstallFinishedDescription">GoAwayEdge è stato rimosso con successo dal sistema.</system:String>
+    <system:String x:Key="DonateButton">Donazione tramite PayPal</system:String>
+
+</ResourceDictionary>

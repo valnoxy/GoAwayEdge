@@ -24,13 +24,26 @@ namespace GoAwayEdge
             Debug.WriteLine("Trying to load language: " + language);
             dict.Source = language switch
             {
-                "en-US" => new Uri(@"/GoAwayEdge;component/Localization/ResourceDictionary.xaml", UriKind.Relative),
-                "de-DE" => new Uri(@"/GoAwayEdge;component/Localization/ResourceDictionary.de-DE.xaml", UriKind.Relative),
-                _ => new Uri(@"/GoAwayEdge;component/Localization/ResourceDictionary.xaml", UriKind.Relative)
+                "en-US" => new Uri("/GoAwayEdge;component/Localization/ResourceDictionary.xaml", UriKind.Relative),
+                "de-DE" => new Uri("/GoAwayEdge;component/Localization/ResourceDictionary.de-DE.xaml", UriKind.Relative),
+                "es-ES" => new Uri("/GoAwayEdge;component/Localization/ResourceDictionary.es-ES.xaml", UriKind.Relative),
+                "fr-FR" => new Uri("/GoAwayEdge;component/Localization/ResourceDictionary.fr-FR.xaml", UriKind.Relative),
+                "it-IT" => new Uri("/GoAwayEdge;component/Localization/ResourceDictionary.it-IT.xaml", UriKind.Relative),
+                "pl-PL" => new Uri("/GoAwayEdge;component/Localization/ResourceDictionary.pl-PL.xaml", UriKind.Relative),
+                _ => new Uri("/GoAwayEdge;component/Localization/ResourceDictionary.xaml", UriKind.Relative)
             };
-            Application.Current.Resources.MergedDictionaries.Add(dict);
-            VersionLbl.Content = $"Version {Assembly.GetExecutingAssembly().GetName().Version!}";
-
+            try
+            {
+                Application.Current.Resources.MergedDictionaries.Add(dict);
+                VersionLbl.Content = $"Version {Assembly.GetExecutingAssembly().GetName().Version!}";
+            }
+            catch (Exception ex)
+            {
+                // TODO: Implement message box
+                // Failed to load language: {ex.Message}
+                return;
+            }
+            
             _licensePage = new License();
             FrameWindow.Content = _licensePage;
             ContentWindow = this;

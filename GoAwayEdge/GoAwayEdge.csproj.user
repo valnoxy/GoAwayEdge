@@ -27,6 +27,18 @@
     <Page Update="App.xaml">
       <SubType>Designer</SubType>
     </Page>
+    <Resource Update="Localization\ResourceDictionary.es-ES.xaml">
+      <SubType>Designer</SubType>
+    </Resource>
+    <Resource Update="Localization\ResourceDictionary.it-IT.xaml">
+      <SubType>Designer</SubType>
+    </Resource>
+    <Resource Update="Localization\ResourceDictionary.pl-PL.xaml">
+      <SubType>Designer</SubType>
+    </Resource>
+    <Resource Update="Localization\ResourceDictionary.fr-FR.xaml">
+      <SubType>Designer</SubType>
+    </Resource>
     <Resource Update="Localization\ResourceDictionary.de-DE.xaml">
       <SubType>Designer</SubType>
     </Resource>
