@@ -7,6 +7,9 @@
     <Compile Update="App.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="MessageUI.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="Pages\Installation.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -25,6 +28,9 @@
   </ItemGroup>
   <ItemGroup>
     <Page Update="App.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="MessageUI.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Resource Update="Localization\ResourceDictionary.es-ES.xaml">

@@ -49,7 +49,9 @@ namespace GoAwayEdge.Pages
             var status = CopyItself(Path.Combine(instDir, "GoAwayEdge.exe"), Path.GetDirectoryName(Process.GetCurrentProcess().MainModule?.FileName) != instDir);
             if (status == false)
             {
-                MessageBox.Show("Installation failed! Please try again.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                var messageUi = new MessageUI("GoAwayEdge",
+                    "Installation failed! Please try again.", "OK", null, true);
+                messageUi.ShowDialog();
                 Environment.Exit(1);
                 return;
             }
@@ -102,7 +104,9 @@ namespace GoAwayEdge.Pages
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Installation failed!\n{ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                var messageUi = new MessageUI("GoAwayEdge",
+                    $"Installation failed!\n{ex.Message}", "OK", null, true);
+                messageUi.ShowDialog();
                 Environment.Exit(1);
                 return;
             }
@@ -114,7 +118,9 @@ namespace GoAwayEdge.Pages
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Installation failed!\n{ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                var messageUi = new MessageUI("GoAwayEdge",
+                    $"Installation failed!\n{ex.Message}", "OK", null, true);
+                messageUi.ShowDialog(); 
                 Environment.Exit(1);
                 return;
             }
@@ -131,7 +137,9 @@ namespace GoAwayEdge.Pages
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Installation failed!\n{ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                var messageUi = new MessageUI("GoAwayEdge",
+                    $"Installation failed!\n{ex.Message}", "OK", null, true);
+                messageUi.ShowDialog();
                 Environment.Exit(1);
                 return;
             }
@@ -158,7 +166,9 @@ namespace GoAwayEdge.Pages
             }
             catch (Exception ex) 
             {
-                MessageBox.Show($"Uninstallation failed! Please try again.\n{ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                var messageUi = new MessageUI("GoAwayEdge",
+                    $"Uninstallation failed! Please try again.\n{ex.Message}", "OK", null, true);
+                messageUi.ShowDialog(); 
                 Environment.Exit(1);
                 return;
             }
@@ -172,7 +182,9 @@ namespace GoAwayEdge.Pages
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Uninstallation failed! Please try again.\n{ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                var messageUi = new MessageUI("GoAwayEdge",
+                    $"Uninstallation failed! Please try again.\n{ex.Message}", "OK", null, true);
+                messageUi.ShowDialog(); 
                 Environment.Exit(1);
                 return;
             }
@@ -213,9 +225,11 @@ namespace GoAwayEdge.Pages
                 }
             }
 
-            catch (Exception e)
+            catch (Exception ex)
             {
-                MessageBox.Show(e.ToString());
+                var messageUi = new MessageUI("GoAwayEdge",
+                    $"Copy failed: {ex.Message}", "OK", null, true);
+                messageUi.ShowDialog(); 
                 return false;
             }
 

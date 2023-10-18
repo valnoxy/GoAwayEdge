@@ -26,7 +26,7 @@
         public static EdgeChannel Channel { get; set; }
         public static SearchEngine Search { get; set; }
         public static bool Uninstall { get; set; }
-        public static string CustomQueryUrl { get; set; }
+        public static string? CustomQueryUrl { get; set; }
     }
 
     internal enum ModifyAction
@@ -37,7 +37,7 @@
 
     internal class FileConfiguration
     {
-        public static string EdgePath = "";
-        public static string IfeoPath = "";
+        public static string EdgePath = string.Empty;
+        public static string IfeoPath = string.Empty;
     }
 }

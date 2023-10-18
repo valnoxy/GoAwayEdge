@@ -1,0 +1,63 @@
+﻿<ui:UiWindow x:Class="GoAwayEdge.MessageUI"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:local="clr-namespace:GoAwayEdge"
+             mc:Ignorable="d"
+             Title="GoAwayEdge" MinHeight="200" MinWidth="500" MaxWidth="500"
+             xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+             Background="{ui:ThemeResource ApplicationBackgroundBrush}"
+             ExtendsContentIntoTitleBar="True"
+             WindowBackdropType="Mica"
+             WindowCornerPreference="Round"
+             WindowStartupLocation="CenterScreen"
+             PreviewKeyDown="WindowKeyDown"
+             SizeToContent="Height">
+
+    <Grid>
+        <Grid Margin="20,30,20,20">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <!-- Title with button text -->
+                <RowDefinition Height="40"/>
+                <!-- Content -->
+            </Grid.RowDefinitions>
+
+            <Grid Grid.Row="0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <TextBlock Grid.Row="0" FontWeight="Bold" FontSize="20" Foreground="#FFFFFF" x:Name="MessageTitle" Margin="0,0,0,5">
+                    Message.Title
+                </TextBlock>
+
+                <TextBlock Grid.Row="1" FontWeight="Normal" FontSize="14" Foreground="#FFFFFF" x:Name="MessageText" TextWrapping="Wrap">
+                    Message.Text
+                </TextBlock>
+            </Grid>
+
+            <Grid Grid.Row="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <Grid Grid.Column="0" HorizontalAlignment="Left">
+                    <TextBlock FontWeight="Normal" FontSize="14" Foreground="#FFFFFF" x:Name="LbTimer" VerticalAlignment="Center" TextAlignment="Right"/>
+                </Grid>
+
+                <Grid Grid.Column="1" Margin="15,0,0,0" HorizontalAlignment="Right">
+                    <ui:Button x:Name="Btn2" Content="Btn2" Click="Btn2_OnClick"/>
+                </Grid>
+
+                <Grid Grid.Column="2" Margin="15,0,0,0" HorizontalAlignment="Right">
+                    <ui:Button x:Name="Btn1" Content="Btn1" Click="Btn1_OnClick"/>
+                </Grid>
+            </Grid>
+        </Grid>
+        <ui:TitleBar CanMaximize="False" ShowMinimize="false" ShowMaximize="false"/>
+    </Grid>
+</ui:UiWindow>

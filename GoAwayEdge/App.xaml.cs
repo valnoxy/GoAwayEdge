@@ -58,9 +58,13 @@ namespace GoAwayEdge
             Output.WriteLine("Please go away Edge!");
             Output.WriteLine("Hooked into process via IFEO successfully.");
             var argumentJoin = string.Join(",", args);
-            
+
+            Updater.InitialEnvironment();
+
 #if DEBUG
-            MessageBox.Show("The following args are redirected (CTRL+C to copy):\n\n" + argumentJoin, "GoAwayEdge", MessageBoxButton.OK, MessageBoxImage.Information);
+            var w = new MessageUI("GoAwayEdge",
+                $"The following args are redirected (CTRL+C to copy):\n\n{argumentJoin}", "OK", null, true);
+            w.ShowDialog();
 #endif
             Output.WriteLine("Command line args:\n\n" + argumentJoin + "\n", ConsoleColor.Gray);
 
@@ -74,7 +78,7 @@ namespace GoAwayEdge
                 }
                 if (arg.Contains("--update"))
                 {
-                    var statusEnv = Updater.InitEnv();
+                    var statusEnv = Updater.InitialEnvironment();
                     if (statusEnv == false) Environment.Exit(1);
 
                     // Validate IFEO bínary
@@ -86,8 +90,11 @@ namespace GoAwayEdge
                         case 1: // failed validation
                             if (IsAdministrator() == false)
                             {
-                                var result = MessageBox.Show("The IFEO exclusion file needs to be updated. Update now?", "GoAwayEdge", MessageBoxButton.YesNo, MessageBoxImage.Information);
-                                if (result == MessageBoxResult.Yes)
+                                var ifeoMessageUi = new MessageUI("GoAwayEdge",
+                                    "The IFEO exclusion file needs to be updated. Update now?", "No", "Yes");
+                                ifeoMessageUi.ShowDialog();
+                                
+                                if (ifeoMessageUi.Summary == "Btn2")
                                 {
                                     // Restart program and run as admin
                                     var exeName = Process.GetCurrentProcess().MainModule?.FileName;
@@ -111,8 +118,11 @@ namespace GoAwayEdge
                         case 2: // missing
                             if (IsAdministrator() == false)
                             {
-                                var result = MessageBox.Show("The IFEO exclusion file is missing and need to be copied. Copy now?", "GoAwayEdge", MessageBoxButton.YesNo, MessageBoxImage.Information);
-                                if (result == MessageBoxResult.Yes)
+                                var ifeoMessageUi = new MessageUI("GoAwayEdge",
+                                        "The IFEO exclusion file is missing and need to be copied. Copy now?", "No", "Yes");
+                                ifeoMessageUi.ShowDialog();
+
+                                if (ifeoMessageUi.Summary == "Btn2")
                                 {
                                     // Restart program and run as admin
                                     var exeName = Process.GetCurrentProcess().MainModule?.FileName;
@@ -160,12 +170,14 @@ namespace GoAwayEdge
                 if (!args.Contains("--profile-directory") && !ContainsParsedData(args) && args.Length != 2) continue; // Start Edge (default browser on this system)
 
 #if DEBUG
-                MessageBox.Show("Microsoft Edge will now start normally via IFEO application.", "GoAwayEdge", MessageBoxButton.OK, MessageBoxImage.Information);
+                var messageUi = new MessageUI("GoAwayEdge",
+                    $"Microsoft Edge will now start normally via IFEO application.", "OK", null, true);
+                messageUi.ShowDialog();
 #endif
 
                 var parsedArgs = args.Skip(2);
                 var p = new Process();
-                p.StartInfo.FileName = "C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge_ifeo.exe";
+                p.StartInfo.FileName = FileConfiguration.IfeoPath;
                 p.StartInfo.Arguments = string.Join(" ", parsedArgs);
                 p.StartInfo.UseShellExecute = true;
                 p.StartInfo.RedirectStandardOutput = false;
@@ -177,23 +189,28 @@ namespace GoAwayEdge
             if (_url != null)
             {
                 var p = new Process();
-                string parsed = null;
-                // If this is copilot
-                if (_url.Contains("?ux=copilot&tcp=1&source=taskbar"))
+
+                // Windows Copilot
+                if (_url.Contains("microsoft-edge://?ux=copilot&tcp=1&source=taskbar")
+                    || _url.Contains("microsoft-edge:///?ux=copilot&tcp=1&source=taskbar"))
                 {
-                    p.StartInfo.FileName = "C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge_ifeo.exe";
+                    p.StartInfo.FileName = FileConfiguration.IfeoPath;
                     p.StartInfo.Arguments = "microsoft-edge://?ux=copilot&tcp=1&source=taskbar";
                     Output.WriteLine("Opening Windows Copilot", ConsoleColor.Gray);
 #if DEBUG
-                    MessageBox.Show("Opening Windows Copilot", "GoAwayEdge", MessageBoxButton.OK, MessageBoxImage.Information);
+                    var copilotMessageUi = new MessageUI("GoAwayEdge",
+                        "Opening Windows Copilot ...", "OK", null, true);
+                    copilotMessageUi.ShowDialog();
 #endif
                 }
                 else
                 {
-                    parsed = ParseUrl(_url);
+                    var parsed = ParseUrl(_url);
                     Output.WriteLine("Opening URL in default browser:\n\n" + parsed + "\n", ConsoleColor.Gray);
 #if DEBUG
-                    MessageBox.Show("Opening URL in default browser:\n\n" + parsed + "\n", "GoAwayEdge", MessageBoxButton.OK, MessageBoxImage.Information);
+                    var defaultUrlMessageUi = new MessageUI("GoAwayEdge",
+                        "Opening URL in default browser:\n\n" + parsed + "\n", "OK", null, true);
+                    defaultUrlMessageUi.ShowDialog();
 #endif
                     p.StartInfo.FileName = parsed;
                     p.StartInfo.Arguments = "";
@@ -242,7 +259,9 @@ namespace GoAwayEdge
             encodedUrl = encodedUrl.Replace("https://www.bing.com/search?q=", DefineEngine(_engine));
 
 #if DEBUG
-            MessageBox.Show("New Uri: " + encodedUrl, "GoAwayEdge", MessageBoxButton.OK, MessageBoxImage.Information);
+            var uriMessageUi = new MessageUI("GoAwayEdge",
+                "New Uri: " + encodedUrl, "OK", null, true);
+            uriMessageUi.ShowDialog();
 #endif
             var uri = new Uri(encodedUrl);
             return uri.ToString();

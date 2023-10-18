@@ -14,11 +14,10 @@ namespace GoAwayEdge.Common
         /// <returns>
         ///     Boolean status of the initialization.
         /// </returns>
-        public static bool InitEnv()
+        public static bool InitialEnvironment()
         {
             try
             {
-                // Get Ifeo-Path
                 var key = Registry.LocalMachine.OpenSubKey(
                     @"SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\msedge.exe\0");
                 if (key == null)
@@ -27,20 +26,22 @@ namespace GoAwayEdge.Common
                     return false;
                 }
 
-                var IfeoBinaryPath = (string)key.GetValue("FilterFullPath");
-                if (IfeoBinaryPath == null)
+                var ifeoBinaryPath = (string)key.GetValue("FilterFullPath")!;
+                if (string.IsNullOrEmpty(ifeoBinaryPath))
                 {
                     Console.WriteLine("FilterFullPath value not found.");
                     return false;
                 }
 
-                FileConfiguration.EdgePath = Path.GetDirectoryName(IfeoBinaryPath) + "\\msedge.exe";
-                FileConfiguration.IfeoPath = Path.GetDirectoryName(IfeoBinaryPath) + "\\msedge_ifeo.exe";
+                FileConfiguration.EdgePath = Path.Combine(Path.GetDirectoryName(ifeoBinaryPath)!, "msedge.exe");
+                FileConfiguration.IfeoPath = Path.Combine(Path.GetDirectoryName(ifeoBinaryPath)!, "msedge_ifeo.exe");
                 return true;
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Initialization failed!\n{ex.Message}", "GoAwayEdge", MessageBoxButton.OK, MessageBoxImage.Error);
+                var messageUi = new MessageUI("GoAwayEdge",
+                    $"Initialization failed!\n{ex.Message}", "OK", null, true);
+                messageUi.ShowDialog();
                 return false;
             }
         }
@@ -56,44 +57,44 @@ namespace GoAwayEdge.Common
         /// </returns>
         public static int ValidateIfeoBinary()
         {
-            // Get Ifeo-Path
-            var key = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\msedge.exe\0");
+            var key = Registry.LocalMachine.OpenSubKey(
+                @"SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\msedge.exe\0");
             if (key == null)
             {
                 Console.WriteLine("Registry key not found.");
                 return 2;
             }
 
-            var ifeoBinaryPath = (string)key.GetValue("FilterFullPath");
-            if (ifeoBinaryPath == null)
+            var binaryPath = (string)key.GetValue("FilterFullPath")!;
+            if (string.IsNullOrEmpty(binaryPath))
             {
                 Console.WriteLine("FilterFullPath value not found.");
                 return 2;
             }
 
+            var edgeBinaryPath = Path.Combine(Path.GetDirectoryName(binaryPath)!, "msedge.exe");
+            var ifeoBinaryPath = Path.Combine(Path.GetDirectoryName(binaryPath)!, "msedge_ifeo.exe");
+
             if (File.Exists(ifeoBinaryPath))
             {
-                var edgeBinaryPath = Path.GetDirectoryName(ifeoBinaryPath) + "\\msedge.exe";
-                ifeoBinaryPath = Path.GetDirectoryName(ifeoBinaryPath) + "\\msedge_ifeo.exe";
-
-                var edgeHash = CalculateMD5(edgeBinaryPath);
-                var ifeoHash = CalculateMD5(ifeoBinaryPath);
+                var edgeHash = CalculateMd5(edgeBinaryPath);
+                var ifeoHash = CalculateMd5(ifeoBinaryPath);
 #if DEBUG
-                if (edgeHash != ifeoHash)
-                    MessageBox.Show($"The Edge Hash ({edgeHash}) and Ifeo Hash ({ifeoHash}) are not identical. Validation failed!", "GoAwayEdge", MessageBoxButton.OK, MessageBoxImage.Warning);
+                if (edgeHash != ifeoHash) {
+                    var messageUi = new MessageUI("GoAwayEdge",
+                        $"The Edge Hash ({edgeHash}) and Ifeo Hash ({ifeoHash}) are not identical. Validation failed!", "OK", null,true);
+                    messageUi.ShowDialog();
+                }
 #endif
-
                 return edgeHash != ifeoHash ? 1 : 0;
             }
-            else
-            {
-                Console.WriteLine($"FilterFullPath does not exist: {ifeoBinaryPath}");
-                return 2;
-            }
+
+            Console.WriteLine($"Ifeo binary does not exist: {ifeoBinaryPath}");
+            return 2;
         }
 
         /// <summary>
-        /// Modifies the Ifeo Binary.
+        /// Modifies the Ifeo binary.
         /// </summary>
         public static void ModifyIfeoBinary(ModifyAction action)
         {
@@ -112,15 +113,16 @@ namespace GoAwayEdge.Common
                     }
                     catch (Exception ex)
                     {
-                        MessageBox.Show($"Update failed!\n{ex.Message}", "GoAwayEdge", MessageBoxButton.OK,
-                            MessageBoxImage.Error);
+                        var messageUi = new MessageUI("GoAwayEdge",
+                            $"Update failed!\n{ex.Message}!", "OK", null, true);
+                        messageUi.ShowDialog();
                     }
                     break;
                 }
             }
         }
 
-        private static string CalculateMD5(string filename)
+        private static string CalculateMd5(string filename)
         {
             using var md5 = MD5.Create();
             using var stream = File.OpenRead(filename);
