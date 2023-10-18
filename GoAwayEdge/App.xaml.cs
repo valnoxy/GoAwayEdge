@@ -60,8 +60,7 @@ namespace GoAwayEdge
             var argumentJoin = string.Join(",", args);
             
 #if DEBUG
-            Clipboard.SetText(argumentJoin);
-            MessageBox.Show("The following args are redirected (copied to the clipboard):\n\n" + argumentJoin, "GoAwayEdge", MessageBoxButton.OK, MessageBoxImage.Information);
+            MessageBox.Show("The following args are redirected (CTRL+C to copy):\n\n" + argumentJoin, "GoAwayEdge", MessageBoxButton.OK, MessageBoxImage.Information);
 #endif
             Output.WriteLine("Command line args:\n\n" + argumentJoin + "\n", ConsoleColor.Gray);
 
@@ -141,7 +140,6 @@ namespace GoAwayEdge
                 {
                     _url = arg;
                 }
-
                 if (arg.Contains("-se"))
                 {
                     var argParsed = arg.Remove(0,3);
@@ -159,7 +157,6 @@ namespace GoAwayEdge
                         _ => SearchEngine.Google // Fallback search engine
                     };
                 }
-
                 if (!args.Contains("--profile-directory") && !ContainsParsedData(args) && args.Length != 2) continue; // Start Edge (default browser on this system)
 
 #if DEBUG
@@ -179,14 +176,28 @@ namespace GoAwayEdge
             // Open URL in default browser
             if (_url != null)
             {
-                var parsed = ParseUrl(_url);
-                Output.WriteLine("Opening URL in default browser:\n\n" + parsed + "\n", ConsoleColor.Gray);
-#if DEBUG
-                MessageBox.Show("Opening URL in default browser:\n\n" + parsed + "\n", "GoAwayEdge", MessageBoxButton.OK, MessageBoxImage.Information);
-#endif
                 var p = new Process();
-                p.StartInfo.FileName = parsed;
-                p.StartInfo.Arguments = "";
+                string parsed = null;
+                // If this is copilot
+                if (_url.Contains("?ux=copilot&tcp=1&source=taskbar"))
+                {
+                    p.StartInfo.FileName = "C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge_ifeo.exe";
+                    p.StartInfo.Arguments = "microsoft-edge://?ux=copilot&tcp=1&source=taskbar";
+                    Output.WriteLine("Opening Windows Copilot", ConsoleColor.Gray);
+#if DEBUG
+                    MessageBox.Show("Opening Windows Copilot", "GoAwayEdge", MessageBoxButton.OK, MessageBoxImage.Information);
+#endif
+                }
+                else
+                {
+                    parsed = ParseUrl(_url);
+                    Output.WriteLine("Opening URL in default browser:\n\n" + parsed + "\n", ConsoleColor.Gray);
+#if DEBUG
+                    MessageBox.Show("Opening URL in default browser:\n\n" + parsed + "\n", "GoAwayEdge", MessageBoxButton.OK, MessageBoxImage.Information);
+#endif
+                    p.StartInfo.FileName = parsed;
+                    p.StartInfo.Arguments = "";
+                }
                 p.StartInfo.UseShellExecute = true;
                 p.StartInfo.RedirectStandardOutput = false;
                 p.Start();
