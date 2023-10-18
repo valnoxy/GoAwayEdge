@@ -83,38 +83,48 @@ namespace GoAwayEdge.Pages
                 case 0:
                     Configuration.Search = SearchEngine.Google;
                     CustomSearchPanel.Visibility = Visibility.Collapsed;
+                    Installer.ContentWindow!.NextBtn.IsEnabled = true;
                     break;
                 case 1:
                     Configuration.Search = SearchEngine.Bing;
                     CustomSearchPanel.Visibility = Visibility.Collapsed;
+                    Installer.ContentWindow!.NextBtn.IsEnabled = true;
                     break;
                 case 2:
                     Configuration.Search = SearchEngine.DuckDuckGo;
                     CustomSearchPanel.Visibility = Visibility.Collapsed;
+                    Installer.ContentWindow!.NextBtn.IsEnabled = true;
                     break;
                 case 3:
                     Configuration.Search = SearchEngine.Yahoo;
                     CustomSearchPanel.Visibility = Visibility.Collapsed;
+                    Installer.ContentWindow!.NextBtn.IsEnabled = true;
                     break;
                 case 4:
                     Configuration.Search = SearchEngine.Yandex;
                     CustomSearchPanel.Visibility = Visibility.Collapsed;
+                    Installer.ContentWindow!.NextBtn.IsEnabled = true;
                     break;
                 case 5:
                     Configuration.Search = SearchEngine.Ecosia;
                     CustomSearchPanel.Visibility = Visibility.Collapsed;
+                    Installer.ContentWindow!.NextBtn.IsEnabled = true;
                     break;
                 case 6:
                     Configuration.Search = SearchEngine.Ask;
                     CustomSearchPanel.Visibility = Visibility.Collapsed;
+                    Installer.ContentWindow!.NextBtn.IsEnabled = true;
                     break;
                 case 7:
                     Configuration.Search = SearchEngine.Qwant;
                     CustomSearchPanel.Visibility = Visibility.Collapsed;
+                    Installer.ContentWindow!.NextBtn.IsEnabled = true;
                     break;
                 case 8:
                     Configuration.Search = SearchEngine.Custom;
                     CustomSearchPanel.Visibility = Visibility.Visible;
+                    if (string.IsNullOrEmpty(Configuration.CustomQueryUrl))
+                        Installer.ContentWindow!.NextBtn.IsEnabled = false;
                     break;
             }
         }
@@ -137,6 +147,8 @@ namespace GoAwayEdge.Pages
         private void QueryUrlTextBox_OnTextChanged(object sender, TextChangedEventArgs e)
         {
             Configuration.CustomQueryUrl = QueryUrlTextBox.Text;
+            Installer.ContentWindow!.NextBtn.IsEnabled = Uri.TryCreate(QueryUrlTextBox.Text, UriKind.Absolute, out var uriResult)
+                                                         && (uriResult.Scheme == Uri.UriSchemeHttp || uriResult.Scheme == Uri.UriSchemeHttps);
         }
     }
 }

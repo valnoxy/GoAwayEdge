@@ -1,6 +1,7 @@
 ﻿using System.Diagnostics;
 using System.Reflection;
 using System.Windows;
+using GoAwayEdge.Common;
 using GoAwayEdge.Pages;
 
 namespace GoAwayEdge
@@ -13,7 +14,7 @@ namespace GoAwayEdge
         internal static Installer? ContentWindow;
         private static License? _licensePage;
         private static Settings? _settingPage;
-        
+
         public Installer()
         {
             InitializeComponent();
@@ -39,9 +40,10 @@ namespace GoAwayEdge
             }
             catch (Exception ex)
             {
-                // TODO: Implement message box
-                // Failed to load language: {ex.Message}
-                return;
+                var messageUi = new MessageUi("GoAwayEdge",
+                    $"Failed to load language: {ex.Message}", "OK", null, true);
+                messageUi.ShowDialog();
+                Environment.Exit(1);
             }
             
             _licensePage = new License();

@@ -39,7 +39,7 @@ namespace GoAwayEdge.Common
             }
             catch (Exception ex)
             {
-                var messageUi = new MessageUI("GoAwayEdge",
+                var messageUi = new MessageUi("GoAwayEdge",
                     $"Initialization failed!\n{ex.Message}", "OK", null, true);
                 messageUi.ShowDialog();
                 return false;
@@ -81,7 +81,7 @@ namespace GoAwayEdge.Common
                 var ifeoHash = CalculateMd5(ifeoBinaryPath);
 #if DEBUG
                 if (edgeHash != ifeoHash) {
-                    var messageUi = new MessageUI("GoAwayEdge",
+                    var messageUi = new MessageUi("GoAwayEdge",
                         $"The Edge Hash ({edgeHash}) and Ifeo Hash ({ifeoHash}) are not identical. Validation failed!", "OK", null,true);
                     messageUi.ShowDialog();
                 }
@@ -113,7 +113,7 @@ namespace GoAwayEdge.Common
                     }
                     catch (Exception ex)
                     {
-                        var messageUi = new MessageUI("GoAwayEdge",
+                        var messageUi = new MessageUi("GoAwayEdge",
                             $"Update failed!\n{ex.Message}!", "OK", null, true);
                         messageUi.ShowDialog();
                     }

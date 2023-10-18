@@ -62,7 +62,7 @@ namespace GoAwayEdge
             Updater.InitialEnvironment();
 
 #if DEBUG
-            var w = new MessageUI("GoAwayEdge",
+            var w = new MessageUi("GoAwayEdge",
                 $"The following args are redirected (CTRL+C to copy):\n\n{argumentJoin}", "OK", null, true);
             w.ShowDialog();
 #endif
@@ -90,7 +90,7 @@ namespace GoAwayEdge
                         case 1: // failed validation
                             if (IsAdministrator() == false)
                             {
-                                var ifeoMessageUi = new MessageUI("GoAwayEdge",
+                                var ifeoMessageUi = new MessageUi("GoAwayEdge",
                                     "The IFEO exclusion file needs to be updated. Update now?", "No", "Yes");
                                 ifeoMessageUi.ShowDialog();
                                 
@@ -118,7 +118,7 @@ namespace GoAwayEdge
                         case 2: // missing
                             if (IsAdministrator() == false)
                             {
-                                var ifeoMessageUi = new MessageUI("GoAwayEdge",
+                                var ifeoMessageUi = new MessageUi("GoAwayEdge",
                                         "The IFEO exclusion file is missing and need to be copied. Copy now?", "No", "Yes");
                                 ifeoMessageUi.ShowDialog();
 
@@ -170,7 +170,7 @@ namespace GoAwayEdge
                 if (!args.Contains("--profile-directory") && !ContainsParsedData(args) && args.Length != 2) continue; // Start Edge (default browser on this system)
 
 #if DEBUG
-                var messageUi = new MessageUI("GoAwayEdge",
+                var messageUi = new MessageUi("GoAwayEdge",
                     $"Microsoft Edge will now start normally via IFEO application.", "OK", null, true);
                 messageUi.ShowDialog();
 #endif
@@ -198,7 +198,7 @@ namespace GoAwayEdge
                     p.StartInfo.Arguments = "microsoft-edge://?ux=copilot&tcp=1&source=taskbar";
                     Output.WriteLine("Opening Windows Copilot", ConsoleColor.Gray);
 #if DEBUG
-                    var copilotMessageUi = new MessageUI("GoAwayEdge",
+                    var copilotMessageUi = new MessageUi("GoAwayEdge",
                         "Opening Windows Copilot ...", "OK", null, true);
                     copilotMessageUi.ShowDialog();
 #endif
@@ -208,7 +208,7 @@ namespace GoAwayEdge
                     var parsed = ParseUrl(_url);
                     Output.WriteLine("Opening URL in default browser:\n\n" + parsed + "\n", ConsoleColor.Gray);
 #if DEBUG
-                    var defaultUrlMessageUi = new MessageUI("GoAwayEdge",
+                    var defaultUrlMessageUi = new MessageUi("GoAwayEdge",
                         "Opening URL in default browser:\n\n" + parsed + "\n", "OK", null, true);
                     defaultUrlMessageUi.ShowDialog();
 #endif
@@ -259,7 +259,7 @@ namespace GoAwayEdge
             encodedUrl = encodedUrl.Replace("https://www.bing.com/search?q=", DefineEngine(_engine));
 
 #if DEBUG
-            var uriMessageUi = new MessageUI("GoAwayEdge",
+            var uriMessageUi = new MessageUi("GoAwayEdge",
                 "New Uri: " + encodedUrl, "OK", null, true);
             uriMessageUi.ShowDialog();
 #endif

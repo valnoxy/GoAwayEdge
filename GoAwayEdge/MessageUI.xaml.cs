@@ -1,9 +1,6 @@
 ﻿// Copyright (c) 2023 valnoxy
 // Copied from Dive: https://github.com/valnoxy/Dive/blob/main/Dive/Dive.UI/MessageUI.xaml.cs
 
-using System;
-using System.Threading;
-using System.Timers;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Threading;
@@ -13,15 +10,15 @@ namespace GoAwayEdge
     /// <summary>
     /// Interaktionslogik für MessageUI.xaml
     /// </summary>
-    public partial class MessageUI
+    public partial class MessageUi
     {
         public virtual string? Summary => _buttonPressed;
 
         private static string? _buttonPressed;
         private static bool _mainThread;
-        private readonly DispatcherTimer _timer;
+        private readonly DispatcherTimer _timer = null!;
 
-        public MessageUI(string title, string message, string? btn1 = null, string? btn2 = null, bool isMainThread = false, int timer = 0)
+        public MessageUi(string title, string message, string? btn1 = null, string? btn2 = null, bool isMainThread = false, int timer = 0)
         {
             InitializeComponent();
 
@@ -41,10 +38,10 @@ namespace GoAwayEdge
 
                 _timer = new DispatcherTimer(new TimeSpan(0, 0, 1), DispatcherPriority.Normal, delegate
                 {
-                    LbTimer.Text = $"{time.ToString("%s")}s before auto-selecting '{this.Btn2.Content}'.";
+                    LbTimer.Text = $"{time:%s}s before auto-selecting '{this.Btn2.Content}'.";
                     if (time == TimeSpan.Zero)
                     {
-                        _timer?.Stop();
+                        _timer.Stop();
                         _buttonPressed = "Btn2";
                         if (_mainThread) this.Hide();
                         else this.Close();
