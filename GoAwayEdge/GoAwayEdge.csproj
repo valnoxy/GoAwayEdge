@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
 		<OutputType>WinExe</OutputType>
@@ -13,7 +13,7 @@
 		<AssemblyName>GoAwayEdge</AssemblyName>
 		<Company>Exploitox</Company>
 		<Authors>valnoxy</Authors>
-		<Version>1.2.0.62</Version>
+		<Version>1.2.1.86</Version>
 		<Copyright>Copyright (c) 2018 - 2023 Exploitox. All rights reserved.</Copyright>
 		<PackageProjectUrl>https://github.com/valnoxy/GoAwayEdge</PackageProjectUrl>
 		<RepositoryUrl>https://github.com/valnoxy/GoAwayEdge</RepositoryUrl>
@@ -50,8 +50,9 @@
 
 	<ItemGroup>
 	  <PackageReference Include="Microsoft.Toolkit.Uwp.Notifications" Version="7.1.3" />
+	  <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
 	  <PackageReference Include="TaskScheduler" Version="2.10.1" />
-	  <PackageReference Include="WPF-UI" Version="2.0.3" />
+	  <PackageReference Include="WPF-UI" Version="2.1.0" />
 	</ItemGroup>
 	
 </Project>

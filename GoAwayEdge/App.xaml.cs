@@ -81,6 +81,20 @@ namespace GoAwayEdge
                     var statusEnv = Updater.InitialEnvironment();
                     if (statusEnv == false) Environment.Exit(1);
 
+                    // Check for app update
+                    var updateAvailable = Updater.CheckForAppUpdate();
+                    if (!string.IsNullOrEmpty(updateAvailable))
+                    {
+                        var updateDialog = new MessageUi("GoAwayEdge",
+                            $"A new version is available: Version {updateAvailable}\nShould the update be performed now?", "No", "Yes", true);
+                        updateDialog.ShowDialog();
+                        if (updateDialog.Summary == "Btn2")
+                        {
+                            var updateResult = Updater.UpdateClient();
+                            if (updateResult == 0) Environment.Exit(0);
+                        }
+                    }
+
                     // Validate IFEO bínary
                     var binaryStatus = Updater.ValidateIfeoBinary();
                     switch (binaryStatus)

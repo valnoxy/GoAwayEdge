@@ -1,13 +1,30 @@
 ﻿using Microsoft.Toolkit.Uwp.Notifications;
 using Microsoft.Win32;
+using System.Diagnostics;
 using System.IO;
+using System.IO.Compression;
+using System.Net;
+using System.Reflection;
 using System.Security.Cryptography;
-using System.Windows;
+using Newtonsoft.Json;
 
 namespace GoAwayEdge.Common
 {
     internal class Updater
     {
+        public class GitHubRelease
+        {
+            public string tag_name { get; set; }
+            public List<GitHubAsset> assets { get; set; }
+        }
+
+        public class GitHubAsset
+        {
+            public string browser_download_url { get; set; }
+            public string name { get; set; }
+        }
+
+
         /// <summary>
         /// Initialize the current environment.
         /// </summary>
@@ -120,6 +137,90 @@ namespace GoAwayEdge.Common
                     break;
                 }
             }
+        }
+
+        /// <summary>
+        /// Checks if an newer version of GoAwayEdge exists.
+        /// </summary>
+        /// <returns>
+        ///     Boolean status of the existence of a newer version.
+        /// </returns>
+        public static string CheckForAppUpdate()
+        {
+            const string url = "https://api.github.com/repos/valnoxy/GoAwayEdge/releases";
+
+            try
+            {
+                var versionInfo = FileVersionInfo.GetVersionInfo(Assembly.GetEntryAssembly()!.Location);
+
+                using var client = new WebClient();
+                client.Headers.Add("User-Agent", $"GoAwayEdge/{versionInfo.FileVersion} valnoxy.dev");
+                var json = client.DownloadString(url);
+
+                var releases = JsonConvert.DeserializeObject<GitHubRelease[]>(json);
+                if (releases is { Length: > 0 })
+                {
+                    var tagName = Convert.ToString(releases[0].tag_name);
+                    var tagVersion = tagName[1..];
+                    var currentFileVersion = versionInfo.FileVersion;
+                    var parts = currentFileVersion.Split('.');
+                    var partsResult = string.Join(".", parts.Take(3));
+                    var currentVersion = new Version(partsResult);
+                    var latestVersion = new Version(tagVersion);
+
+                    if (currentVersion < latestVersion)
+                        return latestVersion.ToString();
+                }
+                return null!;
+            }
+            catch
+            {
+                return null!;
+            }
+        }
+        
+        /// <summary>
+        /// Download and run the new version of GoAwayEdge.
+        /// </summary>
+        public static int UpdateClient()
+        {
+            const string url = "https://api.github.com/repos/valnoxy/GoAwayEdge/releases";
+
+            try
+            {
+                var versionInfo = FileVersionInfo.GetVersionInfo(Assembly.GetEntryAssembly()!.Location);
+                
+                using var client = new WebClient();
+                client.Headers.Add("User-Agent", $"GoAwayEdge/{versionInfo.FileVersion} valnoxy.dev");
+                var json = client.DownloadString(url);
+
+                var releases = JsonConvert.DeserializeObject<GitHubRelease[]>(json);
+                if (releases is { Length: > 0 })
+                {
+                    string assetUrl = null;
+                    foreach (var asset in releases[0].assets.Where(asset => asset.name == "GoAwayEdge.exe"))
+                    {
+                        assetUrl = asset.browser_download_url;
+                    }
+                    
+                    var tempFolder = Path.GetTempPath();
+                    if (assetUrl == null)
+                    {
+                        return 1;
+                    }
+
+                    if (File.Exists(Path.Combine(tempFolder, "GoAwayEdge.exe")))
+                        File.Delete(Path.Combine(tempFolder, "GoAwayEdge.exe"));
+                    client.DownloadFile(assetUrl, Path.Combine(tempFolder, "GoAwayEdge.exe"));
+                    Process.Start(Path.Combine(tempFolder, "GoAwayEdge.exe"));
+                    return 0;
+                }
+            }
+            catch
+            {
+                return 1;
+            }
+            return 1;
         }
 
         private static string CalculateMd5(string filename)
