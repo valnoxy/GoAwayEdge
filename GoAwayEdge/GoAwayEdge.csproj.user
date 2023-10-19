@@ -33,6 +33,9 @@
     <Page Update="MessageUI.xaml">
       <SubType>Designer</SubType>
     </Page>
+    <Resource Update="Localization\ResourceDictionary.ko-KR.xaml">
+      <SubType>Designer</SubType>
+    </Resource>
     <Resource Update="Localization\ResourceDictionary.es-ES.xaml">
       <SubType>Designer</SubType>
     </Resource>

@@ -26,6 +26,7 @@
 	  <Page Remove="Localization\ResourceDictionary.es-ES.xaml" />
 	  <Page Remove="Localization\ResourceDictionary.fr-FR.xaml" />
 	  <Page Remove="Localization\ResourceDictionary.it-IT.xaml" />
+	  <Page Remove="Localization\ResourceDictionary.ko-KR.xaml" />
 	  <Page Remove="Localization\ResourceDictionary.pl-PL.xaml" />
 	  <Page Remove="Localization\ResourceDictionary.xaml" />
 	</ItemGroup>
@@ -35,6 +36,10 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <Resource Include="Localization\ResourceDictionary.ko-KR.xaml">
+	    <SubType>Designer</SubType>
+	    <Generator>MSBuild:Compile</Generator>
+	  </Resource>
 	  <Resource Include="Localization\ResourceDictionary.de-DE.xaml" />
 	  <Resource Include="Localization\ResourceDictionary.es-ES.xaml" />
 	  <Resource Include="Localization\ResourceDictionary.fr-FR.xaml" />
