@@ -59,7 +59,7 @@ namespace GoAwayEdge
             Output.WriteLine("Hooked into process via IFEO successfully.");
             var argumentJoin = string.Join(",", args);
 
-            Updater.InitialEnvironment();
+            Configuration.InitialEnvironment();
 
 #if DEBUG
             var w = new MessageUi("GoAwayEdge",
@@ -78,7 +78,7 @@ namespace GoAwayEdge
                 }
                 if (arg.Contains("--update"))
                 {
-                    var statusEnv = Updater.InitialEnvironment();
+                    var statusEnv = Configuration.InitialEnvironment();
                     if (statusEnv == false) Environment.Exit(1);
 
                     // Check for app update
@@ -185,7 +185,7 @@ namespace GoAwayEdge
 
 #if DEBUG
                 var messageUi = new MessageUi("GoAwayEdge",
-                    $"Microsoft Edge will now start normally via IFEO application.", "OK", null, true);
+                    "Microsoft Edge will now start normally via IFEO application.", "OK", null, true);
                 messageUi.ShowDialog();
 #endif
 

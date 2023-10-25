@@ -45,17 +45,11 @@ namespace GoAwayEdge.Pages
 
             SearchEngineBox.SelectedIndex = 0;
             Configuration.Search = SearchEngine.Google;
-
             Configuration.Uninstall = false;
 
-            var instDir = Path.Combine(
-                Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles),
-                "valnoxy",
-                "GoAwayEdge");
-
-            if (!Path.Exists(instDir))
+            if (!Path.Exists(Configuration.InstallDir))
                 UninstallSwitch.IsEnabled = false;
-            if (Path.GetDirectoryName(Environment.ProcessPath) != instDir) return;
+            if (Path.GetDirectoryName(Environment.ProcessPath) != Configuration.InstallDir) return;
             UninstallSwitch.IsEnabled = false;
             Dispatcher.Invoke(() =>
             {

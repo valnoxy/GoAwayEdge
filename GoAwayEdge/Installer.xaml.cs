@@ -1,6 +1,7 @@
 ﻿using System.Diagnostics;
 using System.Reflection;
 using System.Windows;
+using GoAwayEdge.Common;
 using GoAwayEdge.Pages;
 
 namespace GoAwayEdge
@@ -45,6 +46,8 @@ namespace GoAwayEdge
                 messageUi.ShowDialog();
                 Environment.Exit(1);
             }
+
+            Configuration.InitialEnvironment();
             
             _licensePage = new License();
             FrameWindow.Content = _licensePage;

@@ -26,44 +26,6 @@ namespace GoAwayEdge.Common
 
 
         /// <summary>
-        /// Initialize the current environment.
-        /// </summary>
-        /// <returns>
-        ///     Boolean status of the initialization.
-        /// </returns>
-        public static bool InitialEnvironment()
-        {
-            try
-            {
-                var key = Registry.LocalMachine.OpenSubKey(
-                    @"SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\msedge.exe\0");
-                if (key == null)
-                {
-                    Console.WriteLine("Registry key not found.");
-                    return false;
-                }
-
-                var ifeoBinaryPath = (string)key.GetValue("FilterFullPath")!;
-                if (string.IsNullOrEmpty(ifeoBinaryPath))
-                {
-                    Console.WriteLine("FilterFullPath value not found.");
-                    return false;
-                }
-
-                FileConfiguration.EdgePath = Path.Combine(Path.GetDirectoryName(ifeoBinaryPath)!, "msedge.exe");
-                FileConfiguration.IfeoPath = Path.Combine(Path.GetDirectoryName(ifeoBinaryPath)!, "msedge_ifeo.exe");
-                return true;
-            }
-            catch (Exception ex)
-            {
-                var messageUi = new MessageUi("GoAwayEdge",
-                    $"Initialization failed!\n{ex.Message}", "OK", null, true);
-                messageUi.ShowDialog();
-                return false;
-            }
-        }
-
-        /// <summary>
         /// Validates if the installed IFEO-Binary is identical with the Edge-Binary.
         /// </summary>
         /// <returns>

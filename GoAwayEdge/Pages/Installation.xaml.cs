@@ -40,14 +40,10 @@ namespace GoAwayEdge.Pages
             var worker = sender as BackgroundWorker;
 
             // Create installation directory
-            var instDir = Path.Combine(
-                Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles),
-                "valnoxy",
-                "GoAwayEdge");
-            Directory.CreateDirectory(instDir);
+            Directory.CreateDirectory(Configuration.InstallDir);
 
-            var status = CopyItself(Path.Combine(instDir, "GoAwayEdge.exe"), Path.GetDirectoryName(Process.GetCurrentProcess().MainModule?.FileName) != instDir);
-            if (status == false)
+            var status = CopyItself(Path.Combine(Configuration.InstallDir, "GoAwayEdge.exe"), Path.GetDirectoryName(Process.GetCurrentProcess().MainModule?.FileName) != Configuration.InstallDir);
+            if (!status)
             {
                 MessageBox.Show("Installation failed! Please try again.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 Environment.Exit(1);
@@ -79,7 +75,7 @@ namespace GoAwayEdge.Pages
 
                 key?.CreateSubKey("0");
                 key = key?.OpenSubKey("0", true);
-                key?.SetValue("Debugger", Path.Combine(instDir, $"GoAwayEdge.exe -se{Configuration.Search}"));
+                key?.SetValue("Debugger", Path.Combine(Configuration.InstallDir, $"GoAwayEdge.exe -se{Configuration.Search}"));
                 key?.SetValue("FilterFullPath", msEdge);
 
                 if (Configuration.Search == SearchEngine.Custom)
@@ -111,6 +107,12 @@ namespace GoAwayEdge.Pages
             {
                 // TODO: highly wip
                 var summaryRemoval = Removal.RemoveMsEdge();
+                if (!summaryRemoval)
+                {
+                    MessageBox.Show("Removal of Microsoft Edge failed! Please try again.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    Environment.Exit(1);
+                    return;
+                }
             }
             else
             {
@@ -134,7 +136,7 @@ namespace GoAwayEdge.Pages
                 var td = ts.NewTask();
                 td.RegistrationInfo.Description = "Checks validation between Edge and IFEO binary.";
                 td.Triggers.Add(new LogonTrigger { Delay = TimeSpan.FromMinutes(5) });
-                td.Actions.Add(new ExecAction(Path.Combine(instDir, "GoAwayEdge.exe"), "--update", instDir));
+                td.Actions.Add(new ExecAction(Path.Combine(Configuration.InstallDir, "GoAwayEdge.exe"), "--update", Configuration.InstallDir));
                 ts.RootFolder.RegisterTaskDefinition(@"valnoxy\GoAwayEdge\GoAwayEdge IFEO Validation", td);
             }
             catch (Exception ex)
@@ -143,7 +145,6 @@ namespace GoAwayEdge.Pages
                 Environment.Exit(1);
                 return;
             }
-
 
             // Switch FrameWindow content to InstallationSuccess
             worker?.ReportProgress(100, "");
@@ -154,14 +155,9 @@ namespace GoAwayEdge.Pages
             var worker = sender as BackgroundWorker;
 
             // Remove installation directory
-            var instDir = Path.Combine(
-                Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles),
-                "valnoxy",
-                "GoAwayEdge");
-
             try
             {
-                var dir = new DirectoryInfo(instDir);
+                var dir = new DirectoryInfo(Configuration.InstallDir);
                 dir.Delete(true);
             }
             catch (Exception ex) 
@@ -171,9 +167,10 @@ namespace GoAwayEdge.Pages
                 return;
             }
             
+            // Remove Ifeo from registry
             try
             {
-                var key = Microsoft.Win32.Registry.LocalMachine.OpenSubKey(
+                var key = Registry.LocalMachine.OpenSubKey(
                     @"SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options", true);
                 key?.DeleteSubKeyTree("msedge.exe");
                 key?.Close();
@@ -185,6 +182,30 @@ namespace GoAwayEdge.Pages
                 return;
             }
 
+            // Remove URI handler and Edge Update block from registry
+            var defaultEdgePath = Path.Combine(
+                Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86),
+                "Microsoft", "Edge", "Application");
+            if (!Directory.Exists(defaultEdgePath))
+            {
+                try
+                {
+                    var key = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft", true);
+                    key?.DeleteSubKeyTree("EdgeUpdate");
+                    key?.Close();
+
+                    key = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Classes", true);
+                    key?.DeleteSubKeyTree("microsoft-edge");
+                    key?.DeleteSubKeyTree("EdgeHTM");
+                    key?.Close();
+                }
+                catch
+                {
+                    // ignore
+                }
+            }
+            
+            // Clean up Task Scheduler
             try
             {
                 var ts = new TaskService();
