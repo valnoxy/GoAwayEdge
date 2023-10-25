@@ -22,6 +22,8 @@
     <system:String x:Key="SettingsUninstallTitle">Uninstall</system:String>
     <system:String x:Key="SettingsUninstallDescription">Uninstall GoAwayEdge and restore Edge functionality.</system:String>
     <system:String x:Key="SettingsUninstallUseInstaller">Please use the Installer in order to uninstall GoAwayEdge.</system:String>
+    <system:String x:Key="SettingsMSEdgeUninstallTitle">Remove Microsoft Edge</system:String>
+    <system:String x:Key="SettingsMSEdgeUninstallDescription">Remove Microsoft Edge completely from the system. [WIP]</system:String>
 
     <!-- Setup in progress -->
     <system:String x:Key="SetupProgressTitle">Installation in progress ...</system:String>

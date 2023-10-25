@@ -107,16 +107,24 @@ namespace GoAwayEdge.Pages
                 return;
             }
 
-            // Create non-IFEO injected copy of msedge.exe
-            try
+            if (Configuration.UninstallEdge)
             {
-                File.Copy(msEdge, Path.Combine(Path.GetDirectoryName(msEdge),"msedge_ifeo.exe"), true);
+                // TODO: highly wip
+                var summaryRemoval = Removal.RemoveMsEdge();
             }
-            catch (Exception ex)
+            else
             {
-                MessageBox.Show($"Installation failed!\n{ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                Environment.Exit(1);
-                return;
+                // Create non-IFEO injected copy of msedge.exe
+                try
+                {
+                    File.Copy(msEdge, Path.Combine(Path.GetDirectoryName(msEdge), "msedge_ifeo.exe"), true);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Installation failed!\n{ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    Environment.Exit(1);
+                    return;
+                }
             }
 
             // Create Task Schedule for IFEO update 

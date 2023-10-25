@@ -150,5 +150,10 @@ namespace GoAwayEdge.Pages
             Installer.ContentWindow!.NextBtn.IsEnabled = Uri.TryCreate(QueryUrlTextBox.Text, UriKind.Absolute, out var uriResult)
                                                          && (uriResult.Scheme == Uri.UriSchemeHttp || uriResult.Scheme == Uri.UriSchemeHttps);
         }
+
+        private void MsEdgeUninstallSwitch_OnClickUninstallSwitch_OnClick(object sender, RoutedEventArgs e)
+        {
+            Configuration.UninstallEdge = MsEdgeUninstallSwitch.IsChecked!.Value;
+        }
     }
 }

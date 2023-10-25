@@ -26,6 +26,7 @@
         public static EdgeChannel Channel { get; set; }
         public static SearchEngine Search { get; set; }
         public static bool Uninstall { get; set; }
+        public static bool UninstallEdge { get; set; }
         public static string? CustomQueryUrl { get; set; }
     }
 
