@@ -27,8 +27,9 @@
         </Border>
 
         <DockPanel Grid.Row="2" Margin="15,0,10,0">
-            <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
-                <Label Content="Version 1.2.0" VerticalContentAlignment="Bottom" x:Name="VersionLbl"/>
+            <StackPanel Orientation="Horizontal" Margin="0,0,0,12">
+                <Label Content="Version 0.0.0" VerticalContentAlignment="Bottom" x:Name="VersionLbl"/>
+                <ui:Hyperlink NavigateUri="https://github.com/valnoxy/GoAwayEdge" VerticalContentAlignment="Bottom" Content="GitHub" Margin="5,20,0,0"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
                 <Button Content="{DynamicResource Back}" Margin="0,0,5,0" Click="BackBtn_OnClick" x:Name="BackBtn" IsEnabled="false"/>
