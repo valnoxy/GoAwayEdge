@@ -12,7 +12,8 @@ namespace GoAwayEdge
     public partial class Installer
     {
         internal static Installer? ContentWindow;
-        private static License? _licensePage;
+        private static Welcome? _welcomePage;
+        public static License LicensePage;
         private static Settings? _settingPage;
 
         public Installer()
@@ -48,9 +49,10 @@ namespace GoAwayEdge
             }
 
             Configuration.InitialEnvironment();
-            
-            _licensePage = new License();
-            FrameWindow.Content = _licensePage;
+
+            _welcomePage = new Welcome();
+            LicensePage = new License();
+            FrameWindow.Content = _welcomePage;
             ContentWindow = this;
         }
 
@@ -78,8 +80,13 @@ namespace GoAwayEdge
             {
                 case Settings:
                     NextBtn.IsEnabled = true;
+                    BackBtn.IsEnabled = true;
+                    FrameWindow.Content = LicensePage;
+                    break;
+                case License:
+                    NextBtn.IsEnabled = false;
                     BackBtn.IsEnabled = false;
-                    FrameWindow.Content = _licensePage;
+                    FrameWindow.Content = _welcomePage;
                     break;
             }
         }

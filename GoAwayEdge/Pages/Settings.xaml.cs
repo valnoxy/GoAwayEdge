@@ -46,16 +46,6 @@ namespace GoAwayEdge.Pages
             SearchEngineBox.SelectedIndex = 0;
             Configuration.Search = SearchEngine.Google;
             Configuration.Uninstall = false;
-
-            if (!Path.Exists(Configuration.InstallDir))
-                UninstallSwitch.IsEnabled = false;
-            if (Path.GetDirectoryName(Environment.ProcessPath) != Configuration.InstallDir) return;
-            UninstallSwitch.IsEnabled = false;
-            Dispatcher.Invoke(() =>
-            {
-                var resourceValue = (string)Application.Current.MainWindow!.FindResource("SettingsUninstallUseInstaller");
-                EdgeUninstallNote.Text = !string.IsNullOrEmpty(resourceValue) ? resourceValue : "Please use the Installer in order to uninstall GoAwayEdge.";
-            });
         }
 
         private void EdgeChannelBox_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -122,22 +112,7 @@ namespace GoAwayEdge.Pages
                     break;
             }
         }
-
-        private void UninstallSwitch_OnClick(object sender, RoutedEventArgs e)
-        {
-            Configuration.Uninstall = UninstallSwitch.IsChecked!.Value;
-            if (UninstallSwitch.IsChecked.Value)
-            {
-                SearchEngineBox.IsEnabled = false;
-                EdgeChannelBox.IsEnabled = false;
-            }
-            else 
-            {
-                SearchEngineBox.IsEnabled = true;
-                EdgeChannelBox.IsEnabled = true;
-            }
-        }
-
+        
         private void QueryUrlTextBox_OnTextChanged(object sender, TextChangedEventArgs e)
         {
             Configuration.CustomQueryUrl = QueryUrlTextBox.Text;

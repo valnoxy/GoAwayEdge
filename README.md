@@ -1,10 +1,10 @@
-<h1 align="center"><br><img src="https://dl.exploitox.de/other/GoAwayEdge.png" alt="GoAwayEdge Logo" width=100></h1>
+<h1 align="center"><br><img src="https://dl.exploitox.de/other/GoAwayEdge_v2.png" alt="GoAwayEdge Logo" width=100></h1>
 
 <h3 align="center">GoAwayEdge</h3>
 <p align="center">
     Redirect all Edge calls to your favorite browser! 
     <br />
-    <strong>Version: </strong>1.2.1
+    <strong>Version: </strong>1.3.0
     <br />
     <br />
     <a href="https://github.com/valnoxy/GoAwayEdge/releases"><strong>Download now »</strong></a>

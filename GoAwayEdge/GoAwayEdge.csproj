@@ -22,6 +22,10 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+	  <None Remove="Assets\SetupBannerIcon.png" />
+	</ItemGroup>
+
+	<ItemGroup>
 	  <Page Remove="Localization\ResourceDictionary.de-DE.xaml" />
 	  <Page Remove="Localization\ResourceDictionary.es-ES.xaml" />
 	  <Page Remove="Localization\ResourceDictionary.fr-FR.xaml" />
@@ -36,6 +40,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <Resource Include="Assets\SetupBannerIcon.png" />
 	  <Resource Include="Localization\ResourceDictionary.ko-KR.xaml">
 	    <SubType>Designer</SubType>
 	    <Generator>MSBuild:Compile</Generator>
