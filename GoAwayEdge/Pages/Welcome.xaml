@@ -15,8 +15,8 @@
 
         <Image Grid.Column="0" Source="pack://application:,,,/Assets/SetupBannerIcon.png" Height="200"/>
         <StackPanel Grid.Column="1" VerticalAlignment="Center">
-            <Label FontSize="20" Content="Welcome" Foreground="{DynamicResource TextFillColorPrimaryBrush}"/>
-            <TextBlock FontSize="14" TextWrapping="Wrap" Text="Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam" Foreground="{DynamicResource TextFillColorPrimaryBrush}"/>
+            <Label FontSize="20" Content="{DynamicResource WelcomeTitle}" FontWeight="Bold" Foreground="{DynamicResource TextFillColorPrimaryBrush}"/>
+            <TextBlock FontSize="14" TextWrapping="Wrap" Text="{DynamicResource WelcomeDescription}" Foreground="{DynamicResource TextFillColorPrimaryBrush}"/>
             <ui:CardAction
                 Margin="0,20,0,8"
                 Click="InstallBtn_Click"
@@ -25,11 +25,11 @@
                     <TextBlock
                         Margin="0,0,0,4"
                         FontWeight="Medium"
-                        Text="Install" />
+                        Text="{DynamicResource SettingsInstallTitle}" />
                     <TextBlock
                         FontSize="12"
                         Foreground="{DynamicResource TextFillColorTertiaryBrush}"
-                        Text="Install GoAwayEdge on this machine." />
+                        Text="{DynamicResource SettingsInstallDescription}" />
                 </StackPanel>
             </ui:CardAction>
             <ui:CardAction

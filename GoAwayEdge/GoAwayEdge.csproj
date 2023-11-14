@@ -1,63 +1,56 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-
-	<PropertyGroup>
-		<OutputType>WinExe</OutputType>
-		<TargetFramework>net7.0-windows10.0.18362.0</TargetFramework>
-		<ImplicitUsings>enable</ImplicitUsings>
-		<Nullable>enable</Nullable>
-		<PublishSingleFile>true</PublishSingleFile>
-		<SelfContained>false</SelfContained>
-		<RuntimeIdentifier>win-x64</RuntimeIdentifier>
-		<PublishReadyToRun>true</PublishReadyToRun>
-		<UseWPF>true</UseWPF>
-		<AssemblyName>GoAwayEdge</AssemblyName>
-		<Company>Exploitox</Company>
-		<Authors>valnoxy</Authors>
-		<Version>1.3.0.96</Version>
-		<Copyright>Copyright (c) 2018 - 2023 Exploitox. All rights reserved.</Copyright>
-		<PackageProjectUrl>https://github.com/valnoxy/GoAwayEdge</PackageProjectUrl>
-		<RepositoryUrl>https://github.com/valnoxy/GoAwayEdge</RepositoryUrl>
-		<StartupObject>GoAwayEdge.App</StartupObject>
-		<ApplicationIcon>GoAwayEdge.ico</ApplicationIcon>
-	</PropertyGroup>
-
-	<ItemGroup>
-	  <None Remove="Assets\SetupBannerIcon.png" />
-	</ItemGroup>
-
-	<ItemGroup>
-	  <Page Remove="Localization\ResourceDictionary.de-DE.xaml" />
-	  <Page Remove="Localization\ResourceDictionary.es-ES.xaml" />
-	  <Page Remove="Localization\ResourceDictionary.fr-FR.xaml" />
-	  <Page Remove="Localization\ResourceDictionary.it-IT.xaml" />
-	  <Page Remove="Localization\ResourceDictionary.ko-KR.xaml" />
-	  <Page Remove="Localization\ResourceDictionary.pl-PL.xaml" />
-	  <Page Remove="Localization\ResourceDictionary.xaml" />
-	</ItemGroup>
-
-	<ItemGroup>
-	  <Content Include="GoAwayEdge.ico" />
-	</ItemGroup>
-
-	<ItemGroup>
-	  <Resource Include="Assets\SetupBannerIcon.png" />
-	  <Resource Include="Localization\ResourceDictionary.ko-KR.xaml">
-	    <SubType>Designer</SubType>
-	    <Generator>MSBuild:Compile</Generator>
-	  </Resource>
-	  <Resource Include="Localization\ResourceDictionary.de-DE.xaml" />
-	  <Resource Include="Localization\ResourceDictionary.es-ES.xaml" />
-	  <Resource Include="Localization\ResourceDictionary.fr-FR.xaml" />
-	  <Resource Include="Localization\ResourceDictionary.it-IT.xaml" />
-	  <Resource Include="Localization\ResourceDictionary.pl-PL.xaml" />
-	  <Resource Include="Localization\ResourceDictionary.xaml" />
-	</ItemGroup>
-
-	<ItemGroup>
-	  <PackageReference Include="Microsoft.Toolkit.Uwp.Notifications" Version="7.1.3" />
-	  <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
-	  <PackageReference Include="TaskScheduler" Version="2.10.1" />
-	  <PackageReference Include="WPF-UI" Version="2.1.0" />
-	</ItemGroup>
-	
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0-windows10.0.18362.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <PublishSingleFile>true</PublishSingleFile>
+    <SelfContained>false</SelfContained>
+    <RuntimeIdentifier>win-x64</RuntimeIdentifier>
+    <PublishReadyToRun>true</PublishReadyToRun>
+    <UseWPF>true</UseWPF>
+    <AssemblyName>GoAwayEdge</AssemblyName>
+    <Company>Exploitox</Company>
+    <Authors>valnoxy</Authors>
+    <Version>1.3.0.96</Version>
+    <Copyright>Copyright (c) 2018 - 2023 Exploitox. All rights reserved.</Copyright>
+    <PackageProjectUrl>https://github.com/valnoxy/GoAwayEdge</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/valnoxy/GoAwayEdge</RepositoryUrl>
+    <StartupObject>GoAwayEdge.App</StartupObject>
+    <ApplicationIcon>GoAwayEdge.ico</ApplicationIcon>
+  </PropertyGroup>
+  <ItemGroup>
+    <None Remove="Assets\SetupBannerIcon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Page Remove="Localization\ResourceDictionary.de-DE.xaml" />
+    <Page Remove="Localization\ResourceDictionary.es-ES.xaml" />
+    <Page Remove="Localization\ResourceDictionary.fr-FR.xaml" />
+    <Page Remove="Localization\ResourceDictionary.it-IT.xaml" />
+    <Page Remove="Localization\ResourceDictionary.ko-KR.xaml" />
+    <Page Remove="Localization\ResourceDictionary.pl-PL.xaml" />
+    <Page Remove="Localization\ResourceDictionary.xaml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="GoAwayEdge.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Assets\SetupBannerIcon.png" />
+    <Resource Include="Localization\ResourceDictionary.ko-KR.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Resource>
+    <Resource Include="Localization\ResourceDictionary.de-DE.xaml" />
+    <Resource Include="Localization\ResourceDictionary.es-ES.xaml" />
+    <Resource Include="Localization\ResourceDictionary.fr-FR.xaml" />
+    <Resource Include="Localization\ResourceDictionary.it-IT.xaml" />
+    <Resource Include="Localization\ResourceDictionary.pl-PL.xaml" />
+    <Resource Include="Localization\ResourceDictionary.xaml" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Toolkit.Uwp.Notifications" Version="7.1.3" />
+    <PackageReference Include="TaskScheduler" Version="2.10.1" />
+    <PackageReference Include="WPF-UI" Version="2.1.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+  </ItemGroup>
 </Project>

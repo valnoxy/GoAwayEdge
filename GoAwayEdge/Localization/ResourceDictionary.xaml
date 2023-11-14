@@ -5,7 +5,17 @@
     <system:String x:Key="Next">Next</system:String>
     <system:String x:Key="Back">Back</system:String>
 
+    <!-- Welcome -->
+    <system:String x:Key="WelcomeTitle">Welcome</system:String>
+    <system:String x:Key="WelcomeDescription">The installer will perform all the necessary steps to install GoAwayEdge on your system. After installation, all Edge calls will be redirected to your browser. Please select the desired option to continue.</system:String>
+    <system:String x:Key="SettingsInstallTitle">Install</system:String>
+    <system:String x:Key="SettingsInstallDescription">Install and configure GoAwayEdge on your system.</system:String>
+    <system:String x:Key="SettingsUninstallTitle">Uninstall</system:String>
+    <system:String x:Key="SettingsUninstallDescription">Uninstall GoAwayEdge and restore Edge functionality.</system:String>
+    <system:String x:Key="SettingsUninstallUseInstaller">Please use the Installer in order to uninstall GoAwayEdge.</system:String>
+
     <!-- License -->
+    <system:String x:Key="LicenseTitle">License</system:String>
     <system:String x:Key="LicenseNote">Please read the following License. You must accept the terms of the license before continuing with the installation.</system:String>
     <system:String x:Key="LicenseAccept">I accept this license.</system:String>
     <system:String x:Key="LicenseDecline">I decline this license.</system:String>
@@ -19,9 +29,6 @@
     <system:String x:Key="SettingsSearchEngineCustomItem">Custom</system:String>
     <system:String x:Key="SettingsCustomSearchEngineTitle">Custom Search Engine</system:String>
     <system:String x:Key="SettingsCustomSearchEngineDescription">Please enter the query URL from the search engine.</system:String>
-    <system:String x:Key="SettingsUninstallTitle">Uninstall</system:String>
-    <system:String x:Key="SettingsUninstallDescription">Uninstall GoAwayEdge and restore Edge functionality.</system:String>
-    <system:String x:Key="SettingsUninstallUseInstaller">Please use the Installer in order to uninstall GoAwayEdge.</system:String>
     <system:String x:Key="SettingsMSEdgeUninstallTitle">Remove Microsoft Edge (Stable)</system:String>
     <system:String x:Key="SettingsMSEdgeUninstallDescription">Remove Microsoft Edge completely from the system. [WIP]</system:String>
 

@@ -37,6 +37,6 @@
             </StackPanel>
         </DockPanel>
 
-        <ui:TitleBar x:Name="Bar" Title="{DynamicResource Title}" Grid.Row="0" ShowMaximize="false"/>
+        <ui:TitleBar x:Name="Bar" Title="{DynamicResource Title}" Grid.Row="0" ShowMaximize="false" Icon="pack://application:,,,/GoAwayEdge.ico"/>
     </Grid>
 </ui:UiWindow>
