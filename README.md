@@ -1,73 +1,108 @@
-<h1 align="center"><br><img src="https://dl.exploitox.de/other/GoAwayEdge_v2.png" alt="GoAwayEdge Logo" width=100></h1>
+<div align="center">
 
-<h3 align="center">GoAwayEdge</h3>
-<p align="center">
-    Redirect all Edge calls to your favorite browser! 
-    <br />
-    <strong>Version: </strong>1.3.0
-    <br />
-    <br />
-    <a href="https://github.com/valnoxy/GoAwayEdge/releases"><strong>Download now »</strong></a>
-    <br />
-    <br />
+  <!-- PROJECT LOGO -->
+  <br />
+    <a href="https://goawayedge.com">
+      <img src="https://dl.exploitox.de/goawayedge/gh-banner-goawayedge.png" alt="GoAwayEdge Banner">
+    </a>
+  <br />
+
+  [![Version][version-shield]][version-url]
+  [![Crowdin][crowdin-shield]][crowdin-url]
+  [![Download Counter][downloads-shield]][downloads-url]
+  [![License][license-shield]][license-url]
+</div>
+
+[version-shield]: https://img.shields.io/github/v/release/valnoxy/GoAwayEdge?color=9565F6
+[version-url]: https://github.com/valnoxy/GoAwayEdge/releases
+
+[crowdin-shield]: https://badges.crowdin.net/goawayedge/localized.svg?color=9565F6
+[crowdin-url]: https://crowdin.com/project/goawayedge
+
+[downloads-shield]: https://img.shields.io/github/downloads/valnoxy/GoAwayEdge/total.svg?color=431D93
+[downloads-url]: https://github.com/valnoxy/GoAwayEdge/releases
+
+[license-shield]: https://img.shields.io/github/license/valnoxy/GoAwayEdge?color=9565F6
+[license-url]: https://img.shields.io/github/license/valnoxy/GoAwayEdge
+
+<div align="center">
+  <h3 align="center">GoAwayEdge</h3>
+  <p align="center">
+    <p>Don't like Microsoft Edge? Me neither. Redirect all Edge calls to your favorite browser!</p>
     <a href="https://github.com/valnoxy/GoAwayEdge/issues">Report Bug</a>
     ·
     <a href="https://github.com/valnoxy/GoAwayEdge/discussions/">Discussions</a>
     ·
     <a href="https://crowdin.com/project/goawayedge">Help me translate</a>
+    <br />
+    <br />
+    🎉 Version 1.3.0 is out. Check out the release notes
+    <a href="https://github.com/valnoxy/GoAwayEdge/releases">here</a>.
+    <br />
+    <br />
   </p>
-</p>
+</div>
 
-![-----------------------------------------------------](https://github.com/valnoxy/valnoxy/raw/main/assets/bar.gif)
+---
 
-![Download counter](https://img.shields.io/github/downloads/valnoxy/GoAwayEdge/total.svg)
-![License](https://img.shields.io/github/license/valnoxy/GoAwayEdge)
-![version](https://img.shields.io/github/v/release/valnoxy/GoAwayEdge)
-[![Crowdin](https://badges.crowdin.net/goawayedge/localized.svg)](https://crowdin.com/project/goawayedge)
+> [!NOTE]
+> This application will modify the system. I won't be responsible for any damage you've done yourself trying to use this application.
 
-## 🔔 Information
-Don't like MS Edge? Me neither. Redirect all Edge calls (like Windows Search and Widgets) to your favorite browser! 
+# 🚀Introduction
+GoAwayEdge is designed for those who, like me, aren’t fans of Microsoft Edge. If you find yourself constantly annoyed by Edge popping up unexpectedly, fear not! This clever utility redirects all Edge-related calls to your preferred browser, ensuring a seamless browsing experience.
 
-- Redirect Edge calls to other browsers
-- Redirect search queries to other search engines
-- Filter search queries (removes url tracker)
-- Simple usage
+Here are some key points about GoAwayEdge:
 
-## 🖼️ Screenshot
-<img src="https://dl.exploitox.de/goawayedge/GoAwayEdge_Screenshot1.png" alt="GoAwayEdge Setup" width=650>
+- Purpose: The primary purpose of GoAwayEdge is to intercept any requests or actions that would normally trigger Microsoft Edge and reroute them to your favorite browser instead.
+- How It Works: GoAwayEdge interrupts the Edge process from launching by hooking via Image File Execution Options. It then reads the arguments, parses them and redirects them to your default browser.
+- Compatibility: It works on Windows 10 / 11 systems and provides a simple solution for those who want to avoid Edge altogether.
 
-## 🔧 Usage
+Feel free to explore the code, contribute, or simply enjoy a browser experience free from unexpected Edge encounters! 🚀
+
+# 🤸 Installation methods
+## 💿 1. Install normally
 1. Download the latest version from [GitHub](https://github.com/valnoxy/GoAwayEdge/releases).
 2. Start the application.
 3. Accept the license.
 4. Customize GoAwayEdge as you like.
 5. Done!
 
-## 🗑️ Uninstall GoAwayEdge
+## 🤫 2. Silent Installation
+You can install GoAwayEdge silently by parsing the following arguments:
+
+| Switch            | Description                                                               |
+| ----------------- | ------------------------------------------------------------------------- |
+| `-s`              | Silent installation                                                       |
+| `-se:<Engine>`    | Specify the Search Engine: `Google` (default), `Bing`, `DuckDuckGo`, `Yahoo`, `Yandex`, `Ecisua`, `Ask`, `Quant`, `Perplexity`         |
+| `--url:<Url>`     | Custom search query url (ex: `https://google.com/search?q=`)              |
+
+<b>Example</b>:
+
+```bat
+GoAwayEdge.exe -s -se:DuckDuckGo
+``` 
+
+# 🗑️ Remove GoAwayEdge
 1. Download the latest version from [GitHub](https://github.com/valnoxy/GoAwayEdge/releases).
 2. Start the application.
-3. Accept the license.
-4. Enable the switch ```Uninstall``` and click on Next.
-5. Done!
+3. Click on ```Uninstall```.
+4. Done!
 
-## ℹ️ Disclaimer
-> This application will modify the system. I won't be responsible for any damage you've done yourself trying to use this application.
+# 🖼️ Screenshot
+<img src="https://dl.exploitox.de/goawayedge/GoAwayEdge_Screenshot1.png" alt="GoAwayEdge Setup" width=650>
 
-## ⚙️ Compiling the source code
-For compiling, you'll need ```Visual Studio 2022``` and ```.NET 7.0```.
-Clone this source and restore the NUGET Packages.
-
-## 🧾 License
-GoAwayEdge is licensed under [MIT](https://github.com/valnoxy/GoAwayEdge/blob/main/LICENSE). So you are allowed to use freely and modify the application. I will not be responsible for any outcome. Proceed with any action at your own risk.
-
-## 🙏 Libraries
+# 🙏 Libraries
 This project uses the following libraries:
 - [Microsoft.Toolkit.Uwp.Notification](https://github.com/CommunityToolkit/WindowsCommunityToolkit)
 - [TaskScheduler](https://github.com/dahall/taskscheduler)
 - [WPF-UI](https://github.com/lepoco/wpfui)
 
+
+# 🧾 License
+GoAwayEdge is licensed under [MIT](https://github.com/valnoxy/GoAwayEdge/blob/main/LICENSE). So you are allowed to use freely and modify the application. I will not be responsible for any outcome. Proceed with any action at your own risk.
+
 <hr>
-<h6 align="center">© 2018 - 2023 valnoxy. All Rights Reserved. 
+<h6 align="center">© 2018 - 2024 valnoxy. All Rights Reserved. 
 <br>
 By Jonas Günner &lt;jonas@exploitox.de&gt;</h6>
 <p align="center">
