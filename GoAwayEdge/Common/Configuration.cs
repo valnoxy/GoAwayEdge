@@ -13,6 +13,7 @@ namespace GoAwayEdge.Common
         Ecosia,
         Ask,
         Qwant,
+        Perplexity,
         Custom
     }
 

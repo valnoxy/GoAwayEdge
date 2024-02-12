@@ -57,7 +57,7 @@ namespace GoAwayEdge
             string[] args = e.Args;
             Output.WriteLine("Please go away Edge!");
             Output.WriteLine("Hooked into process via IFEO successfully.");
-            var argumentJoin = string.Join(",", args);
+            var argumentJoin = string.Join(" ", args);
 
             Configuration.InitialEnvironment();
 
@@ -150,7 +150,7 @@ namespace GoAwayEdge
                                         };
                                         Process.Start(startInfo);
                                     }
-                                    Application.Current.Shutdown();
+                                    Current.Shutdown();
                                     return;
                                 }
                                 Environment.Exit(0);
@@ -177,6 +177,7 @@ namespace GoAwayEdge
                         "Ecosia" => SearchEngine.Ecosia,
                         "Ask" => SearchEngine.Ask,
                         "Qwant" => SearchEngine.Qwant,
+                        "Perplexity" => SearchEngine.Perplexity,
                         "Custom" => SearchEngine.Custom,
                         _ => SearchEngine.Google // Fallback search engine
                     };
@@ -305,6 +306,7 @@ namespace GoAwayEdge
                 SearchEngine.Ecosia => "https://www.ecosia.org/search?q=",
                 SearchEngine.Ask => "https://www.ask.com/web?q=",
                 SearchEngine.Qwant => "https://qwant.com/?q=",
+                SearchEngine.Perplexity => "https://www.perplexity.ai/search?copilot=false&q=",
                 SearchEngine.Custom => customQueryUrl,
                 _ => "https://www.google.com/search?q="
             };

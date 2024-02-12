@@ -1,7 +1,6 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
 using GoAwayEdge.Common;
-using Path = System.IO.Path;
 
 namespace GoAwayEdge.Pages
 {
@@ -29,6 +28,7 @@ namespace GoAwayEdge.Pages
             SearchEngineBox.Items.Add("Ecosia");
             SearchEngineBox.Items.Add("Ask");
             SearchEngineBox.Items.Add("Qwant");
+            SearchEngineBox.Items.Add("Perplexity");
 
             try
             {
@@ -105,6 +105,11 @@ namespace GoAwayEdge.Pages
                     Installer.ContentWindow!.NextBtn.IsEnabled = true;
                     break;
                 case 8:
+                    Configuration.Search = SearchEngine.Perplexity;
+                    CustomSearchPanel.Visibility = Visibility.Collapsed;
+                    Installer.ContentWindow!.NextBtn.IsEnabled = true;
+                    break;
+                case 9:
                     Configuration.Search = SearchEngine.Custom;
                     CustomSearchPanel.Visibility = Visibility.Visible;
                     if (string.IsNullOrEmpty(Configuration.CustomQueryUrl))
