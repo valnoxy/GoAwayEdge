@@ -30,7 +30,8 @@ namespace GoAwayEdge
 
         public void Application_Startup(object sender, StartupEventArgs e)
         {
-            if (e.Args.Length == 0) // Opens Installer
+            string[] args = e.Args;
+            if (args.Length == 0) // Opens Installer
             {
                 if (IsAdministrator() == false)
                 {
@@ -45,38 +46,41 @@ namespace GoAwayEdge
                         };
                         Process.Start(startInfo);
                     }
-                    Application.Current.Shutdown();
+                    Current.Shutdown();
                     return;
                 }
-                
+
                 var installer = new Installer();
                 installer.ShowDialog();
                 Environment.Exit(0);
             }
-            
-            string[] args = e.Args;
-            Output.WriteLine("Please go away Edge!");
-            Output.WriteLine("Hooked into process via IFEO successfully.");
-            var argumentJoin = string.Join(" ", args);
-
-            Configuration.InitialEnvironment();
-
-#if DEBUG
-            var w = new MessageUi("GoAwayEdge",
-                $"The following args are redirected (CTRL+C to copy):\n\n{argumentJoin}", "OK", null, true);
-            w.ShowDialog();
-#endif
-            Output.WriteLine("Command line args:\n\n" + argumentJoin + "\n", ConsoleColor.Gray);
-
-            // Filter command line args
-            foreach (var arg in args)
+            else if (args.Length > 0)
             {
-                if (arg.Contains("-ToastActivated"))
+                if (args.Contains("-ToastActivated")) // Clicked on notification, ignore it.
+                    Environment.Exit(0);
+                if (args.Contains("-s")) // Silent Installation
                 {
-                    // Clicked on Toast notification, ignore it.
+                    foreach (var arg in args)
+                    {
+                        if (arg.Contains("-se:"))
+                            Configuration.Search = ParseSearchEngine(arg);
+                        if (arg.Contains("--url:"))
+                        {
+                            Configuration.CustomQueryUrl = ParseCustomSearchEngine(arg);
+                            Configuration.Search = !string.IsNullOrEmpty(Configuration.CustomQueryUrl) ? SearchEngine.Custom : SearchEngine.Google;
+                        }
+                    }
+
+                    InstallRoutine.Install(null);
                     Environment.Exit(0);
                 }
-                if (arg.Contains("--update"))
+
+                if (args.Contains("-u"))
+                {
+                    InstallRoutine.Uninstall(null);
+                    Environment.Exit(0);
+                }
+                if (args.Contains("--update"))
                 {
                     var statusEnv = Configuration.InitialEnvironment();
                     if (statusEnv == false) Environment.Exit(1);
@@ -95,7 +99,7 @@ namespace GoAwayEdge
                         }
                     }
 
-                    // Validate IFEO bínary
+                    // Validate Ifeo binary
                     var binaryStatus = Updater.ValidateIfeoBinary();
                     switch (binaryStatus)
                     {
@@ -107,7 +111,7 @@ namespace GoAwayEdge
                                 var ifeoMessageUi = new MessageUi("GoAwayEdge",
                                     "The IFEO exclusion file needs to be updated. Update now?", "No", "Yes");
                                 ifeoMessageUi.ShowDialog();
-                                
+
                                 if (ifeoMessageUi.Summary == "Btn2")
                                 {
                                     // Restart program and run as admin
@@ -122,7 +126,7 @@ namespace GoAwayEdge
                                         };
                                         Process.Start(startInfo);
                                     }
-                                    Application.Current.Shutdown();
+                                    Current.Shutdown();
                                     return;
                                 }
                                 Environment.Exit(0);
@@ -160,27 +164,34 @@ namespace GoAwayEdge
                     }
                     Environment.Exit(0);
                 }
-                if (arg.Contains("microsoft-edge:"))
+            }
+
+            Configuration.InitialEnvironment();
+            RunParser(args);
+
+            Environment.Exit(0);
+        }
+
+        public static void RunParser(string[] args)
+        {
+            var argumentJoin = string.Join(" ", args);
+#if DEBUG
+            var w = new MessageUi("GoAwayEdge",
+                $"The following args are redirected (CTRL+C to copy):\n\n{argumentJoin}", "OK", null, true);
+            w.ShowDialog();
+#endif
+            Output.WriteLine("Command line args:\n\n" + argumentJoin + "\n", ConsoleColor.Gray);
+
+            // Filter command line args
+            foreach (var arg in args)
+            {
+                if (arg.StartsWith("microsoft-edge:"))
                 {
                     _url = arg;
                 }
-                if (arg.Contains("-se"))
+                if (arg.StartsWith("-se:"))
                 {
-                    var argParsed = arg.Remove(0,3);
-                    _engine = argParsed switch
-                    {
-                        "Google" => SearchEngine.Google,
-                        "Bing" => SearchEngine.Bing,
-                        "DuckDuckGo" => SearchEngine.DuckDuckGo,
-                        "Yahoo" => SearchEngine.Yahoo,
-                        "Yandex" => SearchEngine.Yandex,
-                        "Ecosia" => SearchEngine.Ecosia,
-                        "Ask" => SearchEngine.Ask,
-                        "Qwant" => SearchEngine.Qwant,
-                        "Perplexity" => SearchEngine.Perplexity,
-                        "Custom" => SearchEngine.Custom,
-                        _ => SearchEngine.Google // Fallback search engine
-                    };
+                    _engine = ParseSearchEngine(arg);
                 }
                 if (!args.Contains("--profile-directory") && !ContainsParsedData(args) && args.Length != 2) continue; // Start Edge (default browser on this system)
 
@@ -189,7 +200,6 @@ namespace GoAwayEdge
                     "Microsoft Edge will now start normally via IFEO application.", "OK", null, true);
                 messageUi.ShowDialog();
 #endif
-
                 var parsedArgs = args.Skip(2);
                 var p = new Process();
                 p.StartInfo.FileName = FileConfiguration.IfeoPath;
@@ -234,8 +244,33 @@ namespace GoAwayEdge
                 p.StartInfo.RedirectStandardOutput = false;
                 p.Start();
             }
-            
-            Environment.Exit(0);
+        }
+
+        private string? ParseCustomSearchEngine(string argument)
+        {
+            var argParsed = argument.Remove(0, 6);
+            var result = Uri.TryCreate(argParsed, UriKind.Absolute, out var uriResult)
+                         && (uriResult.Scheme == Uri.UriSchemeHttp || uriResult.Scheme == Uri.UriSchemeHttps);
+            return result ? argParsed : null;
+        }
+
+        private static SearchEngine ParseSearchEngine(string argument)
+        {
+            var argParsed = argument.Remove(0, 4);
+            return argParsed.ToLower() switch
+            {
+                "google" => SearchEngine.Google,
+                "bing" => SearchEngine.Bing,
+                "duckduckgo" => SearchEngine.DuckDuckGo,
+                "yahoo" => SearchEngine.Yahoo,
+                "yandex" => SearchEngine.Yandex,
+                "ecosia" => SearchEngine.Ecosia,
+                "ask" => SearchEngine.Ask,
+                "qwant" => SearchEngine.Qwant,
+                "perplexity" => SearchEngine.Perplexity,
+                "custom" => SearchEngine.Custom,
+                _ => SearchEngine.Google // Fallback search engine
+            };
         }
 
         private static bool ContainsParsedData(IEnumerable<string> args)
