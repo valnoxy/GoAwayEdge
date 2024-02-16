@@ -31,6 +31,7 @@ namespace GoAwayEdge.Common
         public static SearchEngine Search { get; set; }
         public static bool Uninstall { get; set; }
         public static bool UninstallEdge { get; set; }
+        public static bool NoEdgeInstalled { get; set; }
         public static string? CustomQueryUrl { get; set; }
 
         public static string InstallDir = Path.Combine(
@@ -48,30 +49,36 @@ namespace GoAwayEdge.Common
         {
             try
             {
-                var key = Registry.LocalMachine.OpenSubKey(
-                    @"SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\msedge.exe\0");
-                if (key == null)
-                {
-                    var defaultEdgePath = Path.Combine(
-                        Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86),
-                        "Microsoft", "Edge", "Application");
-
-                    if (!Directory.Exists(defaultEdgePath)) return false;
-                    
-                    FileConfiguration.EdgePath = Path.Combine(defaultEdgePath, "msedge.exe");
-                    FileConfiguration.IfeoPath = Path.Combine(defaultEdgePath, "msedge_ifeo.exe");
-                    return true;
-                }
-
-                var ifeoBinaryPath = (string)key.GetValue("FilterFullPath")!;
-                if (string.IsNullOrEmpty(ifeoBinaryPath))
-                {
-                    Console.WriteLine("FilterFullPath value not found.");
+                if (!Directory.Exists(Path.GetDirectoryName(FileConfiguration.EdgePath)))
                     return false;
-                }
 
-                FileConfiguration.EdgePath = Path.Combine(Path.GetDirectoryName(ifeoBinaryPath)!, "msedge.exe");
-                FileConfiguration.IfeoPath = Path.Combine(Path.GetDirectoryName(ifeoBinaryPath)!, "msedge_ifeo.exe");
+                var subDirectories = Directory.GetDirectories(Path.GetDirectoryName(FileConfiguration.EdgePath)!);
+                var validDirectories = subDirectories
+                    .Where(dir => Version.TryParse(Path.GetFileName(dir), out _))
+                    .ToList();
+
+                if (validDirectories.Count != 0)
+                {
+                    var sortedDirectories = validDirectories
+                        .Select(dir => new
+                        {
+                            DirectoryPath = dir,
+                            Version = new Version(Path.GetFileName(dir))
+                        })
+                        .OrderByDescending(x => x.Version);
+
+                    var newestDirectory = sortedDirectories.FirstOrDefault();
+                    var edgeSetupFile = Path.Combine(newestDirectory!.DirectoryPath, "Installer", "setup.exe");
+                    NoEdgeInstalled = !File.Exists(edgeSetupFile);
+                }
+                else NoEdgeInstalled = false;
+                
+                RegistryConfig.SetKey("NoEdgeInstalled", NoEdgeInstalled);
+                if (NoEdgeInstalled) return true;
+                
+                FileConfiguration.EdgePath = RegistryConfig.GetKey("EdgeFilePath");
+                FileConfiguration.NonIfeoPath = RegistryConfig.GetKey("EdgeNonIEFOFilePath");
+
                 return true;
             }
             catch (Exception ex)
@@ -93,6 +100,92 @@ namespace GoAwayEdge.Common
     internal class FileConfiguration
     {
         public static string EdgePath = string.Empty;
-        public static string IfeoPath = string.Empty;
+        public static string NonIfeoPath = string.Empty;
+    }
+
+    public class RegistryConfig
+    {
+        private const string Company = "valnoxy";
+        private const string Product = "GoAwayEdge";
+        private const string RegistryPath = @$"SOFTWARE\{Company}\{Product}";
+
+        /// <summary>
+        /// Create a Key in the Registry
+        /// </summary>
+        /// <param name="option">Key Name</param>
+        /// <param name="value">Key Value</param>
+        public static void SetKey(string option, object value)
+        {
+            try
+            {
+                using var key = Registry.LocalMachine.CreateSubKey(RegistryPath, RegistryKeyPermissionCheck.ReadWriteSubTree);
+                key.SetValue(option, value);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("An error has occurred while writing to the registry: " + ex.Message);
+            }
+        }
+
+        /// <summary>
+        /// Retrieves the value of a key from the Registry.
+        /// </summary>
+        /// <param name="option">Name of the key.</param>
+        /// <returns>The value of the key if it exists, otherwise null.</returns>
+        public static string GetKey(string option)
+        {
+            try
+            {
+                using var key = Registry.LocalMachine.OpenSubKey(RegistryPath);
+                if (key != null)
+                {
+                    var value = key.GetValue(option);
+                    if (value != null)
+                    {
+                        return value.ToString()!;
+                    }
+                    else
+                    {
+                        Console.WriteLine($"Value for key '{option}' not found in the registry.");
+                        return "";
+                    }
+                }
+                else
+                {
+                    Console.WriteLine($"Registry key '{RegistryPath}' not found.");
+                    return "";
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("An error has occurred while reading the registry: " + ex.Message);
+                return "";
+            }
+        }
+
+        /// <summary>
+        /// Create a Key in the Registry
+        /// </summary>
+        /// <param name="option">Key Name</param>
+        public static bool RemoveKey(string option)
+        {
+            try
+            {
+                using var key = Registry.LocalMachine.OpenSubKey(RegistryPath, RegistryKeyPermissionCheck.ReadWriteSubTree);
+                var value = key?.GetValue(option);
+                if (value != null)
+                {
+                    key?.DeleteValue(option);
+                }
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("An error has occurred while reading the registry: " + ex.Message);
+            }
+
+            return false;
+        }
     }
 }

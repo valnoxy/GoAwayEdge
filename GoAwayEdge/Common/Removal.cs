@@ -1,4 +1,4 @@
-﻿using System.Diagnostics;
+using System.Diagnostics;
 using System.IO;
 using Microsoft.Win32;
 
@@ -15,7 +15,7 @@ namespace GoAwayEdge.Common
 		public static bool RemoveMsEdge()
         {
 			//
-			// Ok, this is very wip. Current plan:
+			// Ok, this should be stable now. Current plan:
 			//
 			//  1. Remove Edge via edge setup (setup.exe --uninstall --system-level --verbose-logging --force-uninstall)
             //  2. Prevent Edge from reinstalling
@@ -50,13 +50,14 @@ namespace GoAwayEdge.Common
             }
             else
             {
-                return false; // Might not be installed - TODO: Add handler
+                return false; // Edge is already removed
             }
 
             // Terminate processes
             KillProcess("MicrosoftEdge");
             KillProcess("chredge");
             KillProcess("msedge");
+            KillProcess("MicrosoftEdgeUpdate");
             KillProcess("edge");
 
             // Clean up registry
@@ -66,38 +67,15 @@ namespace GoAwayEdge.Common
             RemoveUserRegistryKey(@"Software\Classes\MSEdgeHTM");
 
             // Write temporary URI handler into the registry
-            try
-            {
-                // HKLM\SOFTWARE\Classes\microsoft-edge
-                using (var baseKey = Registry.LocalMachine)
-                using (var key = baseKey.OpenSubKey(@"SOFTWARE\Classes\microsoft-edge", true) ??
-                                 baseKey.CreateSubKey(@"SOFTWARE\Classes\microsoft-edge"))
-                {
-                    using (var shellKey = key.CreateSubKey("shell"))
-                    using (var openKey = shellKey.CreateSubKey("open"))
-                    using (var commandKey = openKey.CreateSubKey("command"))
-                    {
-                        commandKey.SetValue("", $"\"{FileConfiguration.EdgePath}\" \" --single-argument %1\"", RegistryValueKind.String);
-                    }
-                }
-
-                // HKLM\SOFTWARE\Classes\EdgeHTM
-                using (var baseKey = Registry.LocalMachine)
-                using (var key = baseKey.OpenSubKey(@"SOFTWARE\Classes\MSEdgeHTM", true) ??
-                                 baseKey.CreateSubKey(@"SOFTWARE\Classes\MSEdgeHTM"))
-                {
-                    using (var shellKey = key.CreateSubKey("shell"))
-                    using (var openKey = shellKey.CreateSubKey("open"))
-                    using (var commandKey = openKey.CreateSubKey("command"))
-                    {
-                        commandKey.SetValue("", $"\"{FileConfiguration.EdgePath}\" \" --single-argument %1\"", RegistryValueKind.String);
-                    }
-                }
-            }
-            catch
-            {
+            var status = Register.UriHandler(Register.UriType.microsoftEdge,
+                $"\"{FileConfiguration.EdgePath}\" \" --single-argument %1\"");
+            if (!status)
                 return false;
-            }
+            
+            status = Register.UriHandler(Register.UriType.EdgeHTM,
+                $"\"{FileConfiguration.EdgePath}\" \" --single-argument %1\"");
+            if (!status)
+                return false;
 
             // Remove certain registry properties
             try
@@ -160,7 +138,6 @@ namespace GoAwayEdge.Common
             }
 
             // Find and copy ie_to_edge_stub.exe
-
             var ieToEdgeStubFile = Path.Combine(edgeNewestVersionPath, "BHO", "ie_to_edge_stub.exe");
             if (File.Exists(ieToEdgeStubFile))
             {
@@ -208,7 +185,6 @@ namespace GoAwayEdge.Common
             {
                 return false;
             }
-
 
             // Removing Edge (+ Updater)
             var timeoutStopwatch = new Stopwatch();
@@ -277,77 +253,41 @@ namespace GoAwayEdge.Common
                 return false;
             }
 
-
             // Prevent Edge from reinstalling
             try
             {
-                using (var baseKey = Registry.LocalMachine)
-                using (var key = baseKey.OpenSubKey(@"SOFTWARE\Microsoft", true) ??
-                                 baseKey.CreateSubKey(@"SOFTWARE\Microsoft"))
-                {
-                    using (var edgeUpdate = key.CreateSubKey("EdgeUpdate"))
-                    {
-                        edgeUpdate.SetValue("DoNotUpdateToEdgeWithChromium", 1, RegistryValueKind.DWord);
-                    }
-                }
-			}
+                using var baseKey = Registry.LocalMachine;
+                using var key = baseKey.OpenSubKey(@"SOFTWARE\Microsoft", true) ??
+                                baseKey.CreateSubKey(@"SOFTWARE\Microsoft");
+                using var edgeUpdate = key.CreateSubKey("EdgeUpdate");
+                edgeUpdate.SetValue("DoNotUpdateToEdgeWithChromium", 1, RegistryValueKind.DWord);
+            }
             catch
             {
                 return false;
             }
 
             // Register new URIs
-            try
-            {
-                // HKLM\SOFTWARE\Classes\microsoft-edge
-                using (var baseKey = Registry.LocalMachine)
-                using (var key = baseKey.OpenSubKey(@"SOFTWARE\Classes\microsoft-edge", true) ??
-                                 baseKey.CreateSubKey(@"SOFTWARE\Classes\microsoft-edge"))
-                {
-                    using (var shellKey = key.CreateSubKey("shell"))
-                    using (var openKey = shellKey.CreateSubKey("open"))
-                    using (var commandKey = openKey.CreateSubKey("command"))
-                    {
-                        commandKey.SetValue("", $"\"{Path.Combine(Configuration.InstallDir, "ie_to_edge_stub.exe")}\" \"%1\"", RegistryValueKind.String);
-                    }
-                }
-
-                // HKLM\SOFTWARE\Classes\EdgeHTM
-                using (var baseKey = Registry.LocalMachine)
-                using (var key = baseKey.OpenSubKey(@"SOFTWARE\Classes\MSEdgeHTM", true) ??
-                                 baseKey.CreateSubKey(@"SOFTWARE\Classes\MSEdgeHTM"))
-                {
-                    using (var shellKey = key.CreateSubKey("shell"))
-                    using (var openKey = shellKey.CreateSubKey("open"))
-                    using (var commandKey = openKey.CreateSubKey("command"))
-                    {
-                        commandKey.SetValue("", $"\"{Path.Combine(Configuration.InstallDir, "ie_to_edge_stub.exe")}\" \"%1\"", RegistryValueKind.String);
-                    }
-                }
-
-                try
-                {
-                    var key = Registry.LocalMachine.OpenSubKey(
-                        @"SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options", true);
-                    key?.CreateSubKey("ie_to_edge_stub.exe");
-                    key = key?.OpenSubKey("ie_to_edge_stub.exe", true);
-                    key?.SetValue("UseFilter", 1, RegistryValueKind.DWord);
-
-                    key?.CreateSubKey("0");
-                    key = key?.OpenSubKey("0", true);
-                    key?.SetValue("Debugger", Path.Combine(Configuration.InstallDir, $"GoAwayEdge.exe -se:{Configuration.Search}"));
-                    key?.SetValue("FilterFullPath", Path.Combine(Configuration.InstallDir, "ie_to_edge_stub.exe"));
-                    key?.Close();
-                }
-                catch
-                {
-                    return false;
-                }
-            }
-            catch
-            {
+            status = Register.UriHandler(Register.UriType.microsoftEdge,
+                $"\"{Path.Combine(Configuration.InstallDir, "ie_to_edge_stub.exe")}\" \"%1\"");
+            if (!status) 
                 return false;
-            }
+
+            status = Register.UriHandler(Register.UriType.EdgeHTM,
+                $"\"{Path.Combine(Configuration.InstallDir, "ie_to_edge_stub.exe")}\" \"%1\"");
+            if (!status) 
+                return false;
+
+            status = Register.ImageFileExecutionOption(
+                Register.IfeoType.ie_to_edge_stub,
+                Path.Combine(Configuration.InstallDir, "GoAwayEdge.exe"),
+                Path.Combine(Configuration.InstallDir, "ie_to_edge_stub.exe"));
+            
+            if (!status) 
+                return false;
+
+            // Set registry config
+            RegistryConfig.SetKey("NoEdgeInstalled", true);
 
             return true;
         }

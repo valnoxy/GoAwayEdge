@@ -29,12 +29,14 @@ namespace GoAwayEdge.Common
         /// </summary>
         /// <returns>
         ///     Integer value if the Binary is identical, not identical or missing.
-        ///     0 : true
+        ///     0 : true (also reported if Edge is not installed)
         ///     1 : false
         ///     2 : missing
         /// </returns>
         public static int ValidateIfeoBinary()
         {
+            if (Configuration.NoEdgeInstalled) return 0;
+
             var key = Registry.LocalMachine.OpenSubKey(
                 @"SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\msedge.exe\0");
             if (key == null)
@@ -51,7 +53,7 @@ namespace GoAwayEdge.Common
             }
 
             var edgeBinaryPath = Path.Combine(Path.GetDirectoryName(binaryPath)!, "msedge.exe");
-            var ifeoBinaryPath = Path.Combine(Path.GetDirectoryName(binaryPath)!, "msedge_ifeo.exe");
+            var ifeoBinaryPath = Path.Combine(Path.GetDirectoryName(binaryPath)!, "msedge_non_ifeo.exe");
 
             if (File.Exists(ifeoBinaryPath))
             {
@@ -83,7 +85,7 @@ namespace GoAwayEdge.Common
                 {
                     try
                     {
-                        File.Copy(FileConfiguration.EdgePath, FileConfiguration.IfeoPath, true);
+                        File.Copy(FileConfiguration.EdgePath, FileConfiguration.NonIfeoPath, true);
                         new ToastContentBuilder()
                             .AddText("Update successful")
                             .AddText("The IFEO binary was successfully updated.")
@@ -106,7 +108,7 @@ namespace GoAwayEdge.Common
         /// <returns>
         ///     Boolean status of the existence of a newer version.
         /// </returns>
-        public static string CheckForAppUpdate()
+        public static string? CheckForAppUpdate()
         {
             const string url = "https://api.github.com/repos/valnoxy/GoAwayEdge/releases";
 
@@ -124,7 +126,7 @@ namespace GoAwayEdge.Common
                     var tagName = Convert.ToString(releases[0].tag_name);
                     var tagVersion = tagName[1..];
                     var currentFileVersion = versionInfo.FileVersion;
-                    var parts = currentFileVersion.Split('.');
+                    var parts = currentFileVersion!.Split('.');
                     var partsResult = string.Join(".", parts.Take(3));
                     var currentVersion = new Version(partsResult);
                     var latestVersion = new Version(tagVersion);
@@ -132,11 +134,11 @@ namespace GoAwayEdge.Common
                     if (currentVersion < latestVersion)
                         return latestVersion.ToString();
                 }
-                return null!;
+                return null;
             }
             catch
             {
-                return null!;
+                return null;
             }
         }
         

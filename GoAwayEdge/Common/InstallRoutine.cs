@@ -26,9 +26,8 @@ namespace GoAwayEdge.Common
                 return;
             }
 
-            // Apply IFEO registry key
-            var msEdge = "";
-            msEdge = Configuration.Channel switch
+            // Apply registry key
+            var msEdge = Configuration.Channel switch
             {
                 EdgeChannel.Stable => Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86),
                     "Microsoft", "Edge", "Application", "msedge.exe"),
@@ -38,40 +37,34 @@ namespace GoAwayEdge.Common
                     "Microsoft", "Edge Dev", "Application", "msedge.exe"),
                 EdgeChannel.Canary => Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86),
                     "Microsoft", "Edge Canary", "Application", "msedge.exe"),
-                _ => msEdge
+                _ => ""
             };
 
             try
             {
-                var key = Registry.LocalMachine.OpenSubKey(
-                    @"SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options", true);
-                key?.CreateSubKey("msedge.exe");
-                key = key?.OpenSubKey("msedge.exe", true);
-                key?.SetValue("UseFilter", 1, RegistryValueKind.DWord);
-
-                key?.CreateSubKey("0");
-                key = key?.OpenSubKey("0", true);
-                key?.SetValue("Debugger", Path.Combine(Configuration.InstallDir, $"GoAwayEdge.exe -se:{Configuration.Search}"));
-                key?.SetValue("FilterFullPath", msEdge);
-
+                RegistryConfig.SetKey("EdgeChannel", Configuration.Channel.ToString());
+                RegistryConfig.SetKey("EdgeFilePath", msEdge);
+                RegistryConfig.SetKey("SearchEngine", Configuration.Search);
                 if (Configuration.Search == SearchEngine.Custom)
                 {
                     if (Configuration.CustomQueryUrl != null)
-                        key?.SetValue("CustomQueryUrl", Configuration.CustomQueryUrl);
+                        RegistryConfig.SetKey("CustomQueryUrl", Configuration.CustomQueryUrl);
                 }
                 else
                 {
-                    try
-                    {
-                        key?.DeleteValue("CustomQueryUrl");
-                    }
-                    catch
-                    {
-                        // ignore: never used custom search engine
-                    }
+                    RegistryConfig.RemoveKey("CustomQueryUrl");
                 }
 
-                key?.Close();
+                status = Register.ImageFileExecutionOption(
+                    Register.IfeoType.msedge, 
+                    Path.Combine(Configuration.InstallDir, "GoAwayEdge.exe"),
+                    msEdge);
+                if (!status)
+                {
+                    MessageBox.Show("Failed to register Image File Execution Option for 'msedge.exe'. Please try again.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    Environment.Exit(1);
+                    return;
+                }
             }
             catch (Exception ex)
             {
@@ -82,21 +75,22 @@ namespace GoAwayEdge.Common
 
             if (Configuration.UninstallEdge)
             {
-                // TODO: highly wip
-                var summaryRemoval = Removal.RemoveMsEdge();
-                if (!summaryRemoval)
+                FileConfiguration.EdgePath = msEdge;
+                status = Removal.RemoveMsEdge();
+                if (!status)
                 {
                     MessageBox.Show("Removal of Microsoft Edge failed! Please try again.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                     Environment.Exit(1);
                     return;
                 }
             }
-            else
+            else if (!Configuration.NoEdgeInstalled)
             {
                 // Create non-IFEO injected copy of msedge.exe
                 try
                 {
-                    File.Copy(msEdge, Path.Combine(Path.GetDirectoryName(msEdge)!, "msedge_ifeo.exe"), true);
+                    File.Copy(msEdge, Path.Combine(Path.GetDirectoryName(msEdge)!, "msedge_non_ifeo.exe"), true);
+                    RegistryConfig.SetKey("EdgeNonIEFOFilePath", Path.Combine(Path.GetDirectoryName(msEdge)!, "msedge_non_ifeo.exe"));
                 }
                 catch (Exception ex)
                 {
@@ -106,15 +100,24 @@ namespace GoAwayEdge.Common
                 }
             }
 
-            // Create Task Schedule for IFEO update 
+            // Delete old tasks & create new task schedule for Update & Validation
             try
             {
                 var ts = new TaskService();
+                try
+                {
+                    ts.RootFolder.DeleteTask("valnoxy\\GoAwayEdge\\GoAwayEdge IFEO Validation");
+                }
+                catch
+                {
+                    // ignored; not existing
+                }
+
                 var td = ts.NewTask();
-                td.RegistrationInfo.Description = "Checks validation between Edge and IFEO binary.";
+                td.RegistrationInfo.Description = "Checks for new versions and validates non-IEFO file.";
                 td.Triggers.Add(new LogonTrigger { Delay = TimeSpan.FromMinutes(5) });
                 td.Actions.Add(new ExecAction(Path.Combine(Configuration.InstallDir, "GoAwayEdge.exe"), "--update", Configuration.InstallDir));
-                ts.RootFolder.RegisterTaskDefinition(@"valnoxy\GoAwayEdge\GoAwayEdge IFEO Validation", td);
+                ts.RootFolder.RegisterTaskDefinition(@"valnoxy\GoAwayEdge\GoAwayEdge Validation & Update Task", td);
             }
             catch (Exception ex)
             {
@@ -147,13 +150,36 @@ namespace GoAwayEdge.Common
                 return;
             }
 
-            // Remove Ifeo from registry
+            // Remove Ifeo & Uri handler from registry
             try
             {
-                var key = Registry.LocalMachine.OpenSubKey(
-                    @"SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options", true);
-                key?.DeleteSubKeyTree("msedge.exe");
-                key?.Close();
+                if (Configuration.NoEdgeInstalled)
+                {
+                    // Image File Execution Options
+                    var key = Registry.LocalMachine.OpenSubKey(
+                        @"SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options", true);
+                    key?.DeleteSubKeyTree("ie_to_edge_stub.exe");
+                    key?.Close();
+
+                    // Uri Handler
+                    key = Registry.LocalMachine.OpenSubKey("SOFTWARE\\Classes", true);
+                    key?.DeleteSubKeyTree("MSEdgeHTM");
+                    key?.DeleteSubKeyTree("microsoft-edge");
+                    key?.Close();
+                }
+                else // Default installation
+                {
+                    var key = Registry.LocalMachine.OpenSubKey(
+                        @"SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options", true);
+                    key?.DeleteSubKeyTree("msedge.exe");
+                    key?.Close();
+                }
+
+                // General infos about GoAwayEdge
+                var generalKey = Registry.LocalMachine.OpenSubKey(
+                    @"SOFTWARE\valnoxy", true);
+                generalKey?.DeleteSubKeyTree("GoAwayEdge");
+                generalKey?.Close();
             }
             catch (Exception ex)
             {
@@ -166,7 +192,15 @@ namespace GoAwayEdge.Common
             try
             {
                 var ts = new TaskService();
-                ts.RootFolder.DeleteTask("valnoxy\\GoAwayEdge\\GoAwayEdge IFEO Validation");
+                try
+                {
+                    ts.RootFolder.DeleteTask("valnoxy\\GoAwayEdge\\GoAwayEdge IFEO Validation");
+                }
+                catch
+                {
+                    // ignored; not existing
+                }
+                ts.RootFolder.DeleteTask("valnoxy\\GoAwayEdge\\GoAwayEdge Validation & Update Task");
             }
             catch
             {
@@ -200,6 +234,106 @@ namespace GoAwayEdge.Common
 
             return true;
         }
+    }
 
+    public class Register
+    {
+        public enum IfeoType
+        {
+            msedge,
+            ie_to_edge_stub
+        }
+        public enum UriType
+        {
+            microsoftEdge,
+            EdgeHTM
+        }
+
+        /// <summary>
+        /// Register a Debugger for a specific application via Image File Execution Option.
+        /// </summary>
+        /// <param name="type">Type of application</param>
+        /// <param name="debugger">Full command for debugger</param>
+        /// <param name="filterFullPath">Path to application</param>
+        /// <returns>
+        ///     Result of the registration as boolean.
+        /// </returns>
+        public static bool ImageFileExecutionOption(IfeoType type, string debugger, string filterFullPath)
+        {
+            try
+            {
+                var key = Registry.LocalMachine.OpenSubKey(
+                    @"SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options", true);
+
+                switch (type)
+                {
+                    case IfeoType.msedge:
+                        key?.CreateSubKey("msedge.exe");
+                        key = key?.OpenSubKey("msedge.exe", true);
+                        break;
+                    case IfeoType.ie_to_edge_stub:
+                        key?.CreateSubKey("ie_to_edge_stub.exe");
+                        key = key?.OpenSubKey("ie_to_edge_stub.exe", true);
+                        break;
+                    default:
+                        return false;
+                }
+
+                key?.SetValue("UseFilter", 1, RegistryValueKind.DWord);
+                key?.CreateSubKey("0");
+                key = key?.OpenSubKey("0", true);
+                key?.SetValue("Debugger", debugger);
+                key?.SetValue("FilterFullPath", filterFullPath);
+                key?.Close();
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// Register a Uri Handler.
+        /// </summary>
+        /// <param name="type">Type of Uri</param>
+        /// <param name="commandLine">Full command line</param>
+        /// <returns>
+        ///     Result of the registration as boolean.
+        /// </returns>
+        public static bool UriHandler(UriType type, string commandLine)
+        {
+            try
+            {
+                using var baseKey = Registry.LocalMachine;
+                RegistryKey? key;
+
+                switch (type)
+                {
+                    case UriType.microsoftEdge:
+                        key = baseKey.OpenSubKey(@"SOFTWARE\Classes\microsoft-edge", true) ?? baseKey.CreateSubKey(@"SOFTWARE\Classes\microsoft-edge");
+                        baseKey.SetValue("", "URL:microsoft-edge", RegistryValueKind.String);
+                        baseKey.SetValue("URL Protocol", "", RegistryValueKind.String);
+                        baseKey.SetValue("NoOpenWith", "", RegistryValueKind.String);
+                        break;
+                    case UriType.EdgeHTM:
+                        key = baseKey.OpenSubKey(@"SOFTWARE\Classes\MSEdgeHTM", true) ?? baseKey.CreateSubKey(@"SOFTWARE\Classes\MSEdgeHTM");
+                        baseKey.SetValue("NoOpenWith", "", RegistryValueKind.String);
+                        break;
+                    default:
+                        return false;
+                }
+
+                using var shellKey = key.CreateSubKey("shell");
+                using var openKey = shellKey.CreateSubKey("open");
+                using var commandKey = openKey.CreateSubKey("command");
+                commandKey.SetValue("", commandLine, RegistryValueKind.String);
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
     }
 }

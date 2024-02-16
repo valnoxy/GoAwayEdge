@@ -26,7 +26,6 @@ namespace GoAwayEdge
     public partial class App
     {
         private static string? _url;
-        private static SearchEngine _engine = SearchEngine.Google; // Fallback
 
         public void Application_Startup(object sender, StartupEventArgs e)
         {
@@ -62,7 +61,7 @@ namespace GoAwayEdge
                 {
                     foreach (var arg in args)
                     {
-                        if (arg.Contains("-se:"))
+                        if (arg.StartsWith("-se:"))
                             Configuration.Search = ParseSearchEngine(arg);
                         if (arg.Contains("--url:"))
                         {
@@ -167,6 +166,14 @@ namespace GoAwayEdge
             }
 
             Configuration.InitialEnvironment();
+            try
+            {
+                Configuration.Search = ParseSearchEngine(RegistryConfig.GetKey("SearchEngine"));
+            }
+            catch
+            {
+                // ignored
+            }
             RunParser(args);
 
             Environment.Exit(0);
@@ -189,10 +196,6 @@ namespace GoAwayEdge
                 {
                     _url = arg;
                 }
-                if (arg.StartsWith("-se:"))
-                {
-                    _engine = ParseSearchEngine(arg);
-                }
                 if (!args.Contains("--profile-directory") && !ContainsParsedData(args) && args.Length != 2) continue; // Start Edge (default browser on this system)
 
 #if DEBUG
@@ -202,7 +205,7 @@ namespace GoAwayEdge
 #endif
                 var parsedArgs = args.Skip(2);
                 var p = new Process();
-                p.StartInfo.FileName = FileConfiguration.IfeoPath;
+                p.StartInfo.FileName = FileConfiguration.NonIfeoPath;
                 p.StartInfo.Arguments = string.Join(" ", parsedArgs);
                 p.StartInfo.UseShellExecute = true;
                 p.StartInfo.RedirectStandardOutput = false;
@@ -219,7 +222,7 @@ namespace GoAwayEdge
                 if (_url.Contains("microsoft-edge://?ux=copilot&tcp=1&source=taskbar")
                     || _url.Contains("microsoft-edge:///?ux=copilot&tcp=1&source=taskbar"))
                 {
-                    p.StartInfo.FileName = FileConfiguration.IfeoPath;
+                    p.StartInfo.FileName = FileConfiguration.NonIfeoPath;
                     p.StartInfo.Arguments = _url;
                     Output.WriteLine($"Opening Windows Copilot with following url:\n{_url}", ConsoleColor.Gray);
 #if DEBUG
@@ -246,7 +249,7 @@ namespace GoAwayEdge
             }
         }
 
-        private string? ParseCustomSearchEngine(string argument)
+        private static string? ParseCustomSearchEngine(string argument)
         {
             var argParsed = argument.Remove(0, 6);
             var result = Uri.TryCreate(argParsed, UriKind.Absolute, out var uriResult)
@@ -256,8 +259,11 @@ namespace GoAwayEdge
 
         private static SearchEngine ParseSearchEngine(string argument)
         {
-            var argParsed = argument.Remove(0, 4);
-            return argParsed.ToLower() switch
+            var arg = argument;
+            if (argument.StartsWith("-se:"))
+                arg = argument.Remove(0, 4);
+            
+            return arg.ToLower() switch
             {
                 "google" => SearchEngine.Google,
                 "bing" => SearchEngine.Bing,
@@ -276,7 +282,7 @@ namespace GoAwayEdge
         private static bool ContainsParsedData(IEnumerable<string> args)
         {
             var contains = false;
-            var engineUrl = DefineEngine(_engine);
+            var engineUrl = DefineEngine(Configuration.Search);
 
             foreach (var arg in args)
             {
@@ -306,7 +312,7 @@ namespace GoAwayEdge
             encodedUrl = encodedUrl.Contains("redirect") ? DotSlash(encodedUrl) : DecodeUrlString(encodedUrl);
 
             // Replace Search Engine
-            encodedUrl = encodedUrl.Replace("https://www.bing.com/search?q=", DefineEngine(_engine));
+            encodedUrl = encodedUrl.Replace("https://www.bing.com/search?q=", DefineEngine(Configuration.Search));
 
 #if DEBUG
             var uriMessageUi = new MessageUi("GoAwayEdge",
@@ -319,16 +325,14 @@ namespace GoAwayEdge
 
         private static string DefineEngine(SearchEngine engine)
         {
-            string customQueryUrl = null!;
+            var customQueryUrl = string.Empty;
             try
             {
-                var key = Registry.LocalMachine.OpenSubKey(
-                    @"SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\msedge.exe\0", false);
-                customQueryUrl = (string)key?.GetValue("CustomQueryUrl")!;
+                customQueryUrl = RegistryConfig.GetKey("CustomQueryUrl");
             }
             catch
             {
-                // ignored
+                // ignore; not an valid object
             }
 
             return engine switch

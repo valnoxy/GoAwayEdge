@@ -43,6 +43,12 @@ namespace GoAwayEdge.Pages
                 SearchEngineBox.Items.Add("Custom");
             }
 
+            if (Configuration.NoEdgeInstalled)
+            {
+                MsEdgeRemoveStackPanel.IsEnabled = false;
+                EdgeStackPanel.IsEnabled = false;
+            }
+
             SearchEngineBox.SelectedIndex = 0;
             Configuration.Search = SearchEngine.Google;
             Configuration.Uninstall = false;

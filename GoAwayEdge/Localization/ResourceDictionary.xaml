@@ -30,7 +30,7 @@
     <system:String x:Key="SettingsCustomSearchEngineTitle">Custom Search Engine</system:String>
     <system:String x:Key="SettingsCustomSearchEngineDescription">Please enter the query URL from the search engine.</system:String>
     <system:String x:Key="SettingsMSEdgeUninstallTitle">Remove Microsoft Edge (Stable)</system:String>
-    <system:String x:Key="SettingsMSEdgeUninstallDescription">Remove Microsoft Edge completely from the system. [WIP]</system:String>
+    <system:String x:Key="SettingsMSEdgeUninstallDescription">Remove Microsoft Edge completely from the system.</system:String>
 
     <!-- Setup in progress -->
     <system:String x:Key="SetupProgressTitle">Installation in progress ...</system:String>
