@@ -88,6 +88,11 @@ GoAwayEdge.exe -s -se:DuckDuckGo
 3. Click on ```Uninstall```.
 4. Done!
 
+You can also uninstall GoAwayEdge by parsing the following argument:
+```
+GoAwayEdge.exe -u
+```
+
 # 🖼️ Screenshot
 <img src="https://dl.exploitox.de/goawayedge/GoAwayEdge_Screenshot1.png" alt="GoAwayEdge Setup" width=650>
 
