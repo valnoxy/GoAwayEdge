@@ -18,13 +18,14 @@ namespace GoAwayEdge.Common
 			// Ok, this is very wip. Current plan:
 			//
 			//  1. Remove Edge via edge setup (setup.exe --uninstall --system-level --verbose-logging --force-uninstall)
-			//  2. Prevent Edge from reinstalling
-			//  3. Recreate the URI protocol
+            //  2. Prevent Edge from reinstalling
+            //  3. Recreate the URI protocol
             //
             // This way should left WebView2 etc in tact.
-			// 
+            // 
 
             string edgeSetupPath;
+            string edgeNewestVersionPath;
             if (!Directory.Exists(Path.GetDirectoryName(FileConfiguration.EdgePath)))
                 return false;
 
@@ -44,6 +45,7 @@ namespace GoAwayEdge.Common
                     .OrderByDescending(x => x.Version);
 
                 var newestDirectory = sortedDirectories.FirstOrDefault();
+                edgeNewestVersionPath = newestDirectory!.DirectoryPath;
                 edgeSetupPath = Path.Combine(newestDirectory!.DirectoryPath, "Installer", "setup.exe");
             }
             else
@@ -158,12 +160,13 @@ namespace GoAwayEdge.Common
             }
 
             // Find and copy ie_to_edge_stub.exe
-            var ieToEdgeStubFile = Path.Combine(Path.GetDirectoryName(FileConfiguration.EdgePath)!, "ie_to_edge_stub.exe");
+
+            var ieToEdgeStubFile = Path.Combine(edgeNewestVersionPath, "BHO", "ie_to_edge_stub.exe");
             if (File.Exists(ieToEdgeStubFile))
             {
                 try
                 {
-                    File.Copy(ieToEdgeStubFile, Path.Combine(Configuration.InstallDir, "ie_to_edge_stub.exe"));
+                    File.Copy(ieToEdgeStubFile, Path.Combine(Configuration.InstallDir, "ie_to_edge_stub.exe"), true);
                 }
                 catch
                 {
@@ -207,57 +210,73 @@ namespace GoAwayEdge.Common
             }
 
 
-            // Remove Edge Update
-            var p = new Process();
-            ProcessStartInfo psi;
+            // Removing Edge (+ Updater)
             var timeoutStopwatch = new Stopwatch();
             var programFiles = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86);
             var edgeUpdatePath = Path.Combine(programFiles, "Microsoft", "EdgeUpdate", "MicrosoftEdgeUpdate.exe");
 
-            if (File.Exists(edgeUpdatePath))
+            try
             {
-                psi = new ProcessStartInfo
+                if (File.Exists(edgeUpdatePath))
                 {
-                    FileName = edgeUpdatePath,
-                    Arguments = "/uninstall",
-                };
-                p.StartInfo = psi;
-                p.Start();
-                p.WaitForExit();
+                    using (var proc = new Process()) // Remove Edge Updater
+                    {
+                        var psi = new ProcessStartInfo
+                        {
+                            FileName = edgeUpdatePath,
+                            Arguments = "/uninstall",
+                        };
+                        proc.StartInfo = psi;
+                        proc.Start();
+                        proc.WaitForExit();
 
-                timeoutStopwatch.Start();
-                while (timeoutStopwatch.Elapsed.TotalSeconds < 60 && (IsProcessRunning("setup") || IsEdgeProcessRunning()))
-                {
-                    Thread.Sleep(3000);
+                        timeoutStopwatch.Start();
+                        while (timeoutStopwatch.Elapsed.TotalSeconds < 60 &&
+                               (IsProcessRunning("MicrosoftEdgeUpdate") || IsEdgeProcessRunning()))
+                        {
+                            Thread.Sleep(3000);
+                        }
+
+                        timeoutStopwatch.Stop();
+                        if (timeoutStopwatch.Elapsed.TotalSeconds >= 60)
+                            return false; // Timeout
+                        if (proc.ExitCode != 0 && proc.ExitCode != 19)
+                            return false; // Unknown error?
+                    }
+
+                    using (var proc = new Process()) // Remove Edge via setup file
+                    {
+                        var psi = new ProcessStartInfo
+                        {
+                            FileName = edgeSetupPath,
+                            Arguments = "--uninstall --msedge --system-level --verbose-logging --force-uninstall",
+                            RedirectStandardOutput = true
+                        };
+                        proc.StartInfo = psi;
+                        proc.Start();
+                        proc.WaitForExit();
+
+                        timeoutStopwatch.Start();
+                        while (timeoutStopwatch.Elapsed.TotalSeconds < 60 &&
+                               (IsProcessRunning("setup") || IsEdgeProcessRunning()))
+                        {
+                            Thread.Sleep(3000);
+                        }
+
+                        timeoutStopwatch.Stop();
+                        if (timeoutStopwatch.Elapsed.TotalSeconds >= 60)
+                            return false; // Timeout
+                        if (proc.ExitCode != 0 && proc.ExitCode != 19)
+                            return false; // Unknown error?
+                    }
                 }
-                timeoutStopwatch.Stop();
-                if (timeoutStopwatch.Elapsed.TotalSeconds >= 60)
-                    return false; // Timeout
-                if (p.ExitCode != 0 && p.ExitCode != 19)
-                    return false; // Unknown error?
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine("Exception: " + ex.Message);
+                return false;
             }
 
-            // Remove Edge via setup file
-            psi = new ProcessStartInfo
-            {
-                FileName = edgeSetupPath,
-                Arguments = "--uninstall --msedge --system-level --verbose-logging --force-uninstall",
-                RedirectStandardOutput = true
-            };
-            p.StartInfo = psi;
-            p.Start();
-            p.WaitForExit();
-
-            timeoutStopwatch.Start();
-            while (timeoutStopwatch.Elapsed.TotalSeconds < 60 && (IsProcessRunning("setup") || IsEdgeProcessRunning()))
-            {
-                Thread.Sleep(3000);
-            }
-            timeoutStopwatch.Stop();
-            if (timeoutStopwatch.Elapsed.TotalSeconds >= 60)
-                return false; // Timeout
-            if (p.ExitCode != 0 && p.ExitCode != 19)
-                return false; // Unknown error?
 
             // Prevent Edge from reinstalling
             try
@@ -277,8 +296,60 @@ namespace GoAwayEdge.Common
                 return false;
             }
 
+            // Register new URIs
+            try
+            {
+                // HKLM\SOFTWARE\Classes\microsoft-edge
+                using (var baseKey = Registry.LocalMachine)
+                using (var key = baseKey.OpenSubKey(@"SOFTWARE\Classes\microsoft-edge", true) ??
+                                 baseKey.CreateSubKey(@"SOFTWARE\Classes\microsoft-edge"))
+                {
+                    using (var shellKey = key.CreateSubKey("shell"))
+                    using (var openKey = shellKey.CreateSubKey("open"))
+                    using (var commandKey = openKey.CreateSubKey("command"))
+                    {
+                        commandKey.SetValue("", $"\"{Path.Combine(Configuration.InstallDir, "ie_to_edge_stub.exe")}\" \"%1\"", RegistryValueKind.String);
+                    }
+                }
 
-            return false;
+                // HKLM\SOFTWARE\Classes\EdgeHTM
+                using (var baseKey = Registry.LocalMachine)
+                using (var key = baseKey.OpenSubKey(@"SOFTWARE\Classes\MSEdgeHTM", true) ??
+                                 baseKey.CreateSubKey(@"SOFTWARE\Classes\MSEdgeHTM"))
+                {
+                    using (var shellKey = key.CreateSubKey("shell"))
+                    using (var openKey = shellKey.CreateSubKey("open"))
+                    using (var commandKey = openKey.CreateSubKey("command"))
+                    {
+                        commandKey.SetValue("", $"\"{Path.Combine(Configuration.InstallDir, "ie_to_edge_stub.exe")}\" \"%1\"", RegistryValueKind.String);
+                    }
+                }
+
+                try
+                {
+                    var key = Registry.LocalMachine.OpenSubKey(
+                        @"SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options", true);
+                    key?.CreateSubKey("ie_to_edge_stub.exe");
+                    key = key?.OpenSubKey("ie_to_edge_stub.exe", true);
+                    key?.SetValue("UseFilter", 1, RegistryValueKind.DWord);
+
+                    key?.CreateSubKey("0");
+                    key = key?.OpenSubKey("0", true);
+                    key?.SetValue("Debugger", Path.Combine(Configuration.InstallDir, $"GoAwayEdge.exe -se:{Configuration.Search}"));
+                    key?.SetValue("FilterFullPath", Path.Combine(Configuration.InstallDir, "ie_to_edge_stub.exe"));
+                    key?.Close();
+                }
+                catch
+                {
+                    return false;
+                }
+            }
+            catch
+            {
+                return false;
+            }
+
+            return true;
         }
 
         /// <summary>
@@ -327,15 +398,22 @@ namespace GoAwayEdge.Common
 
         private static void RemoveUserRegistryKey(string keyPath)
         {
-            var users = Registry.Users.GetSubKeyNames();
-            foreach (var userSid in users)
+            try
             {
-                using var userKey = Registry.Users.OpenSubKey(userSid);
-                using var key = userKey?.OpenSubKey(keyPath, true);
-                if (key != null)
+                var users = Registry.Users.GetSubKeyNames();
+                foreach (var userSid in users)
                 {
-                    userKey!.DeleteSubKeyTree(keyPath, false);
+                    using var userKey = Registry.Users.OpenSubKey(userSid);
+                    using var key = userKey?.OpenSubKey(keyPath, true);
+                    if (key != null)
+                    {
+                        userKey!.DeleteSubKeyTree(keyPath, false);
+                    }
                 }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Exception while removing registry key: {ex.Message}");
             }
         }
     }

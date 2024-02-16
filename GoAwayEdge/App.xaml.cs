@@ -220,11 +220,11 @@ namespace GoAwayEdge
                     || _url.Contains("microsoft-edge:///?ux=copilot&tcp=1&source=taskbar"))
                 {
                     p.StartInfo.FileName = FileConfiguration.IfeoPath;
-                    p.StartInfo.Arguments = "microsoft-edge://?ux=copilot&tcp=1&source=taskbar";
-                    Output.WriteLine("Opening Windows Copilot", ConsoleColor.Gray);
+                    p.StartInfo.Arguments = _url;
+                    Output.WriteLine($"Opening Windows Copilot with following url:\n{_url}", ConsoleColor.Gray);
 #if DEBUG
                     var copilotMessageUi = new MessageUi("GoAwayEdge",
-                        "Opening Windows Copilot ...", "OK", null, true);
+                        $"Opening Windows Copilot with following url:\n{_url}", "OK", null, true);
                     copilotMessageUi.ShowDialog();
 #endif
                 }

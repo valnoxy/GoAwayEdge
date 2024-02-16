@@ -162,29 +162,6 @@ namespace GoAwayEdge.Common
                 return;
             }
 
-            // Remove URI handler and Edge Update block from registry
-            var defaultEdgePath = Path.Combine(
-                Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86),
-                "Microsoft", "Edge", "Application");
-            if (!Directory.Exists(defaultEdgePath))
-            {
-                try
-                {
-                    var key = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft", true);
-                    key?.DeleteSubKeyTree("EdgeUpdate");
-                    key?.Close();
-
-                    key = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Classes", true);
-                    key?.DeleteSubKeyTree("microsoft-edge");
-                    key?.DeleteSubKeyTree("EdgeHTM");
-                    key?.Close();
-                }
-                catch
-                {
-                    // ignore
-                }
-            }
-
             // Clean up Task Scheduler
             try
             {

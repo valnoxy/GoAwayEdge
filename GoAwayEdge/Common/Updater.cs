@@ -2,7 +2,6 @@
 using Microsoft.Win32;
 using System.Diagnostics;
 using System.IO;
-using System.IO.Compression;
 using System.Net;
 using System.Reflection;
 using System.Security.Cryptography;
