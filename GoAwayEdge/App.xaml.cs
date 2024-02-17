@@ -16,7 +16,6 @@ using System.Security.Principal;
 using System.Text;
 using System.Web;
 using System.Windows;
-using Microsoft.Win32;
 
 namespace GoAwayEdge
 {

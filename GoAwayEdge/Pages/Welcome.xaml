@@ -15,12 +15,12 @@
 
         <Image Grid.Column="0" Source="pack://application:,,,/Assets/SetupBannerIcon.png" Height="200"/>
         <StackPanel Grid.Column="1" VerticalAlignment="Center">
-            <Label FontSize="20" Content="{DynamicResource WelcomeTitle}" FontWeight="Bold" Foreground="{DynamicResource TextFillColorPrimaryBrush}"/>
-            <TextBlock FontSize="14" TextWrapping="Wrap" Text="{DynamicResource WelcomeDescription}" Foreground="{DynamicResource TextFillColorPrimaryBrush}"/>
+            <ui:TextBlock FontTypography="Subtitle" Text="{DynamicResource WelcomeTitle}" FontWeight="Bold" Foreground="{DynamicResource TextFillColorPrimaryBrush}"/>
+            <ui:TextBlock TextWrapping="Wrap" FontSize="14" Text="{DynamicResource WelcomeDescription}" Foreground="{DynamicResource TextFillColorPrimaryBrush}"/>
             <ui:CardAction
                 Margin="0,20,0,8"
                 Click="InstallBtn_Click"
-                Icon="Apps24">
+                Icon="{ui:SymbolIcon Apps24}">
                 <StackPanel>
                     <TextBlock
                         Margin="0,0,0,4"
@@ -36,7 +36,7 @@
                 Margin="0,0,0,8"
                 Click="UninstallBtn_Click"
                 x:Name="UninstallBtn"
-                Icon="Delete24">
+                Icon="{ui:SymbolIcon Delete24}">
                 <StackPanel>
                     <TextBlock
                         Margin="0,0,0,4"

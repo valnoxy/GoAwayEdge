@@ -8,18 +8,18 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <StackPanel VerticalAlignment="Center">
-        <ui:SymbolIcon Symbol="CheckmarkCircle24" FontSize="80" />
-        <Label Content="{DynamicResource SetupFinishedTitle}"
-               x:Name="SetupTitle"
-               HorizontalAlignment="Center" 
-               FontSize="30" 
-               Foreground="{DynamicResource TextFillColorPrimaryBrush}"/>
-        <Label Content="{DynamicResource SetupFinishedDescription}" 
-               x:Name="SetupDescription"
-               Foreground="{DynamicResource TextFillColorPrimaryBrush}"
-               Margin="0,15,0,0"
-               FontSize="14"
-               HorizontalAlignment="Center"/>
-        <ui:Hyperlink HorizontalAlignment="Center" NavigateUri="https://paypal.me/valnoxy" Content="{DynamicResource DonateButton}"/>
+        <ui:SymbolIcon Symbol="CheckmarkCircle24" FontSize="80" Foreground="{DynamicResource TextFillColorPrimaryBrush}"/>
+        <ui:TextBlock Text="{DynamicResource SetupFinishedTitle}"
+                      x:Name="SetupTitle"
+                      HorizontalAlignment="Center" 
+                      FontTypography="Title"
+                      Foreground="{DynamicResource TextFillColorPrimaryBrush}"/>
+        <ui:TextBlock Text="{DynamicResource SetupFinishedDescription}" 
+                      x:Name="SetupDescription"
+                      Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+                      Margin="0,15,0,0"
+                      FontSize="14"
+                      HorizontalAlignment="Center"/>
+        <ui:HyperlinkButton HorizontalAlignment="Center" NavigateUri="https://paypal.me/valnoxy" Content="{DynamicResource DonateButton}"/>
     </StackPanel>
 </UserControl>

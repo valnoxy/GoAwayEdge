@@ -4,6 +4,7 @@
     <system:String x:Key="Title">GoAwayEdge-Installationsprogramm</system:String>
     <system:String x:Key="Next">Weiter</system:String>
     <system:String x:Key="Back">Zurück</system:String>
+    <system:String x:Key="Exit">Beenden</system:String>
 
     <!-- Welcome -->
     <system:String x:Key="WelcomeTitle">Willkommen</system:String>

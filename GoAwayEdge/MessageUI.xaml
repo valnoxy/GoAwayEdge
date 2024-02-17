@@ -1,19 +1,18 @@
-﻿<ui:UiWindow x:Class="GoAwayEdge.MessageUi"
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:local="clr-namespace:GoAwayEdge"
-             mc:Ignorable="d"
-             Title="GoAwayEdge" MinHeight="200" MinWidth="500" MaxWidth="500"
-             xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
-             Background="{ui:ThemeResource ApplicationBackgroundBrush}"
-             ExtendsContentIntoTitleBar="True"
-             WindowBackdropType="Mica"
-             WindowCornerPreference="Round"
-             WindowStartupLocation="CenterScreen"
-             PreviewKeyDown="WindowKeyDown"
-             SizeToContent="Height">
+﻿<ui:FluentWindow x:Class="GoAwayEdge.MessageUi"
+                 xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                 xmlns:local="clr-namespace:GoAwayEdge"
+                 mc:Ignorable="d"
+                 Title="GoAwayEdge" MinHeight="200" MinWidth="500" MaxHeight="200" MaxWidth="500"
+                 xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+                 Background="{ui:ThemeResource ApplicationBackgroundBrush}"
+                 ExtendsContentIntoTitleBar="True"
+                 WindowBackdropType="Mica"
+                 WindowCornerPreference="Round"
+                 WindowStartupLocation="CenterScreen"
+                 PreviewKeyDown="WindowKeyDown">
 
     <Grid>
         <Grid Margin="20,30,20,20">
@@ -24,19 +23,15 @@
                 <!-- Content -->
             </Grid.RowDefinitions>
 
-            <Grid Grid.Row="0">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="*"/>
-                </Grid.RowDefinitions>
-                <TextBlock Grid.Row="0" FontWeight="Bold" FontSize="20" Foreground="#FFFFFF" x:Name="MessageTitle" Margin="0,0,0,5">
+            <StackPanel Grid.Row="0">
+                <TextBlock FontWeight="Bold" FontSize="20" Foreground="#FFFFFF" x:Name="MessageTitle" Margin="0,0,0,5">
                     Message.Title
                 </TextBlock>
 
-                <TextBlock Grid.Row="1" FontWeight="Normal" FontSize="14" Foreground="#FFFFFF" x:Name="MessageText" TextWrapping="Wrap">
+                <TextBlock FontWeight="Normal" FontSize="14" Foreground="#FFFFFF" x:Name="MessageText" TextWrapping="Wrap">
                     Message.Text
                 </TextBlock>
-            </Grid>
+            </StackPanel>
 
             <Grid Grid.Row="1">
                 <Grid.ColumnDefinitions>
@@ -60,4 +55,4 @@
         </Grid>
         <ui:TitleBar CanMaximize="False" ShowMinimize="false" ShowMaximize="false"/>
     </Grid>
-</ui:UiWindow>
+</ui:FluentWindow>

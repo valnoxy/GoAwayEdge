@@ -1,7 +1,10 @@
 {
   "profiles": {
     "GoAwayEdge": {
-      "commandName": "Project"
+      "commandName": "Project",
+      "remoteDebugEnabled": false,
+      "remoteDebugMachine": "192.168.14.128:4026",
+      "authenticationMode": "Windows"
     }
   }
 }

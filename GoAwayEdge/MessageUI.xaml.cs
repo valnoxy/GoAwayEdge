@@ -1,6 +1,9 @@
 ﻿// Copyright (c) 2023 valnoxy
 // Copied from Dive: https://github.com/valnoxy/Dive/blob/main/Dive/Dive.UI/MessageUI.xaml.cs
 
+using System;
+using System.Threading;
+using System.Timers;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Threading;
@@ -16,9 +19,9 @@ namespace GoAwayEdge
 
         private static string? _buttonPressed;
         private static bool _mainThread;
-        private readonly DispatcherTimer _timer = null!;
+        private readonly DispatcherTimer _timer;
 
-        public MessageUi(string title, string message, string? btn1 = null, string? btn2 = null, bool isMainThread = false, int timer = 0)
+        public MessageUi(string title, string message, string btn1 = null, string btn2 = null, bool isMainThread = false, int timer = 0)
         {
             InitializeComponent();
 
@@ -38,10 +41,10 @@ namespace GoAwayEdge
 
                 _timer = new DispatcherTimer(new TimeSpan(0, 0, 1), DispatcherPriority.Normal, delegate
                 {
-                    LbTimer.Text = $"{time:%s}s before auto-selecting '{this.Btn2.Content}'.";
+                    LbTimer.Text = $"{time.ToString("%s")}s before auto-selecting '{this.Btn2.Content}'.";
                     if (time == TimeSpan.Zero)
                     {
-                        _timer.Stop();
+                        _timer?.Stop();
                         _buttonPressed = "Btn2";
                         if (_mainThread) this.Hide();
                         else this.Close();
@@ -73,7 +76,7 @@ namespace GoAwayEdge
         private void WindowKeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key != Key.C || Keyboard.Modifiers != ModifierKeys.Control) return;
-            
+
             var clipboardString = $"{MessageTitle.Text}\n-----\n{MessageText.Text}";
             Clipboard.SetDataObject(clipboardString);
         }

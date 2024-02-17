@@ -60,6 +60,9 @@ namespace GoAwayEdge
         {
             switch (FrameWindow.Content)
             {
+                case InstallationSuccess:
+                    Environment.Exit(0);
+                    break;
                 case Settings:
                     NextBtn.IsEnabled = false;
                     BackBtn.IsEnabled = false;

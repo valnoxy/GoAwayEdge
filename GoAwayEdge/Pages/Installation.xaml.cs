@@ -19,11 +19,11 @@ namespace GoAwayEdge.Pages
             applyBackgroundWorker.WorkerSupportsCancellation = true;
             if (Configuration.Uninstall)
             {
-                applyBackgroundWorker.DoWork += Common.InstallRoutine.Uninstall;
+                applyBackgroundWorker.DoWork += InstallRoutine.Uninstall;
             }
             else
             {
-                applyBackgroundWorker.DoWork += Common.InstallRoutine.Install;
+                applyBackgroundWorker.DoWork += InstallRoutine.Install;
             }
             applyBackgroundWorker.ProgressChanged += ApplyBackgroundWorker_ProgressChanged;
             applyBackgroundWorker.RunWorkerAsync();
