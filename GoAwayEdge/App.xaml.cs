@@ -191,11 +191,11 @@ namespace GoAwayEdge
             // Filter command line args
             foreach (var arg in args)
             {
-                if (arg.StartsWith("microsoft-edge:"))
+                if (arg.Contains("microsoft-edge:"))
                 {
                     _url = arg;
                 }
-                if (!args.Contains("--profile-directory") && !ContainsParsedData(args) && args.Length != 2) continue; // Start Edge (default browser on this system)
+                if (!args.Contains("--profile-directory") && !ContainsParsedData(args) && args.Length != 1) continue; // Start Edge (default browser on this system)
 
 #if DEBUG
                 var messageUi = new MessageUi("GoAwayEdge",

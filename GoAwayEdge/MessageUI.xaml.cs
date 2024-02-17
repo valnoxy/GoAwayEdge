@@ -1,9 +1,7 @@
 ﻿// Copyright (c) 2023 valnoxy
 // Copied from Dive: https://github.com/valnoxy/Dive/blob/main/Dive/Dive.UI/MessageUI.xaml.cs
 
-using System;
-using System.Threading;
-using System.Timers;
+using System.Reflection;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Threading;
@@ -21,7 +19,7 @@ namespace GoAwayEdge
         private static bool _mainThread;
         private readonly DispatcherTimer _timer;
 
-        public MessageUi(string title, string message, string btn1 = null, string btn2 = null, bool isMainThread = false, int timer = 0)
+        public MessageUi(string title, string message, string btn1 = null, string btn2 = null, bool isMainThread = false)
         {
             InitializeComponent();
 
@@ -34,27 +32,8 @@ namespace GoAwayEdge
                 this.Btn1.Visibility = Visibility.Hidden;
             if (btn2 is null or "")
                 this.Btn2.Visibility = Visibility.Hidden;
-
-            if (timer != 0)
-            {
-                var time = TimeSpan.FromSeconds(timer);
-
-                _timer = new DispatcherTimer(new TimeSpan(0, 0, 1), DispatcherPriority.Normal, delegate
-                {
-                    LbTimer.Text = $"{time.ToString("%s")}s before auto-selecting '{this.Btn2.Content}'.";
-                    if (time == TimeSpan.Zero)
-                    {
-                        _timer?.Stop();
-                        _buttonPressed = "Btn2";
-                        if (_mainThread) this.Hide();
-                        else this.Close();
-                    }
-                    time = time.Add(TimeSpan.FromSeconds(-1));
-                }, Application.Current.Dispatcher);
-
-                _timer.Start();
-            }
-            else LbTimer.Visibility = Visibility.Hidden;
+            
+            VersionLbl.Content = $"Version {Assembly.GetExecutingAssembly().GetName().Version!}";
 
             _mainThread = isMainThread;
         }

@@ -47,8 +47,8 @@
             <StatusBarItem Grid.Column="0">
                 <StackPanel Orientation="Horizontal">
                     <Label Content="Version 0.0.0" x:Name="VersionLbl" VerticalAlignment="Center" Margin="0,3,0,0"/>
-                    <Separator Margin="5,0,0,0"/>
-                    <ui:HyperlinkButton NavigateUri="https://github.com/valnoxy/GoAwayEdge" VerticalContentAlignment="Bottom" Content="GitHub" Margin="0,0,0,0" Height="30"/>
+                    <Separator Margin="8,0,0,0"/>
+                    <ui:HyperlinkButton NavigateUri="https://github.com/valnoxy/GoAwayEdge" VerticalContentAlignment="Bottom" Content="GitHub" Margin="3,0,0,0" Height="30"/>
                 </StackPanel>
             </StatusBarItem>
 
