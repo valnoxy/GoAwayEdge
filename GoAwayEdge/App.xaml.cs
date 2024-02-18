@@ -368,7 +368,7 @@ namespace GoAwayEdge
             {
                 SearchEngine.Google => "https://www.google.com/search?q=",
                 SearchEngine.Bing => "https://www.bing.com/search?q=",
-                SearchEngine.DuckDuckGo => "https://duckduckgo.com/?q=}",
+                SearchEngine.DuckDuckGo => "https://duckduckgo.com/?q=",
                 SearchEngine.Yahoo => "https://search.yahoo.com/search?p=",
                 SearchEngine.Yandex => "https://yandex.com/search/?text=",
                 SearchEngine.Ecosia => "https://www.ecosia.org/search?q=",
