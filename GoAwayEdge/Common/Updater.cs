@@ -139,10 +139,11 @@ namespace GoAwayEdge.Common
 
             try
             {
-                var versionInfo = FileVersionInfo.GetVersionInfo(Assembly.GetEntryAssembly()!.Location);
+                var appVersion = Assembly.GetExecutingAssembly().GetName().Version!;
+                var currentVersion = new Version(appVersion.Major, appVersion.Minor, appVersion.Build);
 
                 using var client = new WebClient();
-                client.Headers.Add("User-Agent", $"GoAwayEdge/{versionInfo.FileVersion} valnoxy.dev");
+                client.Headers.Add("User-Agent", $"GoAwayEdge/{currentVersion} valnoxy.dev");
                 var json = client.DownloadString(url);
 
                 var releases = JsonConvert.DeserializeObject<GitHubRelease[]>(json);
@@ -150,10 +151,6 @@ namespace GoAwayEdge.Common
                 {
                     var tagName = Convert.ToString(releases[0].tag_name);
                     var tagVersion = tagName[1..];
-                    var currentFileVersion = versionInfo.FileVersion;
-                    var parts = currentFileVersion!.Split('.');
-                    var partsResult = string.Join(".", parts.Take(3));
-                    var currentVersion = new Version(partsResult);
                     var latestVersion = new Version(tagVersion);
 
                     if (currentVersion < latestVersion)
@@ -161,8 +158,9 @@ namespace GoAwayEdge.Common
                 }
                 return null;
             }
-            catch
+            catch (Exception ex)
             {
+                Console.WriteLine(ex);
                 return null;
             }
         }
@@ -176,10 +174,11 @@ namespace GoAwayEdge.Common
 
             try
             {
-                var versionInfo = FileVersionInfo.GetVersionInfo(Assembly.GetEntryAssembly()!.Location);
-                
+                var appVersion = Assembly.GetExecutingAssembly().GetName().Version!;
+                var currentVersion = new Version(appVersion.Major, appVersion.Minor, appVersion.Build);
+
                 using var client = new WebClient();
-                client.Headers.Add("User-Agent", $"GoAwayEdge/{versionInfo.FileVersion} valnoxy.dev");
+                client.Headers.Add("User-Agent", $"GoAwayEdge/{currentVersion} valnoxy.dev");
                 var json = client.DownloadString(url);
 
                 var releases = JsonConvert.DeserializeObject<GitHubRelease[]>(json);

@@ -53,7 +53,7 @@ namespace GoAwayEdge.Common
             {
                 NoEdgeInstalled = !File.Exists(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86),
                     "Microsoft", "Edge", "Application", "msedge.exe"));
-                RegistryConfig.SetKey("NoEdgeInstalled", NoEdgeInstalled);
+                // RegistryConfig.SetKey("NoEdgeInstalled", NoEdgeInstalled);
 
                 if (NoEdgeInstalled)
                     return true;
