@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using System.Windows;
 using Microsoft.Win32;
 
 namespace GoAwayEdge.Common
@@ -47,44 +48,24 @@ namespace GoAwayEdge.Common
         /// </returns>
         public static bool InitialEnvironment()
         {
+            // Check if Edge is installed
             try
             {
-                if (!Directory.Exists(Path.GetDirectoryName(FileConfiguration.EdgePath)))
-                    return false;
-
-                var subDirectories = Directory.GetDirectories(Path.GetDirectoryName(FileConfiguration.EdgePath)!);
-                var validDirectories = subDirectories
-                    .Where(dir => Version.TryParse(Path.GetFileName(dir), out _))
-                    .ToList();
-
-                if (validDirectories.Count != 0)
-                {
-                    var sortedDirectories = validDirectories
-                        .Select(dir => new
-                        {
-                            DirectoryPath = dir,
-                            Version = new Version(Path.GetFileName(dir))
-                        })
-                        .OrderByDescending(x => x.Version);
-
-                    var newestDirectory = sortedDirectories.FirstOrDefault();
-                    var edgeSetupFile = Path.Combine(newestDirectory!.DirectoryPath, "Installer", "setup.exe");
-                    NoEdgeInstalled = !File.Exists(edgeSetupFile);
-                }
-                else NoEdgeInstalled = false;
-                
+                NoEdgeInstalled = !File.Exists(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86),
+                    "Microsoft", "Edge", "Application", "msedge.exe"));
                 RegistryConfig.SetKey("NoEdgeInstalled", NoEdgeInstalled);
-                if (NoEdgeInstalled) return true;
-                
+
+                if (NoEdgeInstalled)
+                    return true;
+
                 FileConfiguration.EdgePath = RegistryConfig.GetKey("EdgeFilePath");
                 FileConfiguration.NonIfeoPath = RegistryConfig.GetKey("EdgeNonIEFOFilePath");
-
                 return true;
             }
             catch (Exception ex)
             {
-                var messageUi = new MessageUi("GoAwayEdge",
-                    $"Initialization failed!\n{ex.Message}", "OK", null, true);
+                var errorMessage = LocalizationManager.LocalizeValue("FailedInitialization", ex.Message);
+                var messageUi = new MessageUi("GoAwayEdge", errorMessage, "OK", null, true);
                 messageUi.ShowDialog();
                 return false;
             }

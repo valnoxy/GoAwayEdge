@@ -28,6 +28,9 @@ namespace GoAwayEdge
 
         public void Application_Startup(object sender, StartupEventArgs e)
         {
+            // Load Language
+            LocalizationManager.LoadLanguage();
+
             string[] args = e.Args;
             if (args.Length == 0) // Opens Installer
             {
@@ -87,13 +90,16 @@ namespace GoAwayEdge
                     var updateAvailable = Updater.CheckForAppUpdate();
                     if (!string.IsNullOrEmpty(updateAvailable))
                     {
-                        var updateDialog = new MessageUi("GoAwayEdge",
-                            $"A new version is available: Version {updateAvailable}\nShould the update be performed now?", "No", "Yes", true);
+                        var updateMessage = LocalizationManager.LocalizeValue("NewUpdateAvailable", updateAvailable);
+                        var remindMeLaterBtn = LocalizationManager.LocalizeValue("RemindMeLater");
+                        var installUpdateBtn = LocalizationManager.LocalizeValue("InstallUpdate");
+
+                        var updateDialog = new MessageUi("GoAwayEdge", updateMessage, installUpdateBtn, remindMeLaterBtn, true);
                         updateDialog.ShowDialog();
-                        if (updateDialog.Summary == "Btn2")
+                        if (updateDialog.Summary == "Btn1")
                         {
                             var updateResult = Updater.UpdateClient();
-                            if (updateResult == 0) Environment.Exit(0);
+                            if (!updateResult) Environment.Exit(0);
                         }
                     }
 
@@ -106,11 +112,14 @@ namespace GoAwayEdge
                         case 1: // failed validation
                             if (IsAdministrator() == false)
                             {
-                                var ifeoMessageUi = new MessageUi("GoAwayEdge",
-                                    "The IFEO exclusion file needs to be updated. Update now?", "No", "Yes");
+                                var updateNonIfeoMessage = LocalizationManager.LocalizeValue("NewNonIfeoUpdate");
+                                var remindMeLaterBtn = LocalizationManager.LocalizeValue("RemindMeLater");
+                                var installUpdateBtn = LocalizationManager.LocalizeValue("InstallUpdate");
+
+                                var ifeoMessageUi = new MessageUi("GoAwayEdge", updateNonIfeoMessage, installUpdateBtn, remindMeLaterBtn);
                                 ifeoMessageUi.ShowDialog();
 
-                                if (ifeoMessageUi.Summary == "Btn2")
+                                if (ifeoMessageUi.Summary == "Btn1")
                                 {
                                     // Restart program and run as admin
                                     var exeName = Process.GetCurrentProcess().MainModule?.FileName;
@@ -124,7 +133,7 @@ namespace GoAwayEdge
                                         };
                                         Process.Start(startInfo);
                                     }
-                                    Current.Shutdown();
+                                    Environment.Exit(0);
                                     return;
                                 }
                                 Environment.Exit(0);
@@ -134,11 +143,13 @@ namespace GoAwayEdge
                         case 2: // missing
                             if (IsAdministrator() == false)
                             {
-                                var ifeoMessageUi = new MessageUi("GoAwayEdge",
-                                        "The IFEO exclusion file is missing and need to be copied. Copy now?", "No", "Yes");
+                                var ifeoMissingMessage = LocalizationManager.LocalizeValue("MissingIfeoFile");
+                                var yesBtn = LocalizationManager.LocalizeValue("Yes");
+                                var noBtn = LocalizationManager.LocalizeValue("No");
+                                var ifeoMessageUi = new MessageUi("GoAwayEdge", ifeoMissingMessage, yesBtn, noBtn);
                                 ifeoMessageUi.ShowDialog();
 
-                                if (ifeoMessageUi.Summary == "Btn2")
+                                if (ifeoMessageUi.Summary == "Btn1")
                                 {
                                     // Restart program and run as admin
                                     var exeName = Process.GetCurrentProcess().MainModule?.FileName;
@@ -152,7 +163,7 @@ namespace GoAwayEdge
                                         };
                                         Process.Start(startInfo);
                                     }
-                                    Current.Shutdown();
+                                    Environment.Exit(0);
                                     return;
                                 }
                                 Environment.Exit(0);
@@ -186,7 +197,7 @@ namespace GoAwayEdge
                 $"The following args are redirected (CTRL+C to copy):\n\n{argumentJoin}", "OK", null, true);
             w.ShowDialog();
 #endif
-            Output.WriteLine("Command line args:\n\n" + argumentJoin + "\n", ConsoleColor.Gray);
+            Console.WriteLine("Command line args:\n\n" + argumentJoin + "\n", ConsoleColor.Gray);
 
             // Filter command line args
             foreach (var arg in args)
@@ -223,7 +234,7 @@ namespace GoAwayEdge
                 {
                     p.StartInfo.FileName = FileConfiguration.NonIfeoPath;
                     p.StartInfo.Arguments = _url;
-                    Output.WriteLine($"Opening Windows Copilot with following url:\n{_url}", ConsoleColor.Gray);
+                    Console.WriteLine($"Opening Windows Copilot with following url:\n{_url}", ConsoleColor.Gray);
 #if DEBUG
                     var copilotMessageUi = new MessageUi("GoAwayEdge",
                         $"Opening Windows Copilot with following url:\n{_url}", "OK", null, true);
@@ -233,7 +244,7 @@ namespace GoAwayEdge
                 else
                 {
                     var parsed = ParseUrl(_url);
-                    Output.WriteLine("Opening URL in default browser:\n\n" + parsed + "\n", ConsoleColor.Gray);
+                    Console.WriteLine("Opening URL in default browser:\n\n" + parsed + "\n", ConsoleColor.Gray);
 #if DEBUG
                     var defaultUrlMessageUi = new MessageUi("GoAwayEdge",
                         "Opening URL in default browser:\n\n" + parsed + "\n", "OK", null, true);

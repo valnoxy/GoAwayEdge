@@ -21,7 +21,12 @@ namespace GoAwayEdge.Common
             var status = CopyItself(Path.Combine(Configuration.InstallDir, "GoAwayEdge.exe"), Path.GetDirectoryName(Process.GetCurrentProcess().MainModule?.FileName) != Configuration.InstallDir);
             if (!status)
             {
-                MessageBox.Show("Installation failed! Please try again.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                Application.Current.Dispatcher.Invoke(() =>
+                {
+                    var errorMessage = LocalizationManager.LocalizeValue("FailedInstallationGeneric");
+                    var messageUi = new MessageUi("GoAwayEdge", errorMessage, "OK");
+                    messageUi.ShowDialog();
+                });
                 Environment.Exit(1);
                 return;
             }
@@ -61,14 +66,24 @@ namespace GoAwayEdge.Common
                     msEdge);
                 if (!status)
                 {
-                    MessageBox.Show("Failed to register Image File Execution Option for 'msedge.exe'. Please try again.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    Application.Current.Dispatcher.Invoke(() =>
+                    {
+                        var errorMessage = LocalizationManager.LocalizeValue("FailedRegisterIFEO", "msedge.exe");
+                        var messageUi = new MessageUi("GoAwayEdge", errorMessage, "OK");
+                        messageUi.ShowDialog();
+                    });
                     Environment.Exit(1);
                     return;
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Installation failed!\n{ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                Application.Current.Dispatcher.Invoke(() =>
+                {
+                    var errorMessage = LocalizationManager.LocalizeValue("FailedInstallation", ex.Message);
+                    var messageUi = new MessageUi("GoAwayEdge", errorMessage, "OK");
+                    messageUi.ShowDialog();
+                });
                 Environment.Exit(1);
                 return;
             }
@@ -79,7 +94,12 @@ namespace GoAwayEdge.Common
                 status = Removal.RemoveMsEdge();
                 if (!status)
                 {
-                    MessageBox.Show("Removal of Microsoft Edge failed! Please try again.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    Application.Current.Dispatcher.Invoke(() =>
+                    {
+                        var errorMessage = LocalizationManager.LocalizeValue("FailedEdgeRemoval");
+                        var messageUi = new MessageUi("GoAwayEdge", errorMessage, "OK");
+                        messageUi.ShowDialog();
+                    });
                     Environment.Exit(1);
                     return;
                 }
@@ -94,7 +114,12 @@ namespace GoAwayEdge.Common
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show($"Installation failed!\n{ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    Application.Current.Dispatcher.Invoke(() =>
+                    {
+                        var errorMessage = LocalizationManager.LocalizeValue("FailedInstallation", ex.Message);
+                        var messageUi = new MessageUi("GoAwayEdge", errorMessage, "OK");
+                        messageUi.ShowDialog();
+                    });
                     Environment.Exit(1);
                     return;
                 }
@@ -121,7 +146,12 @@ namespace GoAwayEdge.Common
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Installation failed!\n{ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                Application.Current.Dispatcher.Invoke(() =>
+                {
+                    var errorMessage = LocalizationManager.LocalizeValue("FailedInstallation", ex.Message);
+                    var messageUi = new MessageUi("GoAwayEdge", errorMessage, "OK");
+                    messageUi.ShowDialog();
+                });
                 Environment.Exit(1);
                 return;
             }
@@ -145,7 +175,12 @@ namespace GoAwayEdge.Common
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Uninstallation failed! Please try again.\n{ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                Application.Current.Dispatcher.Invoke(() =>
+                {
+                    var errorMessage = LocalizationManager.LocalizeValue("FailedUninstallation", ex.Message);
+                    var messageUi = new MessageUi("GoAwayEdge", errorMessage, "OK");
+                    messageUi.ShowDialog();
+                });
                 Environment.Exit(1);
                 return;
             }
@@ -183,7 +218,12 @@ namespace GoAwayEdge.Common
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Uninstallation failed! Please try again.\n{ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                Application.Current.Dispatcher.Invoke(() =>
+                {
+                    var errorMessage = LocalizationManager.LocalizeValue("FailedUninstallation", ex.Message);
+                    var messageUi = new MessageUi("GoAwayEdge", errorMessage, "OK");
+                    messageUi.ShowDialog();
+                });
                 Environment.Exit(1);
                 return;
             }

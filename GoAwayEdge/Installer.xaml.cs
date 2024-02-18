@@ -12,42 +12,15 @@ namespace GoAwayEdge
     public partial class Installer
     {
         internal static Installer? ContentWindow;
+        public static License? LicensePage;
         private static Welcome? _welcomePage;
-        public static License LicensePage;
         private static Settings? _settingPage;
 
         public Installer()
         {
             InitializeComponent();
 
-            // Set current language model
-            var language = Thread.CurrentThread.CurrentCulture.ToString();
-            var dict = new ResourceDictionary();
-            Debug.WriteLine("Trying to load language: " + language);
-            dict.Source = language switch
-            {
-                "en-US" => new Uri("/GoAwayEdge;component/Localization/ResourceDictionary.xaml", UriKind.Relative),
-                "de-DE" => new Uri("/GoAwayEdge;component/Localization/ResourceDictionary.de-DE.xaml", UriKind.Relative),
-                "es-ES" => new Uri("/GoAwayEdge;component/Localization/ResourceDictionary.es-ES.xaml", UriKind.Relative),
-                "fr-FR" => new Uri("/GoAwayEdge;component/Localization/ResourceDictionary.fr-FR.xaml", UriKind.Relative),
-                "it-IT" => new Uri("/GoAwayEdge;component/Localization/ResourceDictionary.it-IT.xaml", UriKind.Relative),
-                "pl-PL" => new Uri("/GoAwayEdge;component/Localization/ResourceDictionary.pl-PL.xaml", UriKind.Relative),
-                "ko-KR" => new Uri("/GoAwayEdge;component/Localization/ResourceDictionary.ko-KR.xaml", UriKind.Relative),
-                _ => new Uri("/GoAwayEdge;component/Localization/ResourceDictionary.xaml", UriKind.Relative)
-            };
-            try
-            {
-                Application.Current.Resources.MergedDictionaries.Add(dict);
-                VersionLbl.Content = $"Version {Assembly.GetExecutingAssembly().GetName().Version!}";
-            }
-            catch (Exception ex)
-            {
-                var messageUi = new MessageUi("GoAwayEdge",
-                    $"Failed to load language: {ex.Message}", "OK", null, true);
-                messageUi.ShowDialog();
-                Environment.Exit(1);
-            }
-
+            VersionLbl.Content = $"Version {Assembly.GetExecutingAssembly().GetName().Version!}";
             Configuration.InitialEnvironment();
 
             _welcomePage = new Welcome();

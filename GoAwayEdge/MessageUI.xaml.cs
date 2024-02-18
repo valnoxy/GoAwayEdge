@@ -1,10 +1,9 @@
-﻿// Copyright (c) 2023 valnoxy
+﻿// Copyright (c) 2024 valnoxy
 // Copied from Dive: https://github.com/valnoxy/Dive/blob/main/Dive/Dive.UI/MessageUI.xaml.cs
 
 using System.Reflection;
 using System.Windows;
 using System.Windows.Input;
-using System.Windows.Threading;
 
 namespace GoAwayEdge
 {
@@ -17,9 +16,8 @@ namespace GoAwayEdge
 
         private static string? _buttonPressed;
         private static bool _mainThread;
-        private readonly DispatcherTimer _timer;
 
-        public MessageUi(string title, string message, string btn1 = null, string btn2 = null, bool isMainThread = false)
+        public MessageUi(string title, string message, string? btn1 = null, string? btn2 = null, bool isMainThread = false)
         {
             InitializeComponent();
 

@@ -5,6 +5,8 @@
     <system:String x:Key="Next">Next</system:String>
     <system:String x:Key="Back">Back</system:String>
     <system:String x:Key="Exit">Exit</system:String>
+    <system:String x:Key="Yes">Yes</system:String>
+    <system:String x:Key="No">No</system:String>
 
     <!-- Welcome -->
     <system:String x:Key="WelcomeTitle">Welcome</system:String>
@@ -43,5 +45,23 @@
     <system:String x:Key="UninstallFinishedTitle">Uninstallation completed!</system:String>
     <system:String x:Key="UninstallFinishedDescription">GoAwayEdge has been successfully removed from the system.</system:String>
     <system:String x:Key="DonateButton">Donate via PayPal</system:String>
+
+    <!-- Error Handling / Notifications -->
+    <system:String x:Key="FailedInitialization">Initialization failed: {0}</system:String>
+    <system:String x:Key="FailedInstallation">Installation failed: {0}</system:String>
+    <system:String x:Key="FailedUninstallation">Uninstallation failed: {0}</system:String>
+    <system:String x:Key="FailedUpdate">Update failed: {0}</system:String>
+    <system:String x:Key="FailedInstallationGeneric">Installation failed! Please try again.</system:String>
+    <system:String x:Key="FailedEdgeRemoval">The removal of Microsoft Edge failed! Please try again.</system:String>
+    <system:String x:Key="FailedRegisterIFEO">Failed to register Image File Execution Option for '{0}'. Please try again.</system:String>
+    <system:String x:Key="NewUpdateAvailable">A new version of GoAwayEdge (v{0}) is available. This update includes new features, bug fixes and ensures the functionality of this application.</system:String>
+    <system:String x:Key="NewNonIfeoUpdate">Microsoft Edge has been updated and GoAwayEdge needs to update the alternative startup file to ensure Edge functionality.</system:String>
+    <system:String x:Key="MissingIfeoFile">The alternative startup file of Edge is missing and must be copied to ensure Edge functionality. Copy now?</system:String>
+    <system:String x:Key="InstallUpdate">Install Update</system:String>
+    <system:String x:Key="RemindMeLater">Remind me later</system:String>
+    <system:String x:Key="IfeoUpdateSuccessfulTitle">Update successful</system:String>
+    <system:String x:Key="IfeoUpdateSuccessfulDescription">The alternative startup file of Edge has been successfully updated.</system:String>
+    <system:String x:Key="IfeoCreateSuccessfulTitle">Creation successful</system:String>
+    <system:String x:Key="IfeoCreateSuccessfulDescription">The alternative startup file of Edge has been successfully created.</system:String>
 
 </ResourceDictionary>

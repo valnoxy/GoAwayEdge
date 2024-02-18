@@ -3,8 +3,21 @@
     <system:String x:Key="Title">Installateur GoAwayEdge</system:String>
     <system:String x:Key="Next">Suivant</system:String>
     <system:String x:Key="Back">Retour</system:String>
+    <system:String x:Key="Exit">Sortie</system:String>
+    <system:String x:Key="Yes">Oui</system:String>
+    <system:String x:Key="No">Non</system:String>
+
+    <!-- Welcome -->
+    <system:String x:Key="WelcomeTitle">Bienvenue</system:String>
+    <system:String x:Key="WelcomeDescription">Le programme d'installation effectuera toutes les étapes nécessaires pour installer GoAwayEdge sur votre système. Après l'installation, tous les appels Edge seront redirigés vers votre navigateur. Veuillez sélectionner l'option souhaitée pour continuer.</system:String>
+    <system:String x:Key="SettingsInstallTitle">Installer</system:String>
+    <system:String x:Key="SettingsInstallDescription">Installez et configurez GoAwayEdge sur votre système.</system:String>
+    <system:String x:Key="SettingsUninstallTitle">Désinstaller</system:String>
+    <system:String x:Key="SettingsUninstallDescription">Désinstallez GoAwayEdge et rétablissez les fonctionnalités de Edge.</system:String>
+    <system:String x:Key="SettingsUninstallUseInstaller">Veuillez utiliser le programme d'installation pour désinstaller GoAwayEdge.</system:String>
 
     <!-- License -->
+    <system:String x:Key="LicenseTitle">Licence</system:String>
     <system:String x:Key="LicenseNote">Veuillez lire la licence suivante. Vous devez accepter les termes de la licence avant de poursuivre l'installation.</system:String>
     <system:String x:Key="LicenseAccept">J'accepte cette licence.</system:String>
     <system:String x:Key="LicenseDecline">Je refuse cette licence.</system:String>
@@ -18,9 +31,8 @@
     <system:String x:Key="SettingsSearchEngineCustomItem">Sur mesure</system:String>
     <system:String x:Key="SettingsCustomSearchEngineTitle">Moteur de recherche personnalisé</system:String>
     <system:String x:Key="SettingsCustomSearchEngineDescription">Veuillez saisir l'URL de la requête du moteur de recherche.</system:String>
-    <system:String x:Key="SettingsUninstallTitle">Désinstaller</system:String>
-    <system:String x:Key="SettingsUninstallDescription">Désinstallez GoAwayEdge et rétablissez les fonctionnalités de Edge.</system:String>
-    <system:String x:Key="SettingsUninstallUseInstaller">Veuillez utiliser le programme d'installation pour désinstaller GoAwayEdge.</system:String>
+    <system:String x:Key="SettingsMSEdgeUninstallTitle">Supprimer Microsoft Edge (Stable)</system:String>
+    <system:String x:Key="SettingsMSEdgeUninstallDescription">Supprimer complètement Microsoft Edge du système.</system:String>
 
     <!-- Setup in progress -->
     <system:String x:Key="SetupProgressTitle">Installation en cours ...</system:String>
@@ -32,5 +44,23 @@
     <system:String x:Key="UninstallFinishedTitle">Désinstallation terminée !</system:String>
     <system:String x:Key="UninstallFinishedDescription">GoAwayEdge a été supprimé avec succès du système.</system:String>
     <system:String x:Key="DonateButton">Faire un don via PayPal</system:String>
+
+    <!-- Error Handling / Notifications -->
+    <system:String x:Key="FailedInitialization">Échec de l'initialisation : {0}</system:String>
+    <system:String x:Key="FailedInstallation">L'installation a échoué : {0}</system:String>
+    <system:String x:Key="FailedUninstallation">La désinstallation a échoué : {0}</system:String>
+    <system:String x:Key="FailedUpdate">Échec de la mise à jour : {0}</system:String>
+    <system:String x:Key="FailedInstallationGeneric">L'installation a échoué ! Veuillez réessayer.</system:String>
+    <system:String x:Key="FailedEdgeRemoval">La suppression de Microsoft Edge a échoué ! Veuillez réessayer.</system:String>
+    <system:String x:Key="FailedRegisterIFEO">Échec de l'enregistrement de l'option d'exécution du fichier image pour '{0}'. Veuillez réessayer.</system:String>
+    <system:String x:Key="NewUpdateAvailable">Une nouvelle version de GoAwayEdge (v{0}) est disponible. Cette mise à jour inclut de nouvelles fonctionnalités, des corrections de bugs et assure la fonctionnalité de cette application.</system:String>
+    <system:String x:Key="NewNonIfeoUpdate">Microsoft Edge a été mis à jour et GoAwayEdge doit mettre à jour le fichier non-IFEO pour assurer la fonctionnalité de Edge.</system:String>
+    <system:String x:Key="MissingIfeoFile">La version non-IEFO d'Edge est manquante et doit être copiée pour assurer la fonctionnalité d'Edge. Copier maintenant ?</system:String>
+    <system:String x:Key="InstallUpdate">Installer la mise à jour</system:String>
+    <system:String x:Key="RemindMeLater">Rappelez-moi plus tard</system:String>
+    <system:String x:Key="IfeoUpdateSuccessfulTitle">Mise à jour réussie</system:String>
+    <system:String x:Key="IfeoUpdateSuccessfulDescription">La version non IFO de Edge a été mise à jour avec succès.</system:String>
+    <system:String x:Key="IfeoCreateSuccessfulTitle">Création réussie</system:String>
+    <system:String x:Key="IfeoCreateSuccessfulDescription">La version non-IEFO de Edge a été créée avec succès.</system:String>
 
 </ResourceDictionary>

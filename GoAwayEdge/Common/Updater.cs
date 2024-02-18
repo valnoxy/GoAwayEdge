@@ -81,24 +81,49 @@ namespace GoAwayEdge.Common
             switch (action)
             {
                 case ModifyAction.Update:
+                {
+                    try
+                    {
+                        File.Copy(FileConfiguration.EdgePath, FileConfiguration.NonIfeoPath, true);
+
+                        var title = LocalizationManager.LocalizeValue("IfeoUpdateSuccessfulTitle");
+                        var description = LocalizationManager.LocalizeValue("IfeoUpdateSuccessfulDescription");
+                        new ToastContentBuilder()
+                            .AddText(title)
+                            .AddText(description)
+                            .Show();
+                    }
+                    catch (Exception ex)
+                    {
+                        var message = LocalizationManager.LocalizeValue("FailedUpdate", ex.Message);
+                        var messageUi = new MessageUi("GoAwayEdge", message, "OK", null, true);
+                        messageUi.ShowDialog();
+                    }
+                    break;
+                }
                 case ModifyAction.Create:
                 {
                     try
                     {
                         File.Copy(FileConfiguration.EdgePath, FileConfiguration.NonIfeoPath, true);
+
+                        var title = LocalizationManager.LocalizeValue("IfeoCreateSuccessfulTitle");
+                        var description = LocalizationManager.LocalizeValue("IfeoCreateSuccessfulDescription");
                         new ToastContentBuilder()
-                            .AddText("Update successful")
-                            .AddText("The IFEO binary was successfully updated.")
+                            .AddText(title)
+                            .AddText(description)
                             .Show();
                     }
                     catch (Exception ex)
                     {
-                        var messageUi = new MessageUi("GoAwayEdge",
-                            $"Update failed!\n{ex.Message}!", "OK", null, true);
+                        var message = LocalizationManager.LocalizeValue("FailedUpdate", ex.Message);
+                        var messageUi = new MessageUi("GoAwayEdge", message, "OK", null, true);
                         messageUi.ShowDialog();
                     }
                     break;
                 }
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(action), action, null);
             }
         }
 
@@ -145,7 +170,7 @@ namespace GoAwayEdge.Common
         /// <summary>
         /// Download and run the new version of GoAwayEdge.
         /// </summary>
-        public static int UpdateClient()
+        public static bool UpdateClient()
         {
             const string url = "https://api.github.com/repos/valnoxy/GoAwayEdge/releases";
 
@@ -160,30 +185,30 @@ namespace GoAwayEdge.Common
                 var releases = JsonConvert.DeserializeObject<GitHubRelease[]>(json);
                 if (releases is { Length: > 0 })
                 {
-                    string assetUrl = null;
+                    var assetUrl = string.Empty;
                     foreach (var asset in releases[0].assets.Where(asset => asset.name == "GoAwayEdge.exe"))
                     {
                         assetUrl = asset.browser_download_url;
                     }
                     
                     var tempFolder = Path.GetTempPath();
-                    if (assetUrl == null)
+                    if (string.IsNullOrEmpty(assetUrl))
                     {
-                        return 1;
+                        return false;
                     }
 
                     if (File.Exists(Path.Combine(tempFolder, "GoAwayEdge.exe")))
                         File.Delete(Path.Combine(tempFolder, "GoAwayEdge.exe"));
                     client.DownloadFile(assetUrl, Path.Combine(tempFolder, "GoAwayEdge.exe"));
                     Process.Start(Path.Combine(tempFolder, "GoAwayEdge.exe"));
-                    return 0;
+                    return true;
                 }
             }
             catch
             {
-                return 1;
+                return false;
             }
-            return 1;
+            return false;
         }
 
         private static string CalculateMd5(string filename)
