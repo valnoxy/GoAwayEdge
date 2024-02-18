@@ -25,12 +25,18 @@
     <Compile Update="Pages\Settings.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="Pages\Welcome.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Page Update="App.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="MessageUI.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Pages\Welcome.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Resource Update="Localization\ResourceDictionary.ko-KR.xaml">

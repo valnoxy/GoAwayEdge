@@ -1,9 +1,9 @@
-﻿
+
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.4.33020.496
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GoAwayEdge", "GoAwayEdge\GoAwayEdge.csproj", "{95F3960E-372B-45F3-85D8-CD06F4D8B271}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GoAwayEdge", "GoAwayEdge\GoAwayEdge.csproj", "{95F3960E-372B-45F3-85D8-CD06F4D8B271}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

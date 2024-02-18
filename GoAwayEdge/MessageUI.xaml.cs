@@ -1,9 +1,9 @@
-﻿// Copyright (c) 2023 valnoxy
+﻿// Copyright (c) 2024 valnoxy
 // Copied from Dive: https://github.com/valnoxy/Dive/blob/main/Dive/Dive.UI/MessageUI.xaml.cs
 
+using System.Reflection;
 using System.Windows;
 using System.Windows.Input;
-using System.Windows.Threading;
 
 namespace GoAwayEdge
 {
@@ -16,9 +16,8 @@ namespace GoAwayEdge
 
         private static string? _buttonPressed;
         private static bool _mainThread;
-        private readonly DispatcherTimer _timer = null!;
 
-        public MessageUi(string title, string message, string? btn1 = null, string? btn2 = null, bool isMainThread = false, int timer = 0)
+        public MessageUi(string title, string message, string? btn1 = null, string? btn2 = null, bool isMainThread = false)
         {
             InitializeComponent();
 
@@ -31,27 +30,8 @@ namespace GoAwayEdge
                 this.Btn1.Visibility = Visibility.Hidden;
             if (btn2 is null or "")
                 this.Btn2.Visibility = Visibility.Hidden;
-
-            if (timer != 0)
-            {
-                var time = TimeSpan.FromSeconds(timer);
-
-                _timer = new DispatcherTimer(new TimeSpan(0, 0, 1), DispatcherPriority.Normal, delegate
-                {
-                    LbTimer.Text = $"{time:%s}s before auto-selecting '{this.Btn2.Content}'.";
-                    if (time == TimeSpan.Zero)
-                    {
-                        _timer.Stop();
-                        _buttonPressed = "Btn2";
-                        if (_mainThread) this.Hide();
-                        else this.Close();
-                    }
-                    time = time.Add(TimeSpan.FromSeconds(-1));
-                }, Application.Current.Dispatcher);
-
-                _timer.Start();
-            }
-            else LbTimer.Visibility = Visibility.Hidden;
+            
+            VersionLbl.Content = $"Version {Assembly.GetExecutingAssembly().GetName().Version!}";
 
             _mainThread = isMainThread;
         }
@@ -73,7 +53,7 @@ namespace GoAwayEdge
         private void WindowKeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key != Key.C || Keyboard.Modifiers != ModifierKeys.Control) return;
-            
+
             var clipboardString = $"{MessageTitle.Text}\n-----\n{MessageText.Text}";
             Clipboard.SetDataObject(clipboardString);
         }

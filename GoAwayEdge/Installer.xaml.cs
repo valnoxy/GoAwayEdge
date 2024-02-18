@@ -1,6 +1,7 @@
 ﻿using System.Diagnostics;
 using System.Reflection;
 using System.Windows;
+using GoAwayEdge.Common;
 using GoAwayEdge.Pages;
 
 namespace GoAwayEdge
@@ -11,43 +12,20 @@ namespace GoAwayEdge
     public partial class Installer
     {
         internal static Installer? ContentWindow;
-        private static License? _licensePage;
+        public static License? LicensePage;
+        private static Welcome? _welcomePage;
         private static Settings? _settingPage;
 
         public Installer()
         {
             InitializeComponent();
 
-            // Set current language model
-            var language = Thread.CurrentThread.CurrentCulture.ToString();
-            var dict = new ResourceDictionary();
-            Debug.WriteLine("Trying to load language: " + language);
-            dict.Source = language switch
-            {
-                "en-US" => new Uri("/GoAwayEdge;component/Localization/ResourceDictionary.xaml", UriKind.Relative),
-                "de-DE" => new Uri("/GoAwayEdge;component/Localization/ResourceDictionary.de-DE.xaml", UriKind.Relative),
-                "es-ES" => new Uri("/GoAwayEdge;component/Localization/ResourceDictionary.es-ES.xaml", UriKind.Relative),
-                "fr-FR" => new Uri("/GoAwayEdge;component/Localization/ResourceDictionary.fr-FR.xaml", UriKind.Relative),
-                "it-IT" => new Uri("/GoAwayEdge;component/Localization/ResourceDictionary.it-IT.xaml", UriKind.Relative),
-                "pl-PL" => new Uri("/GoAwayEdge;component/Localization/ResourceDictionary.pl-PL.xaml", UriKind.Relative),
-                "ko-KR" => new Uri("/GoAwayEdge;component/Localization/ResourceDictionary.ko-KR.xaml", UriKind.Relative),
-                _ => new Uri("/GoAwayEdge;component/Localization/ResourceDictionary.xaml", UriKind.Relative)
-            };
-            try
-            {
-                Application.Current.Resources.MergedDictionaries.Add(dict);
-                VersionLbl.Content = $"Version {Assembly.GetExecutingAssembly().GetName().Version!}";
-            }
-            catch (Exception ex)
-            {
-                var messageUi = new MessageUi("GoAwayEdge",
-                    $"Failed to load language: {ex.Message}", "OK", null, true);
-                messageUi.ShowDialog();
-                Environment.Exit(1);
-            }
-            
-            _licensePage = new License();
-            FrameWindow.Content = _licensePage;
+            VersionLbl.Content = $"Version {Assembly.GetExecutingAssembly().GetName().Version!}";
+            Configuration.InitialEnvironment();
+
+            _welcomePage = new Welcome();
+            LicensePage = new License();
+            FrameWindow.Content = _welcomePage;
             ContentWindow = this;
         }
 
@@ -55,6 +33,9 @@ namespace GoAwayEdge
         {
             switch (FrameWindow.Content)
             {
+                case InstallationSuccess:
+                    Environment.Exit(0);
+                    break;
                 case Settings:
                     NextBtn.IsEnabled = false;
                     BackBtn.IsEnabled = false;
@@ -75,8 +56,13 @@ namespace GoAwayEdge
             {
                 case Settings:
                     NextBtn.IsEnabled = true;
+                    BackBtn.IsEnabled = true;
+                    FrameWindow.Content = LicensePage;
+                    break;
+                case License:
+                    NextBtn.IsEnabled = false;
                     BackBtn.IsEnabled = false;
-                    FrameWindow.Content = _licensePage;
+                    FrameWindow.Content = _welcomePage;
                     break;
             }
         }

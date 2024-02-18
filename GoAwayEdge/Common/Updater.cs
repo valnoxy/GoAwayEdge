@@ -2,7 +2,6 @@
 using Microsoft.Win32;
 using System.Diagnostics;
 using System.IO;
-using System.IO.Compression;
 using System.Net;
 using System.Reflection;
 using System.Security.Cryptography;
@@ -26,54 +25,18 @@ namespace GoAwayEdge.Common
 
 
         /// <summary>
-        /// Initialize the current environment.
-        /// </summary>
-        /// <returns>
-        ///     Boolean status of the initialization.
-        /// </returns>
-        public static bool InitialEnvironment()
-        {
-            try
-            {
-                var key = Registry.LocalMachine.OpenSubKey(
-                    @"SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\msedge.exe\0");
-                if (key == null)
-                {
-                    Console.WriteLine("Registry key not found.");
-                    return false;
-                }
-
-                var ifeoBinaryPath = (string)key.GetValue("FilterFullPath")!;
-                if (string.IsNullOrEmpty(ifeoBinaryPath))
-                {
-                    Console.WriteLine("FilterFullPath value not found.");
-                    return false;
-                }
-
-                FileConfiguration.EdgePath = Path.Combine(Path.GetDirectoryName(ifeoBinaryPath)!, "msedge.exe");
-                FileConfiguration.IfeoPath = Path.Combine(Path.GetDirectoryName(ifeoBinaryPath)!, "msedge_ifeo.exe");
-                return true;
-            }
-            catch (Exception ex)
-            {
-                var messageUi = new MessageUi("GoAwayEdge",
-                    $"Initialization failed!\n{ex.Message}", "OK", null, true);
-                messageUi.ShowDialog();
-                return false;
-            }
-        }
-
-        /// <summary>
         /// Validates if the installed IFEO-Binary is identical with the Edge-Binary.
         /// </summary>
         /// <returns>
         ///     Integer value if the Binary is identical, not identical or missing.
-        ///     0 : true
+        ///     0 : true (also reported if Edge is not installed)
         ///     1 : false
         ///     2 : missing
         /// </returns>
         public static int ValidateIfeoBinary()
         {
+            if (Configuration.NoEdgeInstalled) return 0;
+
             var key = Registry.LocalMachine.OpenSubKey(
                 @"SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\msedge.exe\0");
             if (key == null)
@@ -90,7 +53,7 @@ namespace GoAwayEdge.Common
             }
 
             var edgeBinaryPath = Path.Combine(Path.GetDirectoryName(binaryPath)!, "msedge.exe");
-            var ifeoBinaryPath = Path.Combine(Path.GetDirectoryName(binaryPath)!, "msedge_ifeo.exe");
+            var ifeoBinaryPath = Path.Combine(Path.GetDirectoryName(binaryPath)!, "msedge_non_ifeo.exe");
 
             if (File.Exists(ifeoBinaryPath))
             {
@@ -118,24 +81,49 @@ namespace GoAwayEdge.Common
             switch (action)
             {
                 case ModifyAction.Update:
-                case ModifyAction.Create:
                 {
                     try
                     {
-                        File.Copy(FileConfiguration.EdgePath, FileConfiguration.IfeoPath, true);
+                        File.Copy(FileConfiguration.EdgePath, FileConfiguration.NonIfeoPath, true);
+
+                        var title = LocalizationManager.LocalizeValue("IfeoUpdateSuccessfulTitle");
+                        var description = LocalizationManager.LocalizeValue("IfeoUpdateSuccessfulDescription");
                         new ToastContentBuilder()
-                            .AddText("Update successful")
-                            .AddText("The IFEO binary was successfully updated.")
+                            .AddText(title)
+                            .AddText(description)
                             .Show();
                     }
                     catch (Exception ex)
                     {
-                        var messageUi = new MessageUi("GoAwayEdge",
-                            $"Update failed!\n{ex.Message}!", "OK", null, true);
+                        var message = LocalizationManager.LocalizeValue("FailedUpdate", ex.Message);
+                        var messageUi = new MessageUi("GoAwayEdge", message, "OK", null, true);
                         messageUi.ShowDialog();
                     }
                     break;
                 }
+                case ModifyAction.Create:
+                {
+                    try
+                    {
+                        File.Copy(FileConfiguration.EdgePath, FileConfiguration.NonIfeoPath, true);
+
+                        var title = LocalizationManager.LocalizeValue("IfeoCreateSuccessfulTitle");
+                        var description = LocalizationManager.LocalizeValue("IfeoCreateSuccessfulDescription");
+                        new ToastContentBuilder()
+                            .AddText(title)
+                            .AddText(description)
+                            .Show();
+                    }
+                    catch (Exception ex)
+                    {
+                        var message = LocalizationManager.LocalizeValue("FailedUpdate", ex.Message);
+                        var messageUi = new MessageUi("GoAwayEdge", message, "OK", null, true);
+                        messageUi.ShowDialog();
+                    }
+                    break;
+                }
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(action), action, null);
             }
         }
 
@@ -145,7 +133,7 @@ namespace GoAwayEdge.Common
         /// <returns>
         ///     Boolean status of the existence of a newer version.
         /// </returns>
-        public static string CheckForAppUpdate()
+        public static string? CheckForAppUpdate()
         {
             const string url = "https://api.github.com/repos/valnoxy/GoAwayEdge/releases";
 
@@ -163,7 +151,7 @@ namespace GoAwayEdge.Common
                     var tagName = Convert.ToString(releases[0].tag_name);
                     var tagVersion = tagName[1..];
                     var currentFileVersion = versionInfo.FileVersion;
-                    var parts = currentFileVersion.Split('.');
+                    var parts = currentFileVersion!.Split('.');
                     var partsResult = string.Join(".", parts.Take(3));
                     var currentVersion = new Version(partsResult);
                     var latestVersion = new Version(tagVersion);
@@ -171,18 +159,18 @@ namespace GoAwayEdge.Common
                     if (currentVersion < latestVersion)
                         return latestVersion.ToString();
                 }
-                return null!;
+                return null;
             }
             catch
             {
-                return null!;
+                return null;
             }
         }
         
         /// <summary>
         /// Download and run the new version of GoAwayEdge.
         /// </summary>
-        public static int UpdateClient()
+        public static bool UpdateClient()
         {
             const string url = "https://api.github.com/repos/valnoxy/GoAwayEdge/releases";
 
@@ -197,30 +185,30 @@ namespace GoAwayEdge.Common
                 var releases = JsonConvert.DeserializeObject<GitHubRelease[]>(json);
                 if (releases is { Length: > 0 })
                 {
-                    string assetUrl = null;
+                    var assetUrl = string.Empty;
                     foreach (var asset in releases[0].assets.Where(asset => asset.name == "GoAwayEdge.exe"))
                     {
                         assetUrl = asset.browser_download_url;
                     }
                     
                     var tempFolder = Path.GetTempPath();
-                    if (assetUrl == null)
+                    if (string.IsNullOrEmpty(assetUrl))
                     {
-                        return 1;
+                        return false;
                     }
 
                     if (File.Exists(Path.Combine(tempFolder, "GoAwayEdge.exe")))
                         File.Delete(Path.Combine(tempFolder, "GoAwayEdge.exe"));
                     client.DownloadFile(assetUrl, Path.Combine(tempFolder, "GoAwayEdge.exe"));
                     Process.Start(Path.Combine(tempFolder, "GoAwayEdge.exe"));
-                    return 0;
+                    return true;
                 }
             }
             catch
             {
-                return 1;
+                return false;
             }
-            return 1;
+            return false;
         }
 
         private static string CalculateMd5(string filename)

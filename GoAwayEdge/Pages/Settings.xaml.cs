@@ -1,7 +1,6 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
 using GoAwayEdge.Common;
-using Path = System.IO.Path;
 
 namespace GoAwayEdge.Pages
 {
@@ -29,6 +28,7 @@ namespace GoAwayEdge.Pages
             SearchEngineBox.Items.Add("Ecosia");
             SearchEngineBox.Items.Add("Ask");
             SearchEngineBox.Items.Add("Qwant");
+            SearchEngineBox.Items.Add("Perplexity");
 
             try
             {
@@ -43,25 +43,15 @@ namespace GoAwayEdge.Pages
                 SearchEngineBox.Items.Add("Custom");
             }
 
+            if (Configuration.NoEdgeInstalled)
+            {
+                MsEdgeRemoveStackPanel.IsEnabled = false;
+                EdgeStackPanel.IsEnabled = false;
+            }
+
             SearchEngineBox.SelectedIndex = 0;
             Configuration.Search = SearchEngine.Google;
-
             Configuration.Uninstall = false;
-
-            var instDir = Path.Combine(
-                Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles),
-                "valnoxy",
-                "GoAwayEdge");
-
-            if (!Path.Exists(instDir))
-                UninstallSwitch.IsEnabled = false;
-            if (Path.GetDirectoryName(Environment.ProcessPath) != instDir) return;
-            UninstallSwitch.IsEnabled = false;
-            Dispatcher.Invoke(() =>
-            {
-                var resourceValue = (string)Application.Current.MainWindow!.FindResource("SettingsUninstallUseInstaller");
-                EdgeUninstallNote.Text = !string.IsNullOrEmpty(resourceValue) ? resourceValue : "Please use the Installer in order to uninstall GoAwayEdge.";
-            });
         }
 
         private void EdgeChannelBox_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -121,6 +111,11 @@ namespace GoAwayEdge.Pages
                     Installer.ContentWindow!.NextBtn.IsEnabled = true;
                     break;
                 case 8:
+                    Configuration.Search = SearchEngine.Perplexity;
+                    CustomSearchPanel.Visibility = Visibility.Collapsed;
+                    Installer.ContentWindow!.NextBtn.IsEnabled = true;
+                    break;
+                case 9:
                     Configuration.Search = SearchEngine.Custom;
                     CustomSearchPanel.Visibility = Visibility.Visible;
                     if (string.IsNullOrEmpty(Configuration.CustomQueryUrl))
@@ -128,27 +123,17 @@ namespace GoAwayEdge.Pages
                     break;
             }
         }
-
-        private void UninstallSwitch_OnClick(object sender, RoutedEventArgs e)
-        {
-            Configuration.Uninstall = UninstallSwitch.IsChecked!.Value;
-            if (UninstallSwitch.IsChecked.Value)
-            {
-                SearchEngineBox.IsEnabled = false;
-                EdgeChannelBox.IsEnabled = false;
-            }
-            else 
-            {
-                SearchEngineBox.IsEnabled = true;
-                EdgeChannelBox.IsEnabled = true;
-            }
-        }
-
+        
         private void QueryUrlTextBox_OnTextChanged(object sender, TextChangedEventArgs e)
         {
             Configuration.CustomQueryUrl = QueryUrlTextBox.Text;
             Installer.ContentWindow!.NextBtn.IsEnabled = Uri.TryCreate(QueryUrlTextBox.Text, UriKind.Absolute, out var uriResult)
                                                          && (uriResult.Scheme == Uri.UriSchemeHttp || uriResult.Scheme == Uri.UriSchemeHttps);
+        }
+
+        private void MsEdgeUninstallSwitch_OnClickUninstallSwitch_OnClick(object sender, RoutedEventArgs e)
+        {
+            Configuration.UninstallEdge = MsEdgeUninstallSwitch.IsChecked!.Value;
         }
     }
 }

@@ -16,7 +16,6 @@ using System.Security.Principal;
 using System.Text;
 using System.Web;
 using System.Windows;
-using Microsoft.Win32;
 
 namespace GoAwayEdge
 {
@@ -26,11 +25,14 @@ namespace GoAwayEdge
     public partial class App
     {
         private static string? _url;
-        private static SearchEngine _engine = SearchEngine.Google; // Fallback
 
         public void Application_Startup(object sender, StartupEventArgs e)
         {
-            if (e.Args.Length == 0) // Opens Installer
+            // Load Language
+            LocalizationManager.LoadLanguage();
+
+            string[] args = e.Args;
+            if (args.Length == 0) // Opens Installer
             {
                 if (IsAdministrator() == false)
                 {
@@ -45,57 +47,82 @@ namespace GoAwayEdge
                         };
                         Process.Start(startInfo);
                     }
-                    Application.Current.Shutdown();
+                    Environment.Exit(0);
                     return;
                 }
-                
+
                 var installer = new Installer();
                 installer.ShowDialog();
                 Environment.Exit(0);
             }
-            
-            string[] args = e.Args;
-            Output.WriteLine("Please go away Edge!");
-            Output.WriteLine("Hooked into process via IFEO successfully.");
-            var argumentJoin = string.Join(",", args);
-
-            Updater.InitialEnvironment();
-
-#if DEBUG
-            var w = new MessageUi("GoAwayEdge",
-                $"The following args are redirected (CTRL+C to copy):\n\n{argumentJoin}", "OK", null, true);
-            w.ShowDialog();
-#endif
-            Output.WriteLine("Command line args:\n\n" + argumentJoin + "\n", ConsoleColor.Gray);
-
-            // Filter command line args
-            foreach (var arg in args)
+            else if (args.Length > 0)
             {
-                if (arg.Contains("-ToastActivated"))
+                if (args.Contains("-ToastActivated")) // Clicked on notification, ignore it.
+                    Environment.Exit(0);
+                if (args.Contains("-s")) // Silent Installation
                 {
-                    // Clicked on Toast notification, ignore it.
+                    foreach (var arg in args)
+                    {
+                        if (arg.StartsWith("-se:"))
+                            Configuration.Search = ParseSearchEngine(arg);
+                        if (arg.Contains("--url:"))
+                        {
+                            Configuration.CustomQueryUrl = ParseCustomSearchEngine(arg);
+                            Configuration.Search = !string.IsNullOrEmpty(Configuration.CustomQueryUrl) ? SearchEngine.Custom : SearchEngine.Google;
+                        }
+                    }
+
+                    if (IsAdministrator() == false)
+                    {
+                        // Restart program and run as admin
+                        var exeName = Process.GetCurrentProcess().MainModule?.FileName;
+                        if (exeName != null)
+                        {
+                            var startInfo = new ProcessStartInfo(exeName)
+                            {
+                                Verb = "runas",
+                                UseShellExecute = true,
+                                Arguments = string.Join(" ", args)
+                            };
+                            Process.Start(startInfo);
+                        }
+                        Environment.Exit(0);
+                        return;
+                    }
+
+                    Configuration.InitialEnvironment();
+                    InstallRoutine.Install(null);
                     Environment.Exit(0);
                 }
-                if (arg.Contains("--update"))
+
+                if (args.Contains("-u"))
                 {
-                    var statusEnv = Updater.InitialEnvironment();
+                    InstallRoutine.Uninstall(null);
+                    Environment.Exit(0);
+                }
+                if (args.Contains("--update"))
+                {
+                    var statusEnv = Configuration.InitialEnvironment();
                     if (statusEnv == false) Environment.Exit(1);
 
                     // Check for app update
                     var updateAvailable = Updater.CheckForAppUpdate();
                     if (!string.IsNullOrEmpty(updateAvailable))
                     {
-                        var updateDialog = new MessageUi("GoAwayEdge",
-                            $"A new version is available: Version {updateAvailable}\nShould the update be performed now?", "No", "Yes", true);
+                        var updateMessage = LocalizationManager.LocalizeValue("NewUpdateAvailable", updateAvailable);
+                        var remindMeLaterBtn = LocalizationManager.LocalizeValue("RemindMeLater");
+                        var installUpdateBtn = LocalizationManager.LocalizeValue("InstallUpdate");
+
+                        var updateDialog = new MessageUi("GoAwayEdge", updateMessage, installUpdateBtn, remindMeLaterBtn, true);
                         updateDialog.ShowDialog();
-                        if (updateDialog.Summary == "Btn2")
+                        if (updateDialog.Summary == "Btn1")
                         {
                             var updateResult = Updater.UpdateClient();
-                            if (updateResult == 0) Environment.Exit(0);
+                            if (!updateResult) Environment.Exit(0);
                         }
                     }
 
-                    // Validate IFEO bínary
+                    // Validate Ifeo binary
                     var binaryStatus = Updater.ValidateIfeoBinary();
                     switch (binaryStatus)
                     {
@@ -104,11 +131,14 @@ namespace GoAwayEdge
                         case 1: // failed validation
                             if (IsAdministrator() == false)
                             {
-                                var ifeoMessageUi = new MessageUi("GoAwayEdge",
-                                    "The IFEO exclusion file needs to be updated. Update now?", "No", "Yes");
+                                var updateNonIfeoMessage = LocalizationManager.LocalizeValue("NewNonIfeoUpdate");
+                                var remindMeLaterBtn = LocalizationManager.LocalizeValue("RemindMeLater");
+                                var installUpdateBtn = LocalizationManager.LocalizeValue("InstallUpdate");
+
+                                var ifeoMessageUi = new MessageUi("GoAwayEdge", updateNonIfeoMessage, installUpdateBtn, remindMeLaterBtn);
                                 ifeoMessageUi.ShowDialog();
-                                
-                                if (ifeoMessageUi.Summary == "Btn2")
+
+                                if (ifeoMessageUi.Summary == "Btn1")
                                 {
                                     // Restart program and run as admin
                                     var exeName = Process.GetCurrentProcess().MainModule?.FileName;
@@ -122,7 +152,7 @@ namespace GoAwayEdge
                                         };
                                         Process.Start(startInfo);
                                     }
-                                    Application.Current.Shutdown();
+                                    Environment.Exit(0);
                                     return;
                                 }
                                 Environment.Exit(0);
@@ -132,11 +162,13 @@ namespace GoAwayEdge
                         case 2: // missing
                             if (IsAdministrator() == false)
                             {
-                                var ifeoMessageUi = new MessageUi("GoAwayEdge",
-                                        "The IFEO exclusion file is missing and need to be copied. Copy now?", "No", "Yes");
+                                var ifeoMissingMessage = LocalizationManager.LocalizeValue("MissingIfeoFile");
+                                var yesBtn = LocalizationManager.LocalizeValue("Yes");
+                                var noBtn = LocalizationManager.LocalizeValue("No");
+                                var ifeoMessageUi = new MessageUi("GoAwayEdge", ifeoMissingMessage, yesBtn, noBtn);
                                 ifeoMessageUi.ShowDialog();
 
-                                if (ifeoMessageUi.Summary == "Btn2")
+                                if (ifeoMessageUi.Summary == "Btn1")
                                 {
                                     // Restart program and run as admin
                                     var exeName = Process.GetCurrentProcess().MainModule?.FileName;
@@ -150,7 +182,7 @@ namespace GoAwayEdge
                                         };
                                         Process.Start(startInfo);
                                     }
-                                    Application.Current.Shutdown();
+                                    Environment.Exit(0);
                                     return;
                                 }
                                 Environment.Exit(0);
@@ -160,38 +192,49 @@ namespace GoAwayEdge
                     }
                     Environment.Exit(0);
                 }
+            }
+
+            Configuration.InitialEnvironment();
+            try
+            {
+                Configuration.Search = ParseSearchEngine(RegistryConfig.GetKey("SearchEngine"));
+            }
+            catch
+            {
+                // ignored
+            }
+            RunParser(args);
+
+            Environment.Exit(0);
+        }
+
+        public static void RunParser(string[] args)
+        {
+            var argumentJoin = string.Join(" ", args);
+#if DEBUG
+            var w = new MessageUi("GoAwayEdge",
+                $"The following args are redirected (CTRL+C to copy):\n\n{argumentJoin}", "OK", null, true);
+            w.ShowDialog();
+#endif
+            Console.WriteLine("Command line args:\n\n" + argumentJoin + "\n", ConsoleColor.Gray);
+
+            // Filter command line args
+            foreach (var arg in args)
+            {
                 if (arg.Contains("microsoft-edge:"))
                 {
                     _url = arg;
                 }
-                if (arg.Contains("-se"))
-                {
-                    var argParsed = arg.Remove(0,3);
-                    _engine = argParsed switch
-                    {
-                        "Google" => SearchEngine.Google,
-                        "Bing" => SearchEngine.Bing,
-                        "DuckDuckGo" => SearchEngine.DuckDuckGo,
-                        "Yahoo" => SearchEngine.Yahoo,
-                        "Yandex" => SearchEngine.Yandex,
-                        "Ecosia" => SearchEngine.Ecosia,
-                        "Ask" => SearchEngine.Ask,
-                        "Qwant" => SearchEngine.Qwant,
-                        "Custom" => SearchEngine.Custom,
-                        _ => SearchEngine.Google // Fallback search engine
-                    };
-                }
-                if (!args.Contains("--profile-directory") && !ContainsParsedData(args) && args.Length != 2) continue; // Start Edge (default browser on this system)
+                if (!args.Contains("--profile-directory") && !ContainsParsedData(args) && args.Length != 1) continue; // Start Edge (default browser on this system)
 
 #if DEBUG
                 var messageUi = new MessageUi("GoAwayEdge",
-                    $"Microsoft Edge will now start normally via IFEO application.", "OK", null, true);
+                    "Microsoft Edge will now start normally via IFEO application.", "OK", null, true);
                 messageUi.ShowDialog();
 #endif
-
                 var parsedArgs = args.Skip(2);
                 var p = new Process();
-                p.StartInfo.FileName = FileConfiguration.IfeoPath;
+                p.StartInfo.FileName = FileConfiguration.NonIfeoPath;
                 p.StartInfo.Arguments = string.Join(" ", parsedArgs);
                 p.StartInfo.UseShellExecute = true;
                 p.StartInfo.RedirectStandardOutput = false;
@@ -208,19 +251,19 @@ namespace GoAwayEdge
                 if (_url.Contains("microsoft-edge://?ux=copilot&tcp=1&source=taskbar")
                     || _url.Contains("microsoft-edge:///?ux=copilot&tcp=1&source=taskbar"))
                 {
-                    p.StartInfo.FileName = FileConfiguration.IfeoPath;
-                    p.StartInfo.Arguments = "microsoft-edge://?ux=copilot&tcp=1&source=taskbar";
-                    Output.WriteLine("Opening Windows Copilot", ConsoleColor.Gray);
+                    p.StartInfo.FileName = FileConfiguration.NonIfeoPath;
+                    p.StartInfo.Arguments = _url;
+                    Console.WriteLine($"Opening Windows Copilot with following url:\n{_url}", ConsoleColor.Gray);
 #if DEBUG
                     var copilotMessageUi = new MessageUi("GoAwayEdge",
-                        "Opening Windows Copilot ...", "OK", null, true);
+                        $"Opening Windows Copilot with following url:\n{_url}", "OK", null, true);
                     copilotMessageUi.ShowDialog();
 #endif
                 }
                 else
                 {
                     var parsed = ParseUrl(_url);
-                    Output.WriteLine("Opening URL in default browser:\n\n" + parsed + "\n", ConsoleColor.Gray);
+                    Console.WriteLine("Opening URL in default browser:\n\n" + parsed + "\n", ConsoleColor.Gray);
 #if DEBUG
                     var defaultUrlMessageUi = new MessageUi("GoAwayEdge",
                         "Opening URL in default browser:\n\n" + parsed + "\n", "OK", null, true);
@@ -233,14 +276,42 @@ namespace GoAwayEdge
                 p.StartInfo.RedirectStandardOutput = false;
                 p.Start();
             }
+        }
+
+        private static string? ParseCustomSearchEngine(string argument)
+        {
+            var argParsed = argument.Remove(0, 6);
+            var result = Uri.TryCreate(argParsed, UriKind.Absolute, out var uriResult)
+                         && (uriResult.Scheme == Uri.UriSchemeHttp || uriResult.Scheme == Uri.UriSchemeHttps);
+            return result ? argParsed : null;
+        }
+
+        private static SearchEngine ParseSearchEngine(string argument)
+        {
+            var arg = argument;
+            if (argument.StartsWith("-se:"))
+                arg = argument.Remove(0, 4);
             
-            Environment.Exit(0);
+            return arg.ToLower() switch
+            {
+                "google" => SearchEngine.Google,
+                "bing" => SearchEngine.Bing,
+                "duckduckgo" => SearchEngine.DuckDuckGo,
+                "yahoo" => SearchEngine.Yahoo,
+                "yandex" => SearchEngine.Yandex,
+                "ecosia" => SearchEngine.Ecosia,
+                "ask" => SearchEngine.Ask,
+                "qwant" => SearchEngine.Qwant,
+                "perplexity" => SearchEngine.Perplexity,
+                "custom" => SearchEngine.Custom,
+                _ => SearchEngine.Google // Fallback search engine
+            };
         }
 
         private static bool ContainsParsedData(IEnumerable<string> args)
         {
             var contains = false;
-            var engineUrl = DefineEngine(_engine);
+            var engineUrl = DefineEngine(Configuration.Search);
 
             foreach (var arg in args)
             {
@@ -270,7 +341,7 @@ namespace GoAwayEdge
             encodedUrl = encodedUrl.Contains("redirect") ? DotSlash(encodedUrl) : DecodeUrlString(encodedUrl);
 
             // Replace Search Engine
-            encodedUrl = encodedUrl.Replace("https://www.bing.com/search?q=", DefineEngine(_engine));
+            encodedUrl = encodedUrl.Replace("https://www.bing.com/search?q=", DefineEngine(Configuration.Search));
 
 #if DEBUG
             var uriMessageUi = new MessageUi("GoAwayEdge",
@@ -283,28 +354,27 @@ namespace GoAwayEdge
 
         private static string DefineEngine(SearchEngine engine)
         {
-            string customQueryUrl = null!;
+            var customQueryUrl = string.Empty;
             try
             {
-                var key = Registry.LocalMachine.OpenSubKey(
-                    @"SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\msedge.exe\0", false);
-                customQueryUrl = (string)key?.GetValue("CustomQueryUrl")!;
+                customQueryUrl = RegistryConfig.GetKey("CustomQueryUrl");
             }
             catch
             {
-                // ignored
+                // ignore; not an valid object
             }
 
             return engine switch
             {
                 SearchEngine.Google => "https://www.google.com/search?q=",
                 SearchEngine.Bing => "https://www.bing.com/search?q=",
-                SearchEngine.DuckDuckGo => "https://duckduckgo.com/?q=}",
+                SearchEngine.DuckDuckGo => "https://duckduckgo.com/?q=",
                 SearchEngine.Yahoo => "https://search.yahoo.com/search?p=",
                 SearchEngine.Yandex => "https://yandex.com/search/?text=",
                 SearchEngine.Ecosia => "https://www.ecosia.org/search?q=",
                 SearchEngine.Ask => "https://www.ask.com/web?q=",
                 SearchEngine.Qwant => "https://qwant.com/?q=",
+                SearchEngine.Perplexity => "https://www.perplexity.ai/search?copilot=false&q=",
                 SearchEngine.Custom => customQueryUrl,
                 _ => "https://www.google.com/search?q="
             };
