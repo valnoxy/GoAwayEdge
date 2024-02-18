@@ -47,7 +47,7 @@ namespace GoAwayEdge
                         };
                         Process.Start(startInfo);
                     }
-                    Current.Shutdown();
+                    Environment.Exit(0);
                     return;
                 }
 
@@ -72,6 +72,25 @@ namespace GoAwayEdge
                         }
                     }
 
+                    if (IsAdministrator() == false)
+                    {
+                        // Restart program and run as admin
+                        var exeName = Process.GetCurrentProcess().MainModule?.FileName;
+                        if (exeName != null)
+                        {
+                            var startInfo = new ProcessStartInfo(exeName)
+                            {
+                                Verb = "runas",
+                                UseShellExecute = true,
+                                Arguments = string.Join(" ", args)
+                            };
+                            Process.Start(startInfo);
+                        }
+                        Environment.Exit(0);
+                        return;
+                    }
+
+                    Configuration.InitialEnvironment();
                     InstallRoutine.Install(null);
                     Environment.Exit(0);
                 }
