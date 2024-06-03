@@ -29,6 +29,8 @@
   <h3 align="center">GoAwayEdge</h3>
   <p align="center">
     <p>Don't like Microsoft Edge? Me neither. Redirect all Edge calls to your favorite browser!</p>
+    <a href="https://github.com/valnoxy/GoAwayEdge/releases">Download now</a>
+    ·
     <a href="https://github.com/valnoxy/GoAwayEdge/issues">Report Bug</a>
     ·
     <a href="https://github.com/valnoxy/GoAwayEdge/discussions/">Discussions</a>
@@ -36,7 +38,7 @@
     <a href="https://crowdin.com/project/goawayedge">Help me translate</a>
     <br />
     <br />
-    🎉 Version 1.3.0 is out. Check out the release notes
+    🎉 Version 1.3.1 is out. Check out the release notes
     <a href="https://github.com/valnoxy/GoAwayEdge/releases">here</a>.
     <br />
     <br />
@@ -83,18 +85,19 @@ GoAwayEdge.exe -s -se:DuckDuckGo
 ``` 
 
 # 🗑️ Remove GoAwayEdge
+You can uninstall GoAwayEdge just like any other application. Alternatively, you can also take this way: 
 1. Download the latest version from [GitHub](https://github.com/valnoxy/GoAwayEdge/releases).
 2. Start the application.
 3. Click on ```Uninstall```.
 4. Done!
 
 You can also uninstall GoAwayEdge by parsing the following argument:
-```
+```bat
 GoAwayEdge.exe -u
 ```
 
 # 🖼️ Screenshot
-<img src="https://dl.exploitox.de/goawayedge/GoAwayEdge_Screenshot1.png" alt="GoAwayEdge Setup" width=650>
+<img src="https://dl.exploitox.de/goawayedge/GoAwayEdge_Screenshot2.png" alt="GoAwayEdge Setup" width=650>
 
 # 🙏 Libraries
 This project uses the following libraries:
