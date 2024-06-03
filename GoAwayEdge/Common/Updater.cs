@@ -59,13 +59,14 @@ namespace GoAwayEdge.Common
             {
                 var edgeHash = CalculateMd5(edgeBinaryPath);
                 var ifeoHash = CalculateMd5(ifeoBinaryPath);
-#if DEBUG
-                if (edgeHash != ifeoHash) {
+
+                if (App.Debug && edgeHash != ifeoHash)
+                {
                     var messageUi = new MessageUi("GoAwayEdge",
-                        $"The Edge Hash ({edgeHash}) and Ifeo Hash ({ifeoHash}) are not identical. Validation failed!", "OK", null,true);
+                        $"The Edge Hash ({edgeHash}) and Ifeo Hash ({ifeoHash}) are not identical. Validation failed!", "OK", null, true);
                     messageUi.ShowDialog();
                 }
-#endif
+
                 return edgeHash != ifeoHash ? 1 : 0;
             }
 

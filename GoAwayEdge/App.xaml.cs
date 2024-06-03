@@ -26,9 +26,13 @@ namespace GoAwayEdge
     public partial class App
     {
         private static string? _url;
+        public static bool Debug = false;
 
         public void Application_Startup(object sender, StartupEventArgs e)
         {
+#if DEBUG
+            Debug = true;
+#endif
             // Load Language
             LocalizationManager.LoadLanguage();
 
@@ -60,6 +64,8 @@ namespace GoAwayEdge
             {
                 if (args.Contains("-ToastActivated")) // Clicked on notification, ignore it.
                     Environment.Exit(0);
+                if (args.Contains("-debug"))
+                    Debug = true;
                 if (args.Contains("-s")) // Silent Installation
                 {
                     foreach (var arg in args)
@@ -212,89 +218,101 @@ namespace GoAwayEdge
         public static void RunParser(string[] args)
         {
             var argumentJoin = string.Join(" ", args);
-#if DEBUG
-            var w = new MessageUi("GoAwayEdge",
-                $"The following args are redirected (CTRL+C to copy):\n\n{argumentJoin}", "OK", null, true);
-            w.ShowDialog();
-#endif
-            Console.WriteLine("Command line args:\n\n" + argumentJoin + "\n", ConsoleColor.Gray);
+            var isFile = false;
+            var isCopilot = false;
+            var parsedData = false;
+            var ignoreStartup = false;
+            var p = new Process();
+            p.StartInfo.UseShellExecute = true;
+            p.StartInfo.RedirectStandardOutput = false;
 
-            // Filter command line args
+            if (Debug)
+            {
+                var w = new MessageUi("GoAwayEdge",
+                    $"The following args are redirected (CTRL+C to copy):\n\n{argumentJoin}", "OK", null, true);
+                w.ShowDialog();
+            }
+
             foreach (var arg in args)
             {
-                if (arg.Contains("microsoft-edge:"))
+                // Check for Copilot
+                if (arg.Contains("microsoft-edge://?ux=copilot&tcp=1&source=taskbar")
+                    || arg.Contains("microsoft-edge:///?ux=copilot&tcp=1&source=taskbar"))
                 {
                     _url = arg;
+                    isCopilot = true;
+                    break;
                 }
 
-                // Check if file is opened with Edge
-                var isFile = false;
-                try
+                // User want to parse data
+                if (arg.Contains("microsoft-edge:"))
                 {
-                    if (arg.Contains("msedge.exe"))
-                        isFile = false;
-                    else if (File.Exists(arg))
-                        isFile = true;
+                    _url = ParseUrl(arg);
+                    parsedData = true;
+                    break;
                 }
-                catch
-                {
+
+                // Check if the argument contains a file (like PDF)
+                if (arg.Contains("msedge.exe"))
                     isFile = false;
-                }
-                
-                if (!args.Contains("--profile-directory")
-                    && args.Contains("--no-startup-window")
-                    && !isFile
-                    && !ContainsParsedData(args) 
-                    && args.Length != 1) continue; // Start Edge (default browser on this system)
+                else if (File.Exists(arg))
+                    isFile = true;
 
-#if DEBUG
-                var messageUi = new MessageUi("GoAwayEdge",
-                    "Microsoft Edge will now start normally via IFEO application.", "OK", null, true);
-                messageUi.ShowDialog();
-#endif
+                // Check for blacklisted arguments
+                if (arg.Contains("--no-startup-window") 
+                    || arg.Contains("--profile-directory"))
+                    ignoreStartup = true;
+            }
+
+            // Open Edge normally
+            if ((!parsedData || isCopilot || isFile || args.Contains("--profile-directory")) && !ignoreStartup)
+            {
+                if (Debug)
+                {
+                    if (isCopilot)
+                    {
+                        var copilotMessageUi = new MessageUi("GoAwayEdge",
+                            $"Opening Windows Copilot with following url:\n{_url}", "OK", null, true);
+                        copilotMessageUi.ShowDialog();
+                    }
+                    else
+                    {
+                        var messageUi = new MessageUi("GoAwayEdge",
+                            "Microsoft Edge will now start normally via IFEO application.", "OK", null, true);
+                        messageUi.ShowDialog();
+                    }
+                }
                 var parsedArgs = args.Skip(2);
-                var p = new Process();
                 p.StartInfo.FileName = FileConfiguration.NonIfeoPath;
                 p.StartInfo.Arguments = string.Join(" ", parsedArgs);
-                p.StartInfo.UseShellExecute = true;
-                p.StartInfo.RedirectStandardOutput = false;
                 p.Start();
                 Environment.Exit(0);
             }
 
-            // Open URL in default browser
-            if (_url != null)
+            // Open default Browser with parsed data
+            if (parsedData)
             {
-                var p = new Process();
-
-                // Windows Copilot
-                if (_url.Contains("microsoft-edge://?ux=copilot&tcp=1&source=taskbar")
-                    || _url.Contains("microsoft-edge:///?ux=copilot&tcp=1&source=taskbar"))
+                if (Debug)
                 {
-                    p.StartInfo.FileName = FileConfiguration.NonIfeoPath;
-                    p.StartInfo.Arguments = _url;
-                    Console.WriteLine($"Opening Windows Copilot with following url:\n{_url}", ConsoleColor.Gray);
-#if DEBUG
-                    var copilotMessageUi = new MessageUi("GoAwayEdge",
-                        $"Opening Windows Copilot with following url:\n{_url}", "OK", null, true);
-                    copilotMessageUi.ShowDialog();
-#endif
-                }
-                else
-                {
-                    var parsed = ParseUrl(_url);
-                    Console.WriteLine("Opening URL in default browser:\n\n" + parsed + "\n", ConsoleColor.Gray);
-#if DEBUG
                     var defaultUrlMessageUi = new MessageUi("GoAwayEdge",
-                        "Opening URL in default browser:\n\n" + parsed + "\n", "OK", null, true);
+                        "Opening URL in default browser:\n\n" + _url + "\n", "OK", null, true);
                     defaultUrlMessageUi.ShowDialog();
-#endif
-                    p.StartInfo.FileName = parsed;
-                    p.StartInfo.Arguments = "";
                 }
-                p.StartInfo.UseShellExecute = true;
-                p.StartInfo.RedirectStandardOutput = false;
+                p.StartInfo.FileName = _url;
+                p.StartInfo.Arguments = "";
                 p.Start();
+                Environment.Exit(0);
+            }
+
+            if (ignoreStartup)
+            {
+                if (Debug)
+                {
+                    var defaultUrlMessageUi = new MessageUi("GoAwayEdge",
+                        "Edge was called with a blacklisted argument. Edge won't be launched.", "OK", null, true);
+                    defaultUrlMessageUi.ShowDialog();
+                }
+                Environment.Exit(0);
             }
         }
 
@@ -328,19 +346,6 @@ namespace GoAwayEdge
             };
         }
 
-        private static bool ContainsParsedData(IEnumerable<string> args)
-        {
-            var contains = false;
-            var engineUrl = DefineEngine(Configuration.Search);
-
-            foreach (var arg in args)
-            {
-                if (arg.Contains(engineUrl))
-                    contains = true;
-            }
-            return contains;
-        }
-
         private static string ParseUrl(string encodedUrl)
         {
             // Remove URI handler with url argument prefix
@@ -363,11 +368,12 @@ namespace GoAwayEdge
             // Replace Search Engine
             encodedUrl = encodedUrl.Replace("https://www.bing.com/search?q=", DefineEngine(Configuration.Search));
 
-#if DEBUG
-            var uriMessageUi = new MessageUi("GoAwayEdge",
-                "New Uri: " + encodedUrl, "OK", null, true);
-            uriMessageUi.ShowDialog();
-#endif
+            if (Debug)
+            {
+                var uriMessageUi = new MessageUi("GoAwayEdge",
+                    "New Uri: " + encodedUrl, "OK", null, true);
+                uriMessageUi.ShowDialog();
+            }
             var uri = new Uri(encodedUrl);
             return uri.ToString();
         }

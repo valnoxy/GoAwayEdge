@@ -347,6 +347,7 @@ namespace GoAwayEdge.Common
                 RegistryConfig.SetKey("HelpLink", "https://github.com/valnoxy/GoAwayEdge/issues", isUninstall: true);
                 RegistryConfig.SetKey("InstallDate", installDate, isUninstall: true);
                 RegistryConfig.SetKey("InstallLocation", Configuration.InstallDir, isUninstall: true);
+                RegistryConfig.SetKey("ModifyPath", Path.Combine(Configuration.InstallDir, "GoAwayEdge.exe"), isUninstall: true);
                 RegistryConfig.SetKey("Publisher", "valnoxy", isUninstall: true);
                 RegistryConfig.SetKey("QuietUninstallString", $"\"{Path.Combine(Configuration.InstallDir, "GoAwayEdge.exe")}\"", isUninstall: true);
                 RegistryConfig.SetKey("UninstallString", $"\"{Path.Combine(Configuration.InstallDir, "GoAwayEdge.exe")}\" -u", isUninstall: true);
