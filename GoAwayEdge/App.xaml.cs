@@ -12,6 +12,7 @@
 
 using GoAwayEdge.Common;
 using System.Diagnostics;
+using System.IO;
 using System.Security.Principal;
 using System.Text;
 using System.Web;
@@ -225,7 +226,26 @@ namespace GoAwayEdge
                 {
                     _url = arg;
                 }
-                if (!args.Contains("--profile-directory") && !ContainsParsedData(args) && args.Length != 1) continue; // Start Edge (default browser on this system)
+
+                // Check if file is opened with Edge
+                var isFile = false;
+                try
+                {
+                    if (arg.Contains("msedge.exe"))
+                        isFile = false;
+                    else if (File.Exists(arg))
+                        isFile = true;
+                }
+                catch
+                {
+                    isFile = false;
+                }
+                
+                if (!args.Contains("--profile-directory")
+                    && args.Contains("--no-startup-window")
+                    && !isFile
+                    && !ContainsParsedData(args) 
+                    && args.Length != 1) continue; // Start Edge (default browser on this system)
 
 #if DEBUG
                 var messageUi = new MessageUi("GoAwayEdge",
