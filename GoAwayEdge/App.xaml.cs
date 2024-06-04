@@ -222,6 +222,8 @@ namespace GoAwayEdge
             var isCopilot = false;
             var parsedData = false;
             var ignoreStartup = false;
+            var collectSingleArgument = false;
+            var singleArgument = string.Empty;
             var p = new Process();
             p.StartInfo.UseShellExecute = true;
             p.StartInfo.RedirectStandardOutput = false;
@@ -235,6 +237,13 @@ namespace GoAwayEdge
 
             foreach (var arg in args)
             {
+                if (collectSingleArgument)
+                {
+                    // Concatenate all remaining arguments into a single string
+                    singleArgument += (singleArgument.Length > 0 ? " " : "") + arg;
+                    continue;
+                }
+
                 // Check for Copilot
                 if (arg.Contains("microsoft-edge://?ux=copilot&tcp=1&source=taskbar")
                     || arg.Contains("microsoft-edge:///?ux=copilot&tcp=1&source=taskbar"))
@@ -262,7 +271,17 @@ namespace GoAwayEdge
                 if (arg.Contains("--no-startup-window") 
                     || arg.Contains("--profile-directory"))
                     ignoreStartup = true;
+
+                // Check for the single argument flag
+                if (arg == "--single-argument")
+                {
+                    collectSingleArgument = true;
+                }
             }
+
+            // Validate single argument
+            if (File.Exists(singleArgument))
+                isFile = true;
 
             // Open Edge normally
             if ((!parsedData || isCopilot || isFile || args.Contains("--profile-directory")) && !ignoreStartup)
@@ -282,7 +301,7 @@ namespace GoAwayEdge
                         messageUi.ShowDialog();
                     }
                 }
-                var parsedArgs = args.Skip(2);
+                var parsedArgs = args.Skip(1);
                 p.StartInfo.FileName = FileConfiguration.NonIfeoPath;
                 p.StartInfo.Arguments = string.Join(" ", parsedArgs);
                 p.Start();
