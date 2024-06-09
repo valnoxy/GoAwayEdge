@@ -29,6 +29,9 @@ namespace GoAwayEdge
 
         public void Application_Startup(object sender, StartupEventArgs e)
         {
+            // Initialize the logging system
+            Logging.Initialize();
+
             // Load Language
             LocalizationManager.LoadLanguage();
 
