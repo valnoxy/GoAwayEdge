@@ -4,11 +4,20 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Windows;
+using System.Runtime.InteropServices;
+using System.Reflection;
 
 namespace GoAwayEdge.Common
 {
-    public class InstallRoutine
+    public partial class InstallRoutine
     {
+        // Shell update for uninstallation
+        public partial class Shell32
+        {
+            [LibraryImport("shell32.dll", SetLastError = true)]
+            public static partial void SHChangeNotify(uint wEventId, uint uFlags, IntPtr dwItem1, IntPtr dwItem2);
+        }
+
         public static void Install(object? sender, DoWorkEventArgs? e = null)
         {
             var worker = sender as BackgroundWorker;
@@ -156,6 +165,20 @@ namespace GoAwayEdge.Common
                 return;
             }
 
+            // Register Uninstall data
+            status = SetUninstallData();
+            if (!status)
+            {
+                Application.Current.Dispatcher.Invoke(() =>
+                {
+                    var errorMessage = LocalizationManager.LocalizeValue("FailedInstallationGeneric");
+                    var messageUi = new MessageUi("GoAwayEdge", errorMessage, "OK");
+                    messageUi.ShowDialog();
+                });
+                Environment.Exit(1);
+                return;
+            }
+
             // Switch FrameWindow content to InstallationSuccess
             worker?.ReportProgress(100, "");
             Console.WriteLine("Installation finished.");
@@ -166,6 +189,33 @@ namespace GoAwayEdge.Common
             var worker = sender as BackgroundWorker;
 
             Console.WriteLine("Start uninstallation ...");
+
+            // Check if run in installation directory
+            if (Path.GetDirectoryName(Process.GetCurrentProcess().MainModule?.FileName) == Configuration.InstallDir)
+            {
+                // Copy itself to temp directory
+                var tempDir = Path.Combine(Path.GetTempPath(), "GoAwayEdge");
+                Directory.CreateDirectory(tempDir);
+                var status = CopyItself(Path.Combine(tempDir, "GoAwayEdge.exe"), true);
+                if (!status)
+                {
+                    Application.Current.Dispatcher.Invoke(() =>
+                    {
+                        var errorMessage = LocalizationManager.LocalizeValue("FailedUninstallationGeneric");
+                        var messageUi = new MessageUi("GoAwayEdge", errorMessage, "OK");
+                        messageUi.ShowDialog();
+                    });
+                    Environment.Exit(1);
+                    return;
+                }
+                Process.Start(new ProcessStartInfo
+                {
+                    FileName = Path.Combine(tempDir, "GoAwayEdge.exe"),
+                    Arguments = "-u",
+                    UseShellExecute = true
+                });
+                Environment.Exit(0);
+            }
 
             // Remove installation directory
             try
@@ -247,6 +297,18 @@ namespace GoAwayEdge.Common
                 // ignore
             }
 
+
+            // Remove Uninstall data
+            try
+            {
+                RegistryConfig.RemoveSubKey(RegistryConfig.UninstallGuid, true);
+                Shell32.SHChangeNotify(0x8000000, 0x1000, IntPtr.Zero, IntPtr.Zero); // Notify Shell about uninstallation
+            }
+            catch
+            {
+                // ignore
+            }
+
             // Switch FrameWindow content to InstallationSuccess
             worker?.ReportProgress(100, "");
             Console.WriteLine("Uninstallation finished.");
@@ -273,6 +335,31 @@ namespace GoAwayEdge.Common
             }
 
             return true;
+        }
+
+        internal static bool SetUninstallData()
+        {
+            try
+            {
+                var installDate = DateTime.Now.ToString("yyyyMMdd");
+                RegistryConfig.SetKey("DisplayIcon", Path.Combine(Configuration.InstallDir, "GoAwayEdge.exe"), isUninstall: true);
+                RegistryConfig.SetKey("DisplayName", "GoAwayEdge", isUninstall: true);
+                RegistryConfig.SetKey("DisplayVersion", Assembly.GetExecutingAssembly().GetName().Version!, isUninstall: true);
+                RegistryConfig.SetKey("HelpLink", "https://github.com/valnoxy/GoAwayEdge/issues", isUninstall: true);
+                RegistryConfig.SetKey("InstallDate", installDate, isUninstall: true);
+                RegistryConfig.SetKey("InstallLocation", Configuration.InstallDir, isUninstall: true);
+                RegistryConfig.SetKey("ModifyPath", Path.Combine(Configuration.InstallDir, "GoAwayEdge.exe"), isUninstall: true);
+                RegistryConfig.SetKey("Publisher", "valnoxy", isUninstall: true);
+                RegistryConfig.SetKey("QuietUninstallString", $"\"{Path.Combine(Configuration.InstallDir, "GoAwayEdge.exe")}\"", isUninstall: true);
+                RegistryConfig.SetKey("UninstallString", $"\"{Path.Combine(Configuration.InstallDir, "GoAwayEdge.exe")}\" -u", isUninstall: true);
+                RegistryConfig.SetKey("URLInfoAbout", "https://goawayedge.com", isUninstall: true);
+                RegistryConfig.SetKey("URLUpdateInfo", "https://github.com/valnoxy/goawayedge/releases", isUninstall: true);
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
         }
     }
 

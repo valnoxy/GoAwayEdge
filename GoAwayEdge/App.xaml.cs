@@ -12,6 +12,7 @@
 
 using GoAwayEdge.Common;
 using System.Diagnostics;
+using System.IO;
 using System.Security.Principal;
 using System.Text;
 using System.Web;
@@ -211,6 +212,12 @@ namespace GoAwayEdge
         public static void RunParser(string[] args)
         {
             var argumentJoin = string.Join(" ", args);
+            var isFile = false;
+            var collectSingleArgument = false;
+            var singleArgument = string.Empty;
+            var p = new Process();
+            p.StartInfo.UseShellExecute = true;
+            p.StartInfo.RedirectStandardOutput = false;
 #if DEBUG
             var w = new MessageUi("GoAwayEdge",
                 $"The following args are redirected (CTRL+C to copy):\n\n{argumentJoin}", "OK", null, true);
@@ -225,6 +232,20 @@ namespace GoAwayEdge
                 {
                     _url = arg;
                 }
+
+                if (collectSingleArgument)
+                {
+                    // Concatenate all remaining arguments into a single string
+                    singleArgument += (singleArgument.Length > 0 ? " " : "") + arg;
+                    continue;
+                }
+
+                // Check for the single argument flag
+                if (arg == "--single-argument")
+                {
+                    collectSingleArgument = true;
+                }
+
                 if (!args.Contains("--profile-directory") && !ContainsParsedData(args) && args.Length != 1) continue; // Start Edge (default browser on this system)
 
 #if DEBUG
@@ -233,20 +254,19 @@ namespace GoAwayEdge
                 messageUi.ShowDialog();
 #endif
                 var parsedArgs = args.Skip(2);
-                var p = new Process();
                 p.StartInfo.FileName = FileConfiguration.NonIfeoPath;
                 p.StartInfo.Arguments = string.Join(" ", parsedArgs);
-                p.StartInfo.UseShellExecute = true;
-                p.StartInfo.RedirectStandardOutput = false;
                 p.Start();
                 Environment.Exit(0);
             }
 
+            // Validate single argument
+            if (File.Exists(singleArgument))
+                isFile = true;
+
             // Open URL in default browser
             if (_url != null)
             {
-                var p = new Process();
-
                 // Windows Copilot
                 if (_url.Contains("microsoft-edge://?ux=copilot&tcp=1&source=taskbar")
                     || _url.Contains("microsoft-edge:///?ux=copilot&tcp=1&source=taskbar"))
@@ -272,8 +292,18 @@ namespace GoAwayEdge
                     p.StartInfo.FileName = parsed;
                     p.StartInfo.Arguments = "";
                 }
-                p.StartInfo.UseShellExecute = true;
-                p.StartInfo.RedirectStandardOutput = false;
+                p.Start();
+            }
+            // Is File
+            else if (isFile)
+            {
+                p.StartInfo.FileName = FileConfiguration.NonIfeoPath;
+                p.StartInfo.Arguments = $"--single-argument {singleArgument}";
+#if DEBUG
+                var copilotMessageUi = new MessageUi("GoAwayEdge",
+                    $"Opening '{singleArgument}' with Edge.", "OK", null, true);
+                copilotMessageUi.ShowDialog();
+#endif
                 p.Start();
             }
         }
