@@ -31,7 +31,7 @@ namespace GoAwayEdge.Common
             {
                 Logging.Log($"Failed to load language: {ex}", Logging.LogLevel.ERROR);
                 var messageUi = new MessageUi("GoAwayEdge",
-                    $"Failed to load language: {ex.Message}", "OK", null, true);
+                    $"Failed to load language: {ex.Message}", "OK", isMainThread: true);
                 messageUi.ShowDialog();
                 Environment.Exit(1);
             }

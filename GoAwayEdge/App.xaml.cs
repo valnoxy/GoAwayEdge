@@ -111,18 +111,32 @@ namespace GoAwayEdge
 
                     // Check for app update
                     var updateAvailable = Updater.CheckForAppUpdate();
+
+                    var updateSkipped = RegistryConfig.GetKey("SkipVersion");
+                    if (updateAvailable == updateSkipped)
+                        Environment.Exit(0);
+
                     if (!string.IsNullOrEmpty(updateAvailable))
                     {
                         var updateMessage = LocalizationManager.LocalizeValue("NewUpdateAvailable", updateAvailable);
                         var remindMeLaterBtn = LocalizationManager.LocalizeValue("RemindMeLater");
                         var installUpdateBtn = LocalizationManager.LocalizeValue("InstallUpdate");
+                        var skipUpdateUpdateBtn = LocalizationManager.LocalizeValue("SkipUpdate");
 
-                        var updateDialog = new MessageUi("GoAwayEdge", updateMessage, installUpdateBtn, remindMeLaterBtn, true);
+                        var updateDialog = new MessageUi("GoAwayEdge", updateMessage, installUpdateBtn, remindMeLaterBtn, skipUpdateUpdateBtn, true);
                         updateDialog.ShowDialog();
-                        if (updateDialog.Summary == "Btn1")
+                        switch (updateDialog.Summary)
                         {
-                            var updateResult = Updater.UpdateClient();
-                            if (!updateResult) Environment.Exit(0);
+                            case "Btn1":
+                            {
+                                var updateResult = Updater.UpdateClient();
+                                if (!updateResult) Environment.Exit(0);
+                                break;
+                            }
+                            case "Btn3":
+                                RegistryConfig.SetKey("SkipVersion", updateAvailable);
+                                Environment.Exit(0);
+                                break;
                         }
                     }
 
@@ -223,7 +237,7 @@ namespace GoAwayEdge
             p.StartInfo.RedirectStandardOutput = false;
 #if DEBUG
             var w = new MessageUi("GoAwayEdge",
-                $"The following args are redirected (CTRL+C to copy):\n\n{argumentJoin}", "OK", null, true);
+                $"The following args are redirected (CTRL+C to copy):\n\n{argumentJoin}", "OK", isMainThread: true);
             w.ShowDialog();
 #endif
             Console.WriteLine("Command line args:\n\n" + argumentJoin + "\n", ConsoleColor.Gray);
@@ -253,7 +267,7 @@ namespace GoAwayEdge
 
 #if DEBUG
                 var messageUi = new MessageUi("GoAwayEdge",
-                    "Microsoft Edge will now start normally via IFEO application.", "OK", null, true);
+                    "Microsoft Edge will now start normally via IFEO application.", "OK", isMainThread: true);
                 messageUi.ShowDialog();
 #endif
                 var parsedArgs = args.Skip(2);
@@ -279,7 +293,7 @@ namespace GoAwayEdge
                     Console.WriteLine($"Opening Windows Copilot with following url:\n{_url}", ConsoleColor.Gray);
 #if DEBUG
                     var copilotMessageUi = new MessageUi("GoAwayEdge",
-                        $"Opening Windows Copilot with following url:\n{_url}", "OK", null, true);
+                        $"Opening Windows Copilot with following url:\n{_url}", "OK", isMainThread: true);
                     copilotMessageUi.ShowDialog();
 #endif
                 }
@@ -289,7 +303,7 @@ namespace GoAwayEdge
                     Console.WriteLine("Opening URL in default browser:\n\n" + parsed + "\n", ConsoleColor.Gray);
 #if DEBUG
                     var defaultUrlMessageUi = new MessageUi("GoAwayEdge",
-                        "Opening URL in default browser:\n\n" + parsed + "\n", "OK", null, true);
+                        "Opening URL in default browser:\n\n" + parsed + "\n", "OK", isMainThread: true);
                     defaultUrlMessageUi.ShowDialog();
 #endif
                     p.StartInfo.FileName = parsed;
@@ -304,7 +318,7 @@ namespace GoAwayEdge
                 p.StartInfo.Arguments = $"--single-argument {singleArgument}";
 #if DEBUG
                 var copilotMessageUi = new MessageUi("GoAwayEdge",
-                    $"Opening '{singleArgument}' with Edge.", "OK", null, true);
+                    $"Opening '{singleArgument}' with Edge.", "OK", isMainThread: true);
                 copilotMessageUi.ShowDialog();
 #endif
                 p.Start();
@@ -378,7 +392,7 @@ namespace GoAwayEdge
 
 #if DEBUG
             var uriMessageUi = new MessageUi("GoAwayEdge",
-                "New Uri: " + encodedUrl, "OK", null, true);
+                "New Uri: " + encodedUrl, "OK", isMainThread: true);
             uriMessageUi.ShowDialog();
 #endif
             var uri = new Uri(encodedUrl);

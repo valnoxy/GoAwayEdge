@@ -65,7 +65,7 @@ namespace GoAwayEdge.Common
             catch (Exception ex)
             {
                 var errorMessage = LocalizationManager.LocalizeValue("FailedInitialization", ex.Message);
-                var messageUi = new MessageUi("GoAwayEdge", errorMessage, "OK", null, true);
+                var messageUi = new MessageUi("GoAwayEdge", errorMessage, "OK", isMainThread: true);
                 messageUi.ShowDialog();
                 return false;
             }

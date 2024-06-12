@@ -5,7 +5,7 @@
                  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
                  xmlns:local="clr-namespace:GoAwayEdge"
                  mc:Ignorable="d"
-                 Title="GoAwayEdge" MinHeight="200" MinWidth="540" MaxWidth="540"
+                 Title="GoAwayEdge" MinHeight="200" MinWidth="700" MaxWidth="700"
                  xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
                  Background="{ui:ThemeResource ApplicationBackgroundBrush}"
                  ExtendsContentIntoTitleBar="True"
@@ -66,6 +66,7 @@
 
             <StatusBarItem Grid.Column="2">
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                    <ui:Button Content="Btn3" Margin="0,0,5,0" Click="Btn3_OnClick" x:Name="Btn3"/>
                     <ui:Button Content="Btn2" Margin="0,0,5,0" Click="Btn2_OnClick" x:Name="Btn2"/>
                     <ui:Button Appearance="Primary" Content="Btn1" Margin="0,0,5,0" Click="Btn1_OnClick" x:Name="Btn1"/>
                 </StackPanel>

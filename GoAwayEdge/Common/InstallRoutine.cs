@@ -211,7 +211,7 @@ namespace GoAwayEdge.Common
                     Logging.Log("Failed to copy GoAwayEdge.exe to temp directory.", Logging.LogLevel.ERROR);
                     Application.Current.Dispatcher.Invoke(() =>
                     {
-                        var errorMessage = LocalizationManager.LocalizeValue("FailedUninstallationGeneric");
+                        var errorMessage = LocalizationManager.LocalizeValue("FailedUninstallation");
                         var messageUi = new MessageUi("GoAwayEdge", errorMessage, "OK");
                         messageUi.ShowDialog();
                     });
