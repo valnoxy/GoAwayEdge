@@ -156,6 +156,7 @@ namespace GoAwayEdge.Common
                 var td = ts.NewTask();
                 td.RegistrationInfo.Description = "Checks for new versions and validates non-IEFO file.";
                 td.Triggers.Add(new LogonTrigger { Delay = TimeSpan.FromMinutes(5) });
+                td.Principal.RunLevel = TaskRunLevel.Highest;
                 td.Actions.Add(new ExecAction(Path.Combine(Configuration.InstallDir, "GoAwayEdge.exe"), "--update", Configuration.InstallDir));
                 ts.RootFolder.RegisterTaskDefinition(@"valnoxy\GoAwayEdge\GoAwayEdge Validation & Update Task", td);
             }
