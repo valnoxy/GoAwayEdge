@@ -322,17 +322,6 @@ namespace GoAwayEdge.Common
                 Logging.Log("Failed to remove uninstall data: " + ex, Logging.LogLevel.ERROR);
             }
 
-            // Remove Uninstall data
-            try
-            {
-                RegistryConfig.RemoveSubKey(RegistryConfig.UninstallGuid, true);
-                Shell32.SHChangeNotify(0x8000000, 0x1000, IntPtr.Zero, IntPtr.Zero); // Notify Shell about uninstallation
-            }
-            catch
-            {
-                // ignore
-            }
-
             // Switch FrameWindow content to InstallationSuccess
             worker?.ReportProgress(100, "");
             Logging.Log("Uninstallation finished.");

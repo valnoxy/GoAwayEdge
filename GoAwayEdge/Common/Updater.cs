@@ -66,7 +66,7 @@ namespace GoAwayEdge.Common
                         $"The Edge Hash ({edgeHash}) and Ifeo Hash ({ifeoHash}) are not identical. Validation failed!", "OK", isMainThread: true);
                     messageUi.ShowDialog();
                 }
-
+#endif
                 return edgeHash != ifeoHash ? 1 : 0;
             }
 

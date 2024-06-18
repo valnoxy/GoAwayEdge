@@ -135,8 +135,6 @@ namespace GoAwayEdge.Common
                     Console.WriteLine($"Value for key '{option}' not found in the registry.");
                     return "";
                 }
-                Console.WriteLine($"Registry key '{RegistryPath}' not found.");
-                return "";
             }
             catch (Exception ex)
             {
