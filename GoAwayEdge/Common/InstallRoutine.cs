@@ -4,18 +4,18 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Windows;
-using System.Reflection;
 using System.Runtime.InteropServices;
+using System.Reflection;
 
 namespace GoAwayEdge.Common
 {
-    public class InstallRoutine
+    public partial class InstallRoutine
     {
         // Shell update for uninstallation
-        public class Shell32
+        public partial class Shell32
         {
-            [DllImport("shell32.dll", CharSet = CharSet.Auto, SetLastError = true)]
-            public static extern void SHChangeNotify(uint wEventId, uint uFlags, IntPtr dwItem1, IntPtr dwItem2);
+            [LibraryImport("shell32.dll", SetLastError = true)]
+            public static partial void SHChangeNotify(uint wEventId, uint uFlags, IntPtr dwItem1, IntPtr dwItem2);
         }
 
         public static void Install(object? sender, DoWorkEventArgs? e = null)
@@ -23,6 +23,7 @@ namespace GoAwayEdge.Common
             var worker = sender as BackgroundWorker;
 
             Console.WriteLine("Start installation ...");
+            Logging.Log("Start installation ...");
 
             // Create installation directory
             Directory.CreateDirectory(Configuration.InstallDir);
@@ -30,6 +31,7 @@ namespace GoAwayEdge.Common
             var status = CopyItself(Path.Combine(Configuration.InstallDir, "GoAwayEdge.exe"), Path.GetDirectoryName(Process.GetCurrentProcess().MainModule?.FileName) != Configuration.InstallDir);
             if (!status)
             {
+                Logging.Log("Failed to copy GoAwayEdge.exe to installation directory.", Logging.LogLevel.ERROR);
                 Application.Current.Dispatcher.Invoke(() =>
                 {
                     var errorMessage = LocalizationManager.LocalizeValue("FailedInstallationGeneric");
@@ -75,6 +77,7 @@ namespace GoAwayEdge.Common
                     msEdge);
                 if (!status)
                 {
+                    Logging.Log("Failed to register msedge.exe in Image File Execution Options.", Logging.LogLevel.ERROR);
                     Application.Current.Dispatcher.Invoke(() =>
                     {
                         var errorMessage = LocalizationManager.LocalizeValue("FailedRegisterIFEO", "msedge.exe");
@@ -87,6 +90,7 @@ namespace GoAwayEdge.Common
             }
             catch (Exception ex)
             {
+                Logging.Log("Failed to apply registry keys: " + ex, Logging.LogLevel.ERROR);
                 Application.Current.Dispatcher.Invoke(() =>
                 {
                     var errorMessage = LocalizationManager.LocalizeValue("FailedInstallation", ex.Message);
@@ -103,6 +107,7 @@ namespace GoAwayEdge.Common
                 status = Removal.RemoveMsEdge();
                 if (!status)
                 {
+                    Logging.Log("Failed to remove Microsoft Edge.");
                     Application.Current.Dispatcher.Invoke(() =>
                     {
                         var errorMessage = LocalizationManager.LocalizeValue("FailedEdgeRemoval");
@@ -123,6 +128,7 @@ namespace GoAwayEdge.Common
                 }
                 catch (Exception ex)
                 {
+                    Logging.Log("Failed to create non-IFEO injected copy of msedge.exe: " + ex, Logging.LogLevel.ERROR);
                     Application.Current.Dispatcher.Invoke(() =>
                     {
                         var errorMessage = LocalizationManager.LocalizeValue("FailedInstallation", ex.Message);
@@ -142,19 +148,21 @@ namespace GoAwayEdge.Common
                 {
                     ts.RootFolder.DeleteTask("valnoxy\\GoAwayEdge\\GoAwayEdge IFEO Validation");
                 }
-                catch
+                catch (Exception ex)
                 {
-                    // ignored; not existing
+                    Logging.Log("Failed to delete old task: " + ex, Logging.LogLevel.ERROR);
                 }
 
                 var td = ts.NewTask();
                 td.RegistrationInfo.Description = "Checks for new versions and validates non-IEFO file.";
                 td.Triggers.Add(new LogonTrigger { Delay = TimeSpan.FromMinutes(5) });
+                td.Principal.RunLevel = TaskRunLevel.Highest;
                 td.Actions.Add(new ExecAction(Path.Combine(Configuration.InstallDir, "GoAwayEdge.exe"), "--update", Configuration.InstallDir));
                 ts.RootFolder.RegisterTaskDefinition(@"valnoxy\GoAwayEdge\GoAwayEdge Validation & Update Task", td);
             }
             catch (Exception ex)
             {
+                Logging.Log("Failed to create task schedule: " + ex, Logging.LogLevel.ERROR);
                 Application.Current.Dispatcher.Invoke(() =>
                 {
                     var errorMessage = LocalizationManager.LocalizeValue("FailedInstallation", ex.Message);
@@ -169,6 +177,7 @@ namespace GoAwayEdge.Common
             status = SetUninstallData();
             if (!status)
             {
+                Logging.Log("Failed to set uninstall data.", Logging.LogLevel.ERROR);
                 Application.Current.Dispatcher.Invoke(() =>
                 {
                     var errorMessage = LocalizationManager.LocalizeValue("FailedInstallationGeneric");
@@ -181,13 +190,14 @@ namespace GoAwayEdge.Common
 
             // Switch FrameWindow content to InstallationSuccess
             worker?.ReportProgress(100, "");
+            Logging.Log("Installation finished.");
             Console.WriteLine("Installation finished.");
         }
 
         public static void Uninstall(object? sender, DoWorkEventArgs? e = null)
         {
             var worker = sender as BackgroundWorker;
-
+            Logging.Log("Start uninstallation ...");
             Console.WriteLine("Start uninstallation ...");
 
             // Check if run in installation directory
@@ -199,9 +209,10 @@ namespace GoAwayEdge.Common
                 var status = CopyItself(Path.Combine(tempDir, "GoAwayEdge.exe"), true);
                 if (!status)
                 {
+                    Logging.Log("Failed to copy GoAwayEdge.exe to temp directory.", Logging.LogLevel.ERROR);
                     Application.Current.Dispatcher.Invoke(() =>
                     {
-                        var errorMessage = LocalizationManager.LocalizeValue("FailedUninstallationGeneric");
+                        var errorMessage = LocalizationManager.LocalizeValue("FailedUninstallation");
                         var messageUi = new MessageUi("GoAwayEdge", errorMessage, "OK");
                         messageUi.ShowDialog();
                     });
@@ -216,7 +227,7 @@ namespace GoAwayEdge.Common
                 });
                 Environment.Exit(0);
             }
-            
+
             // Remove installation directory
             try
             {
@@ -225,6 +236,7 @@ namespace GoAwayEdge.Common
             }
             catch (Exception ex)
             {
+                Logging.Log("Failed to delete installation directory: " + ex, Logging.LogLevel.ERROR);
                 Application.Current.Dispatcher.Invoke(() =>
                 {
                     var errorMessage = LocalizationManager.LocalizeValue("FailedUninstallation", ex.Message);
@@ -268,6 +280,7 @@ namespace GoAwayEdge.Common
             }
             catch (Exception ex)
             {
+                Logging.Log("Failed to remove registry keys: " + ex, Logging.LogLevel.ERROR);
                 Application.Current.Dispatcher.Invoke(() =>
                 {
                     var errorMessage = LocalizationManager.LocalizeValue("FailedUninstallation", ex.Message);
@@ -286,15 +299,16 @@ namespace GoAwayEdge.Common
                 {
                     ts.RootFolder.DeleteTask("valnoxy\\GoAwayEdge\\GoAwayEdge IFEO Validation");
                 }
-                catch
+                catch (Exception ex)
                 {
+                    Logging.Log("Failed to delete old task: " + ex);
                     // ignored; not existing
                 }
                 ts.RootFolder.DeleteTask("valnoxy\\GoAwayEdge\\GoAwayEdge Validation & Update Task");
             }
-            catch
+            catch (Exception ex)
             {
-                // ignore
+                Logging.Log("Failed to delete old task: " + ex);
             }
 
             // Remove Uninstall data
@@ -303,13 +317,14 @@ namespace GoAwayEdge.Common
                 RegistryConfig.RemoveSubKey(RegistryConfig.UninstallGuid, true);
                 Shell32.SHChangeNotify(0x8000000, 0x1000, IntPtr.Zero, IntPtr.Zero); // Notify Shell about uninstallation
             }
-            catch
+            catch (Exception ex)
             {
-                // ignore
+                Logging.Log("Failed to remove uninstall data: " + ex, Logging.LogLevel.ERROR);
             }
 
             // Switch FrameWindow content to InstallationSuccess
             worker?.ReportProgress(100, "");
+            Logging.Log("Uninstallation finished.");
             Console.WriteLine("Uninstallation finished.");
         }
 

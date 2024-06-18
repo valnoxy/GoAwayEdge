@@ -65,7 +65,7 @@ namespace GoAwayEdge.Common
             catch (Exception ex)
             {
                 var errorMessage = LocalizationManager.LocalizeValue("FailedInitialization", ex.Message);
-                var messageUi = new MessageUi("GoAwayEdge", errorMessage, "OK", null, true);
+                var messageUi = new MessageUi("GoAwayEdge", errorMessage, "OK", isMainThread: true);
                 messageUi.ShowDialog();
                 return false;
             }
@@ -95,18 +95,16 @@ namespace GoAwayEdge.Common
         /// <summary>
         /// Create a Key in the Registry
         /// </summary>
-        /// <param name="option">Key Name</param>
-        /// <param name="value">Key Value</param>
-        /// <param name="valueKind">Type of value</param>
-        /// <param name="isUninstall">Use the Uninstall Registry key instead.</param>
+        /// <param name="valueKind">Type of value</param> 
+        /// <param name="isUninstall">Use the Uninstall Registry key instead.</param> 
         public static void SetKey(string option, object value, RegistryValueKind valueKind = RegistryValueKind.String, bool isUninstall = false)
         {
             try
             {
-                using var key = isUninstall 
+                using var key = isUninstall
                     ? Registry.LocalMachine.CreateSubKey(UninstallRegistryPath, RegistryKeyPermissionCheck.ReadWriteSubTree)
                     : Registry.LocalMachine.CreateSubKey(RegistryPath, RegistryKeyPermissionCheck.ReadWriteSubTree);
-                key.SetValue(option, value, valueKind);
+                key.SetValue(option, value, valueKind); 
             }
             catch (Exception ex)
             {
@@ -118,15 +116,15 @@ namespace GoAwayEdge.Common
         /// Retrieves the value of a key from the Registry.
         /// </summary>
         /// <param name="option">Name of the key.</param>
-        /// <param name="isUninstall">Use the Uninstall Registry key instead.</param>
+        /// <param name="isUninstall">Use the Uninstall Registry key instead.</param> 
         /// <returns>The value of the key if it exists, otherwise null.</returns>
         public static string GetKey(string option, bool isUninstall = false)
         {
             try
             {
-                using var key = isUninstall 
+                using var key = isUninstall
                     ? Registry.LocalMachine.OpenSubKey(UninstallRegistryPath)
-                    : Registry.LocalMachine.OpenSubKey(RegistryPath);
+                    : Registry.LocalMachine.OpenSubKey(RegistryPath); 
                 if (key != null)
                 {
                     var value = key.GetValue(option);
@@ -137,28 +135,28 @@ namespace GoAwayEdge.Common
                     Console.WriteLine($"Value for key '{option}' not found in the registry.");
                     return "";
                 }
-                Console.WriteLine($"Registry key '{RegistryPath}' not found.");
-                return "";
             }
             catch (Exception ex)
             {
                 Console.WriteLine("An error has occurred while reading the registry: " + ex.Message);
                 return "";
             }
+            Console.WriteLine($"Registry key '{RegistryPath}' not found.");
+            return "";
         }
 
         /// <summary>
-        /// Removes a Key in the Registry
+        /// Removes a Key in the Registry 
         /// </summary>
         /// <param name="option">Key Name</param>
-        /// <param name="isUninstall">Use the Uninstall Registry key instead.</param>
+        /// <param name="isUninstall">Use the Uninstall Registry key instead.</param> 
         public static bool RemoveKey(string option, bool isUninstall = false)
         {
             try
             {
                 using var key = isUninstall
                     ? Registry.LocalMachine.OpenSubKey(UninstallRegistryPath)
-                    : Registry.LocalMachine.OpenSubKey(RegistryPath);
+                    : Registry.LocalMachine.OpenSubKey(RegistryPath); 
                 var value = key?.GetValue(option);
                 if (value != null)
                 {
@@ -175,11 +173,11 @@ namespace GoAwayEdge.Common
             return false;
         }
 
-        /// <summary>
-        /// Removes a SubKey in the Registry
-        /// </summary>
-        /// <param name="option">SubKey Name</param>
-        /// <param name="isUninstall">Use the Uninstall Registry key instead.</param>
+        /// <summary> 
+        /// Removes a SubKey in the Registry 
+        /// </summary> 
+        /// <param name="option">SubKey Name</param> 
+        /// <param name="isUninstall">Use the Uninstall Registry key instead.</param> 
         public static bool RemoveSubKey(string option, bool isUninstall = false)
         {
             try

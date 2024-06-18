@@ -10,6 +10,7 @@ namespace GoAwayEdge.Common
             // Set current language model
             var language = Thread.CurrentThread.CurrentCulture.ToString();
             var dict = new ResourceDictionary();
+            Logging.Log($"Trying to load language: " + language);
             Debug.WriteLine("Trying to load language: " + language);
             dict.Source = language switch
             {
@@ -28,8 +29,9 @@ namespace GoAwayEdge.Common
             }
             catch (Exception ex)
             {
+                Logging.Log($"Failed to load language: {ex}", Logging.LogLevel.ERROR);
                 var messageUi = new MessageUi("GoAwayEdge",
-                    $"Failed to load language: {ex.Message}", "OK", null, true);
+                    $"Failed to load language: {ex.Message}", "OK", isMainThread: true);
                 messageUi.ShowDialog();
                 Environment.Exit(1);
             }
@@ -42,8 +44,9 @@ namespace GoAwayEdge.Common
                 var localizedValue = (string)Application.Current.Resources[value]!;
                 return string.IsNullOrEmpty(localizedValue) ? value : localizedValue;
             }
-            catch
+            catch (Exception ex)
             {
+                Logging.Log($"Failed to localize value: {ex}", Logging.LogLevel.ERROR);
                 return value;
             }
         }
@@ -58,8 +61,9 @@ namespace GoAwayEdge.Common
             {
                 localizedValue = string.Format(localizedValue, args);
             }
-            catch (FormatException)
+            catch (FormatException ex)
             {
+                Logging.Log($"Failed to format localized value: {ex}", Logging.LogLevel.ERROR);
                 return value;
             }
 

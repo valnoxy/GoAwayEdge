@@ -14,15 +14,16 @@ namespace GoAwayEdge.Common
         /// </returns>
 		public static bool RemoveMsEdge()
         {
-			//
-			// Ok, this should be stable now. Current plan:
-			//
-			//  1. Remove Edge via edge setup (setup.exe --uninstall --system-level --verbose-logging --force-uninstall)
+            //
+            // Ok, this should be stable now. Current plan:
+            //
+            //  1. Remove Edge via edge setup (setup.exe --uninstall --system-level --verbose-logging --force-uninstall)
             //  2. Prevent Edge from reinstalling
             //  3. Recreate the URI protocol
             //
             // This way should left WebView2 etc in tact.
             // 
+            Logging.Log("Removing Microsoft Edge ...");
 
             string edgeSetupPath;
             string edgeNewestVersionPath;
@@ -50,10 +51,12 @@ namespace GoAwayEdge.Common
             }
             else
             {
+                Logging.Log("Removal aborted: Edge was not found on this system.", Logging.LogLevel.WARNING);
                 return false; // Edge is already removed
             }
 
             // Terminate processes
+            Logging.Log("Terminating Edge processes ...");
             KillProcess("MicrosoftEdge");
             KillProcess("chredge");
             KillProcess("msedge");
@@ -61,6 +64,7 @@ namespace GoAwayEdge.Common
             KillProcess("edge");
 
             // Clean up registry
+            Logging.Log("Cleaning up registry ...");
             RemoveRegistryKey(@"SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\msedge.exe");
             RemoveRegistryKey(@"SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\ie_to_edge_stub.exe");
             RemoveUserRegistryKey(@"Software\Classes\microsoft-edge");
@@ -70,12 +74,18 @@ namespace GoAwayEdge.Common
             var status = Register.UriHandler(Register.UriType.microsoftEdge,
                 $"\"{FileConfiguration.EdgePath}\" \" --single-argument %1\"");
             if (!status)
+            {
+                Logging.Log("Failed to register URI handler for Microsoft Edge.", Logging.LogLevel.ERROR);
                 return false;
+            }
             
             status = Register.UriHandler(Register.UriType.EdgeHTM,
                 $"\"{FileConfiguration.EdgePath}\" \" --single-argument %1\"");
             if (!status)
+            {
+                Logging.Log("Failed to register URI handler for EdgeHTM.", Logging.LogLevel.ERROR);
                 return false;
+            }
 
             // Remove certain registry properties
             try
@@ -134,6 +144,7 @@ namespace GoAwayEdge.Common
             }
             catch
             {
+                Logging.Log("Failed to remove certain registry properties.", Logging.LogLevel.ERROR);
                 return false;
             }
 
@@ -147,10 +158,15 @@ namespace GoAwayEdge.Common
                 }
                 catch
                 {
+                    Logging.Log("Failed to copy ie_to_edge_stub.exe.", Logging.LogLevel.ERROR);
                     return false;
                 }
             }
-            else return false;
+            else
+            {
+                Logging.Log("ie_to_edge_stub.exe not found.", Logging.LogLevel.ERROR);
+                return false;
+            }
 
             // AppX Removal
             const string removeAppX = "MicrosoftEdge";
@@ -183,6 +199,7 @@ namespace GoAwayEdge.Common
             }
             catch
             {
+                Logging.Log("Failed to remove AppX packages.", Logging.LogLevel.ERROR);
                 return false;
             }
 
@@ -249,7 +266,7 @@ namespace GoAwayEdge.Common
             }
             catch (Exception ex)
             {
-                Debug.WriteLine("Exception: " + ex.Message);
+                Logging.Log("Exception: " + ex, Logging.LogLevel.ERROR);
                 return false;
             }
 
@@ -262,33 +279,44 @@ namespace GoAwayEdge.Common
                 using var edgeUpdate = key.CreateSubKey("EdgeUpdate");
                 edgeUpdate.SetValue("DoNotUpdateToEdgeWithChromium", 1, RegistryValueKind.DWord);
             }
-            catch
+            catch (Exception ex)
             {
+                Logging.Log("Failed to prevent Edge from reinstalling: " + ex, Logging.LogLevel.ERROR);
                 return false;
             }
 
             // Register new URIs
             status = Register.UriHandler(Register.UriType.microsoftEdge,
                 $"\"{Path.Combine(Configuration.InstallDir, "ie_to_edge_stub.exe")}\" \"%1\"");
-            if (!status) 
+            if (!status)
+            {
+                Logging.Log("Failed to register URI handler for Microsoft Edge.", Logging.LogLevel.ERROR);
                 return false;
+            }
 
             status = Register.UriHandler(Register.UriType.EdgeHTM,
                 $"\"{Path.Combine(Configuration.InstallDir, "ie_to_edge_stub.exe")}\" \"%1\"");
-            if (!status) 
+            if (!status)
+            {
+                Logging.Log("Failed to register URI handler for EdgeHTM.", Logging.LogLevel.ERROR);
                 return false;
+            }
 
             status = Register.ImageFileExecutionOption(
                 Register.IfeoType.ie_to_edge_stub,
                 Path.Combine(Configuration.InstallDir, "GoAwayEdge.exe"),
                 Path.Combine(Configuration.InstallDir, "ie_to_edge_stub.exe"));
             
-            if (!status) 
+            if (!status)
+            {
+                Logging.Log("Failed to register Image File Execution Option for ie_to_edge_stub.", Logging.LogLevel.ERROR);
                 return false;
+            }
 
             // Set registry config
             RegistryConfig.SetKey("NoEdgeInstalled", true);
 
+            Logging.Log("Microsoft Edge has been removed successfully.");
             return true;
         }
 
@@ -309,8 +337,9 @@ namespace GoAwayEdge.Common
 
                 return true;
             }
-            catch
+            catch (Exception ex)
             {
+                Logging.Log($"Failed to kill process {processName}: {ex}", Logging.LogLevel.ERROR);
                 return false;
             }
         }
@@ -353,6 +382,7 @@ namespace GoAwayEdge.Common
             }
             catch (Exception ex)
             {
+                Logging.Log($"Exception while removing registry key: {ex}");
                 Debug.WriteLine($"Exception while removing registry key: {ex.Message}");
             }
         }

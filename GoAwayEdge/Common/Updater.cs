@@ -59,14 +59,14 @@ namespace GoAwayEdge.Common
             {
                 var edgeHash = CalculateMd5(edgeBinaryPath);
                 var ifeoHash = CalculateMd5(ifeoBinaryPath);
-
-                if (App.Debug && edgeHash != ifeoHash)
+#if DEBUG
+                if (edgeHash != ifeoHash)
                 {
                     var messageUi = new MessageUi("GoAwayEdge",
-                        $"The Edge Hash ({edgeHash}) and Ifeo Hash ({ifeoHash}) are not identical. Validation failed!", "OK", null, true);
+                        $"The Edge Hash ({edgeHash}) and Ifeo Hash ({ifeoHash}) are not identical. Validation failed!", "OK", isMainThread: true);
                     messageUi.ShowDialog();
                 }
-
+#endif
                 return edgeHash != ifeoHash ? 1 : 0;
             }
 
@@ -97,7 +97,7 @@ namespace GoAwayEdge.Common
                     catch (Exception ex)
                     {
                         var message = LocalizationManager.LocalizeValue("FailedUpdate", ex.Message);
-                        var messageUi = new MessageUi("GoAwayEdge", message, "OK", null, true);
+                        var messageUi = new MessageUi("GoAwayEdge", message, "OK", isMainThread: true);
                         messageUi.ShowDialog();
                     }
                     break;
@@ -118,7 +118,7 @@ namespace GoAwayEdge.Common
                     catch (Exception ex)
                     {
                         var message = LocalizationManager.LocalizeValue("FailedUpdate", ex.Message);
-                        var messageUi = new MessageUi("GoAwayEdge", message, "OK", null, true);
+                        var messageUi = new MessageUi("GoAwayEdge", message, "OK", isMainThread: true);
                         messageUi.ShowDialog();
                     }
                     break;
@@ -129,7 +129,7 @@ namespace GoAwayEdge.Common
         }
 
         /// <summary>
-        /// Checks if an newer version of GoAwayEdge exists.
+        /// Checks if a newer version of GoAwayEdge exists.
         /// </summary>
         /// <returns>
         ///     Boolean status of the existence of a newer version.

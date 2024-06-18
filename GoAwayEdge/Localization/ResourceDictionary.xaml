@@ -59,6 +59,7 @@
     <system:String x:Key="MissingIfeoFile">The alternative startup file of Edge is missing and must be copied to ensure Edge functionality. Copy now?</system:String>
     <system:String x:Key="InstallUpdate">Install Update</system:String>
     <system:String x:Key="RemindMeLater">Remind me later</system:String>
+    <system:String x:Key="SkipUpdate">Skip this version</system:String>
     <system:String x:Key="IfeoUpdateSuccessfulTitle">Update successful</system:String>
     <system:String x:Key="IfeoUpdateSuccessfulDescription">The alternative startup file of Edge has been successfully updated.</system:String>
     <system:String x:Key="IfeoCreateSuccessfulTitle">Creation successful</system:String>
