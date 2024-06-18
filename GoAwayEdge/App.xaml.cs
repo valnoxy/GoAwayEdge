@@ -26,6 +26,7 @@ namespace GoAwayEdge
     public partial class App
     {
         private static string? _url;
+        public static bool Debug = false;
 
         public void Application_Startup(object sender, StartupEventArgs e)
         {
@@ -63,6 +64,8 @@ namespace GoAwayEdge
             {
                 if (args.Contains("-ToastActivated")) // Clicked on notification, ignore it.
                     Environment.Exit(0);
+                if (args.Contains("-debug"))
+                    Debug = true;
                 if (args.Contains("-s")) // Silent Installation
                 {
                     foreach (var arg in args)
@@ -242,12 +245,22 @@ namespace GoAwayEdge
 #endif
             Console.WriteLine("Command line args:\n\n" + argumentJoin + "\n", ConsoleColor.Gray);
 
-            // Filter command line args
             foreach (var arg in args)
             {
-                if (arg.Contains("microsoft-edge:"))
+                if (collectSingleArgument)
+                {
+                    // Concatenate all remaining arguments into a single string
+                    singleArgument += (singleArgument.Length > 0 ? " " : "") + arg;
+                    continue;
+                }
+
+                // Check for Copilot
+                if (arg.Contains("microsoft-edge://?ux=copilot&tcp=1&source=taskbar")
+                    || arg.Contains("microsoft-edge:///?ux=copilot&tcp=1&source=taskbar"))
                 {
                     _url = arg;
+                    isCopilot = true;
+                    break;
                 }
 
                 if (collectSingleArgument)
@@ -297,17 +310,19 @@ namespace GoAwayEdge
                     copilotMessageUi.ShowDialog();
 #endif
                 }
-                else
+                p.StartInfo.FileName = _url;
+                p.StartInfo.Arguments = "";
+                p.Start();
+                Environment.Exit(0);
+            }
+
+            if (ignoreStartup)
+            {
+                if (Debug)
                 {
-                    var parsed = ParseUrl(_url);
-                    Console.WriteLine("Opening URL in default browser:\n\n" + parsed + "\n", ConsoleColor.Gray);
-#if DEBUG
                     var defaultUrlMessageUi = new MessageUi("GoAwayEdge",
                         "Opening URL in default browser:\n\n" + parsed + "\n", "OK", isMainThread: true);
                     defaultUrlMessageUi.ShowDialog();
-#endif
-                    p.StartInfo.FileName = parsed;
-                    p.StartInfo.Arguments = "";
                 }
                 p.Start();
             }
@@ -353,19 +368,6 @@ namespace GoAwayEdge
                 "custom" => SearchEngine.Custom,
                 _ => SearchEngine.Google // Fallback search engine
             };
-        }
-
-        private static bool ContainsParsedData(IEnumerable<string> args)
-        {
-            var contains = false;
-            var engineUrl = DefineEngine(Configuration.Search);
-
-            foreach (var arg in args)
-            {
-                if (arg.Contains(engineUrl))
-                    contains = true;
-            }
-            return contains;
         }
 
         private static string ParseUrl(string encodedUrl)
