@@ -290,10 +290,22 @@ namespace GoAwayEdge
                 {
                     p.StartInfo.FileName = FileConfiguration.NonIfeoPath;
                     p.StartInfo.Arguments = _url;
-                    Console.WriteLine($"Opening Windows Copilot with following url:\n{_url}", ConsoleColor.Gray);
+                    Console.WriteLine($"Opening Windows Copilot (Taskbar) with following url:\n{_url}", ConsoleColor.Gray);
 #if DEBUG
                     var copilotMessageUi = new MessageUi("GoAwayEdge",
-                        $"Opening Windows Copilot with following url:\n{_url}", "OK", isMainThread: true);
+                        $"Opening Windows Copilot (Taskbar) with following url:\n{_url}", "OK", isMainThread: true);
+                    copilotMessageUi.ShowDialog();
+#endif
+                }
+                else if (_url.Contains("microsoft-edge://?ux=copilot&tcp=1&source=hotkey")
+                    || _url.Contains("microsoft-edge:///?ux=copilot&tcp=1&source=hotkey"))
+                {
+                    p.StartInfo.FileName = FileConfiguration.NonIfeoPath;
+                    p.StartInfo.Arguments = _url;
+                    Console.WriteLine($"Opening Windows Copilot (Hotkey) with following url:\n{_url}", ConsoleColor.Gray);
+#if DEBUG
+                    var copilotMessageUi = new MessageUi("GoAwayEdge",
+                        $"Opening Windows Copilot (Hotkey) with following url:\n{_url}", "OK", isMainThread: true);
                     copilotMessageUi.ShowDialog();
 #endif
                 }
