@@ -38,7 +38,7 @@
     <a href="https://crowdin.com/project/goawayedge">Help me translate</a>
     <br />
     <br />
-    🎉 Version 1.3.3 is out. Check out the release notes
+    🎉 Version 1.3.4 is out. Check out the release notes
     <a href="https://github.com/valnoxy/GoAwayEdge/releases">here</a>.
     <br />
     <br />
