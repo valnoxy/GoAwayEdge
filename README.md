@@ -8,16 +8,16 @@
   <br />
 
   [![Version][version-shield]][version-url]
-  [![Crowdin][crowdin-shield]][crowdin-url]
   [![Download Counter][downloads-shield]][downloads-url]
   [![License][license-shield]][license-url]
+  [![Weblate][weblate-shield]][weblate-url]
 </div>
 
 [version-shield]: https://img.shields.io/github/v/release/valnoxy/GoAwayEdge?color=9565F6
 [version-url]: https://github.com/valnoxy/GoAwayEdge/releases
 
-[crowdin-shield]: https://badges.crowdin.net/goawayedge/localized.svg?color=9565F6
-[crowdin-url]: https://crowdin.com/project/goawayedge
+[weblate-shield]: http://translate.valnoxy.dev/widget/goawayedge/svg-badge.svg
+[weblate-url]: https://translate.valnoxy.dev/engage/goawayedge/
 
 [downloads-shield]: https://img.shields.io/github/downloads/valnoxy/GoAwayEdge/total.svg?color=431D93
 [downloads-url]: https://github.com/valnoxy/GoAwayEdge/releases
