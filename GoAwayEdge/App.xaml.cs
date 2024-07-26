@@ -13,6 +13,7 @@
 using GoAwayEdge.Common;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Security.Principal;
 using System.Text;
 using System.Web;
@@ -225,11 +226,12 @@ namespace GoAwayEdge
 
             Environment.Exit(0);
         }
-
+        
         public static void RunParser(string[] args)
         {
             var argumentJoin = string.Join(" ", args);
             var isFile = false;
+            var isApp = false;
             var collectSingleArgument = false;
             var singleArgument = string.Empty;
             var p = new Process();
@@ -263,6 +265,13 @@ namespace GoAwayEdge
                     collectSingleArgument = true;
                 }
 
+                // Check for App
+                if (arg.Contains("--app-id"))
+                {
+                    collectSingleArgument = true;
+                    singleArgument = arg;
+                }
+
                 if (!args.Contains("--profile-directory") && !ContainsParsedData(args) && args.Length != 1) continue; // Start Edge (default browser on this system)
 
 #if DEBUG
@@ -280,6 +289,9 @@ namespace GoAwayEdge
             // Validate single argument
             if (File.Exists(singleArgument))
                 isFile = true;
+
+            if (singleArgument.Contains("--app-id"))
+                isApp = true;
 
             // Open URL in default browser
             if (_url != null)
@@ -329,9 +341,21 @@ namespace GoAwayEdge
                 p.StartInfo.FileName = FileConfiguration.NonIfeoPath;
                 p.StartInfo.Arguments = $"--single-argument {singleArgument}";
 #if DEBUG
-                var copilotMessageUi = new MessageUi("GoAwayEdge",
+                var messageUi = new MessageUi("GoAwayEdge",
                     $"Opening '{singleArgument}' with Edge.", "OK", isMainThread: true);
-                copilotMessageUi.ShowDialog();
+                messageUi.ShowDialog();
+#endif
+                p.Start();
+            }
+            // Is App
+            else if (isApp)
+            {
+                p.StartInfo.FileName = FileConfiguration.NonIfeoPath;
+                p.StartInfo.Arguments = $"{singleArgument}";
+#if DEBUG
+                var messageUi = new MessageUi("GoAwayEdge",
+                    $"Opening PWA Application with following arguments: '{singleArgument}'.", "OK", isMainThread: true);
+                messageUi.ShowDialog();
 #endif
                 p.Start();
             }
