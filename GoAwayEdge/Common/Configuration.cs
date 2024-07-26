@@ -1,5 +1,4 @@
 ﻿using System.IO;
-using System.Windows;
 using Microsoft.Win32;
 
 namespace GoAwayEdge.Common

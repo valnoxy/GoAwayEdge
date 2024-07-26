@@ -6,6 +6,8 @@ using System.IO;
 using System.Windows;
 using System.Runtime.InteropServices;
 using System.Reflection;
+using GoAwayEdge.Common.Installation;
+using GoAwayEdge.Common.Debugging;
 
 namespace GoAwayEdge.Common
 {

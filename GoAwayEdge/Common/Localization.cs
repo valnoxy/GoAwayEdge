@@ -1,5 +1,5 @@
-﻿using System.Diagnostics;
-using System.Windows;
+﻿using System.Windows;
+using GoAwayEdge.Common.Debugging;
 
 namespace GoAwayEdge.Common
 {
@@ -11,7 +11,7 @@ namespace GoAwayEdge.Common
             var language = Thread.CurrentThread.CurrentCulture.ToString();
             var dict = new ResourceDictionary();
             Logging.Log($"Trying to load language: " + language);
-            Debug.WriteLine("Trying to load language: " + language);
+            System.Diagnostics.Debug.WriteLine("Trying to load language: " + language);
             dict.Source = language switch
             {
                 "en-US" => new Uri("/GoAwayEdge;component/Localization/ResourceDictionary.xaml", UriKind.Relative),

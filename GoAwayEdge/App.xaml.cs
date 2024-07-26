@@ -13,11 +13,12 @@
 using GoAwayEdge.Common;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
 using System.Security.Principal;
 using System.Text;
 using System.Web;
 using System.Windows;
+using GoAwayEdge.Common.Runtime;
+using GoAwayEdge.Common.Debugging;
 
 namespace GoAwayEdge
 {
@@ -26,10 +27,14 @@ namespace GoAwayEdge
     /// </summary>
     public partial class App
     {
+        public static bool IsDebug = false;
         private static string? _url;
-
+        
         public void Application_Startup(object sender, StartupEventArgs e)
         {
+#if DEBUG
+            IsDebug = true;
+#endif
             // Initialize the logging system
             Logging.Initialize();
 
@@ -222,145 +227,11 @@ namespace GoAwayEdge
             {
                 // ignored
             }
-            RunParser(args);
 
+            ArgumentParse.Parse(args);
             Environment.Exit(0);
         }
         
-        public static void RunParser(string[] args)
-        {
-            var argumentJoin = string.Join(" ", args);
-            var isFile = false;
-            var isApp = false;
-            var collectSingleArgument = false;
-            var singleArgument = string.Empty;
-            var p = new Process();
-            p.StartInfo.UseShellExecute = true;
-            p.StartInfo.RedirectStandardOutput = false;
-#if DEBUG
-            var w = new MessageUi("GoAwayEdge",
-                $"The following args are redirected (CTRL+C to copy):\n\n{argumentJoin}", "OK", isMainThread: true);
-            w.ShowDialog();
-#endif
-            Console.WriteLine("Command line args:\n\n" + argumentJoin + "\n", ConsoleColor.Gray);
-
-            // Filter command line args
-            foreach (var arg in args)
-            {
-                if (arg.Contains("microsoft-edge:"))
-                {
-                    _url = arg;
-                }
-
-                if (collectSingleArgument)
-                {
-                    // Concatenate all remaining arguments into a single string
-                    singleArgument += (singleArgument.Length > 0 ? " " : "") + arg;
-                    continue;
-                }
-
-                // Check for the single argument flag
-                if (arg == "--single-argument")
-                {
-                    collectSingleArgument = true;
-                }
-
-                // Check for App
-                if (arg.Contains("--app-id"))
-                {
-                    collectSingleArgument = true;
-                    singleArgument = arg;
-                }
-
-                if (!args.Contains("--profile-directory") && !ContainsParsedData(args) && args.Length != 1) continue; // Start Edge (default browser on this system)
-
-#if DEBUG
-                var messageUi = new MessageUi("GoAwayEdge",
-                    "Microsoft Edge will now start normally via IFEO application.", "OK", isMainThread: true);
-                messageUi.ShowDialog();
-#endif
-                var parsedArgs = args.Skip(2);
-                p.StartInfo.FileName = FileConfiguration.NonIfeoPath;
-                p.StartInfo.Arguments = string.Join(" ", parsedArgs);
-                p.Start();
-                Environment.Exit(0);
-            }
-
-            // Validate single argument
-            if (File.Exists(singleArgument))
-                isFile = true;
-
-            if (singleArgument.Contains("--app-id"))
-                isApp = true;
-
-            // Open URL in default browser
-            if (_url != null)
-            {
-                // Windows Copilot
-                if (_url.Contains("microsoft-edge://?ux=copilot&tcp=1&source=taskbar")
-                    || _url.Contains("microsoft-edge:///?ux=copilot&tcp=1&source=taskbar"))
-                {
-                    p.StartInfo.FileName = FileConfiguration.NonIfeoPath;
-                    p.StartInfo.Arguments = _url;
-                    Console.WriteLine($"Opening Windows Copilot (Taskbar) with following url:\n{_url}", ConsoleColor.Gray);
-#if DEBUG
-                    var copilotMessageUi = new MessageUi("GoAwayEdge",
-                        $"Opening Windows Copilot (Taskbar) with following url:\n{_url}", "OK", isMainThread: true);
-                    copilotMessageUi.ShowDialog();
-#endif
-                }
-                else if (_url.Contains("microsoft-edge://?ux=copilot&tcp=1&source=hotkey")
-                    || _url.Contains("microsoft-edge:///?ux=copilot&tcp=1&source=hotkey"))
-                {
-                    p.StartInfo.FileName = FileConfiguration.NonIfeoPath;
-                    p.StartInfo.Arguments = _url;
-                    Console.WriteLine($"Opening Windows Copilot (Hotkey) with following url:\n{_url}", ConsoleColor.Gray);
-#if DEBUG
-                    var copilotMessageUi = new MessageUi("GoAwayEdge",
-                        $"Opening Windows Copilot (Hotkey) with following url:\n{_url}", "OK", isMainThread: true);
-                    copilotMessageUi.ShowDialog();
-#endif
-                }
-                else
-                {
-                    var parsed = ParseUrl(_url);
-                    Console.WriteLine("Opening URL in default browser:\n\n" + parsed + "\n", ConsoleColor.Gray);
-#if DEBUG
-                    var defaultUrlMessageUi = new MessageUi("GoAwayEdge",
-                        "Opening URL in default browser:\n\n" + parsed + "\n", "OK", isMainThread: true);
-                    defaultUrlMessageUi.ShowDialog();
-#endif
-                    p.StartInfo.FileName = parsed;
-                    p.StartInfo.Arguments = "";
-                }
-                p.Start();
-            }
-            // Is File
-            else if (isFile)
-            {
-                p.StartInfo.FileName = FileConfiguration.NonIfeoPath;
-                p.StartInfo.Arguments = $"--single-argument {singleArgument}";
-#if DEBUG
-                var messageUi = new MessageUi("GoAwayEdge",
-                    $"Opening '{singleArgument}' with Edge.", "OK", isMainThread: true);
-                messageUi.ShowDialog();
-#endif
-                p.Start();
-            }
-            // Is App
-            else if (isApp)
-            {
-                p.StartInfo.FileName = FileConfiguration.NonIfeoPath;
-                p.StartInfo.Arguments = $"{singleArgument}";
-#if DEBUG
-                var messageUi = new MessageUi("GoAwayEdge",
-                    $"Opening PWA Application with following arguments: '{singleArgument}'.", "OK", isMainThread: true);
-                messageUi.ShowDialog();
-#endif
-                p.Start();
-            }
-        }
-
         private static string? ParseCustomSearchEngine(string argument)
         {
             var argParsed = argument.Remove(0, 6);
@@ -389,110 +260,6 @@ namespace GoAwayEdge
                 "custom" => SearchEngine.Custom,
                 _ => SearchEngine.Google // Fallback search engine
             };
-        }
-
-        private static bool ContainsParsedData(IEnumerable<string> args)
-        {
-            var contains = false;
-            var engineUrl = DefineEngine(Configuration.Search);
-
-            foreach (var arg in args)
-            {
-                if (arg.Contains(engineUrl))
-                    contains = true;
-            }
-            return contains;
-        }
-
-        private static string ParseUrl(string encodedUrl)
-        {
-            // Remove URI handler with url argument prefix
-            encodedUrl = encodedUrl[encodedUrl.IndexOf("http", StringComparison.Ordinal)..];
-
-            // Remove junk after search term
-            if (encodedUrl.Contains("https%3A%2F%2Fwww.bing.com%2Fsearch%3Fq%3D") && !encodedUrl.Contains("redirect"))
-                encodedUrl = encodedUrl.Substring(encodedUrl.IndexOf("http", StringComparison.Ordinal), encodedUrl.IndexOf("%26", StringComparison.Ordinal));
-
-            // Alternative url form
-            if (encodedUrl.Contains("https%3A%2F%2Fwww.bing.com%2Fsearch%3Fform%3D"))
-            {
-                encodedUrl = encodedUrl.Substring(encodedUrl.IndexOf("26q%3D", StringComparison.Ordinal) + 6, encodedUrl.Length - (encodedUrl.IndexOf("26q%3D", StringComparison.Ordinal) + 6));
-                encodedUrl = "https://www.bing.com/search?q=" + encodedUrl;
-            }
-
-            // Decode Url
-            encodedUrl = encodedUrl.Contains("redirect") ? DotSlash(encodedUrl) : DecodeUrlString(encodedUrl);
-
-            // Replace Search Engine
-            encodedUrl = encodedUrl.Replace("https://www.bing.com/search?q=", DefineEngine(Configuration.Search));
-
-#if DEBUG
-            var uriMessageUi = new MessageUi("GoAwayEdge",
-                "New Uri: " + encodedUrl, "OK", isMainThread: true);
-            uriMessageUi.ShowDialog();
-#endif
-            var uri = new Uri(encodedUrl);
-            return uri.ToString();
-        }
-
-        private static string DefineEngine(SearchEngine engine)
-        {
-            var customQueryUrl = string.Empty;
-            try
-            {
-                customQueryUrl = RegistryConfig.GetKey("CustomQueryUrl");
-            }
-            catch
-            {
-                // ignore; not an valid object
-            }
-
-            return engine switch
-            {
-                SearchEngine.Google => "https://www.google.com/search?q=",
-                SearchEngine.Bing => "https://www.bing.com/search?q=",
-                SearchEngine.DuckDuckGo => "https://duckduckgo.com/?q=",
-                SearchEngine.Yahoo => "https://search.yahoo.com/search?p=",
-                SearchEngine.Yandex => "https://yandex.com/search/?text=",
-                SearchEngine.Ecosia => "https://www.ecosia.org/search?q=",
-                SearchEngine.Ask => "https://www.ask.com/web?q=",
-                SearchEngine.Qwant => "https://qwant.com/?q=",
-                SearchEngine.Perplexity => "https://www.perplexity.ai/search?copilot=false&q=",
-                SearchEngine.Custom => customQueryUrl,
-                _ => "https://www.google.com/search?q="
-            };
-        }
-        
-        private static string DecodeUrlString(string url)
-        {
-            string newUrl;
-            while ((newUrl = Uri.UnescapeDataString(url)) != url)
-                url = newUrl;
-            return newUrl;
-        }
-
-        private static string DotSlash(string url)
-        {
-            string newUrl;
-            while ((newUrl = Uri.UnescapeDataString(url)) != url)
-                url = newUrl;
-
-            try // Decode base64 string from url
-            {
-                var uri = new Uri(url);
-                var query = HttpUtility.ParseQueryString(uri.Query).Get("url");
-                if (query != null)
-                {
-                    var decoded = Encoding.UTF8.GetString(Convert.FromBase64String(query));
-                    return decoded;
-                }
-            }
-            catch
-            {
-                // ignored
-            }
-
-            return url;
         }
         
         private static bool IsAdministrator()
