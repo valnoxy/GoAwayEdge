@@ -60,6 +60,10 @@
             </StatusBarItem>
         </StatusBar>
 
-        <ui:TitleBar x:Name="Bar" Title="{DynamicResource Title}" Grid.Row="0" ShowMaximize="false" Icon="pack://application:,,,/GoAwayEdge.ico"/>
+        <ui:TitleBar x:Name="Bar" Title="{DynamicResource Title}" Grid.Row="0" ShowMaximize="false">
+            <ui:TitleBar.Icon>
+                <ui:ImageIcon Source="pack://application:,,,/GoAwayEdge.ico"/>
+            </ui:TitleBar.Icon>
+        </ui:TitleBar>
     </Grid>
 </ui:FluentWindow>
