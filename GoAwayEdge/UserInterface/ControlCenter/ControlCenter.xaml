@@ -34,14 +34,14 @@
                             <ui:SymbolIcon Symbol="Home24" />
                         </ui:NavigationViewItem.Icon>
                     </ui:NavigationViewItem>
-                    <ui:NavigationViewItem Content="Edge Configuration" NavigationCacheMode="Enabled">
+                    <ui:NavigationViewItem Content="Microsoft Edge" NavigationCacheMode="Enabled">
                         <ui:NavigationViewItem.Icon>
-                            <ui:SymbolIcon Symbol="Globe16" />
+                            <ui:ImageIcon Source="{DynamicResource MicrosoftEdge}" Width="16"/>
                         </ui:NavigationViewItem.Icon>
                     </ui:NavigationViewItem>
                     <ui:NavigationViewItem Content="Windows Copilot" NavigationCacheMode="Enabled">
                         <ui:NavigationViewItem.Icon>
-                            <ui:SymbolIcon Symbol="Airplane24" />
+                            <ui:ImageIcon Source="{DynamicResource MicrosoftCopilot}" Width="16"/>
                         </ui:NavigationViewItem.Icon>
                     </ui:NavigationViewItem>
 
@@ -53,7 +53,7 @@
                             <ui:SymbolIcon Symbol="PaintBrush24" />
                         </ui:NavigationViewItem.Icon>
                     </ui:NavigationViewItem>
-                    <ui:NavigationViewItem NavigationCacheMode="Enabled">
+                    <ui:NavigationViewItem NavigationCacheMode="Enabled" TargetPageType="{x:Type pages:About}">
                         <ui:NavigationViewItem.Icon>
                             <ui:SymbolIcon Symbol="QuestionCircle24" />
                         </ui:NavigationViewItem.Icon>

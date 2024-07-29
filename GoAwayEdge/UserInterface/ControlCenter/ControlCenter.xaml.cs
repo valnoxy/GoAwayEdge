@@ -1,4 +1,4 @@
-﻿using System.Diagnostics;
+using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using System.Security.Principal;
@@ -18,7 +18,7 @@ namespace GoAwayEdge.UserInterface.ControlCenter
             Interval = TimeSpan.FromSeconds(1)
         };
 
-        [RequiresAssemblyFiles()]
+        [RequiresAssemblyFiles]
         public ControlCenter()
         {
             InitializeComponent();

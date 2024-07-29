@@ -7,6 +7,9 @@
     <Compile Update="App.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="UserInterface\ControlCenter\Pages\About.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="UserInterface\ControlCenter\Pages\HomeScreen.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -34,6 +37,15 @@
   </ItemGroup>
   <ItemGroup>
     <Page Update="App.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Assets\Edge.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Assets\Copilot.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="UserInterface\ControlCenter\Pages\About.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="UserInterface\ControlCenter\Pages\HomeScreen.xaml">

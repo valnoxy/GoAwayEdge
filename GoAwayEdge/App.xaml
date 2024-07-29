@@ -11,6 +11,8 @@
                 <ui:ControlsDictionary />
                 <ResourceDictionary Source="/GoAwayEdge;component/Localization/ResourceDictionary.xaml"/>
                 <ResourceDictionary Source="/GoAwayEdge;component/Localization/ResourceDictionary.de-DE.xaml"/>
+                <ResourceDictionary Source="/GoAwayEdge;component/Assets/Copilot.xaml"/>
+                <ResourceDictionary Source="/GoAwayEdge;component/Assets/Edge.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>
