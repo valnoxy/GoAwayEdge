@@ -1,21 +1,18 @@
 ﻿/*
- * Go away Edge - IFEO Method
- * by valnoxy (valnoxy.dev)
- * ----------------------------------
- *  HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\msedge.exe
- *   > UseFilter (DWORD) = 1
+ * GoAwayEdge
+ * Copyright (c) 2018 - 2024 valnoxy.
  *
- *  HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\msedge.exe\0
- *   > Debugger (REG_SZ) = "Path\To\GoAwayEdge.exe"
- *   > FullFilterPath (REG_SZ) = C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe
+ * GoAwayEdge is licensed under MIT License (https://github.com/valnoxy/GoAwayEdge/blob/main/LICENSE).
+ * So you are allowed to use freely and modify the application.
+ * I will not be responsible for any outcome.
+ * Proceed with any action at your own risk.
+ *
+ * Source code: https://github.com/valnoxy/GoAwayEdge
  */
 
 using GoAwayEdge.Common;
 using System.Diagnostics;
-using System.IO;
 using System.Security.Principal;
-using System.Text;
-using System.Web;
 using System.Windows;
 using GoAwayEdge.Common.Runtime;
 using GoAwayEdge.Common.Debugging;
@@ -61,7 +58,7 @@ namespace GoAwayEdge
                     return;
                 }
 
-                var installer = new Installer();
+                var installer = new UserInterface.Setup.Installer();
                 installer.ShowDialog();
                 Environment.Exit(0);
             }
@@ -69,6 +66,12 @@ namespace GoAwayEdge
             {
                 if (args.Contains("-ToastActivated")) // Clicked on notification, ignore it.
                     Environment.Exit(0);
+                if (args.Contains("--control-center"))
+                {
+                    var controlCenter = new UserInterface.ControlCenter.ControlCenter();
+                    controlCenter.ShowDialog();
+                    Environment.Exit(0);
+                }
                 if (args.Contains("-s")) // Silent Installation
                 {
                     foreach (var arg in args)
@@ -104,7 +107,6 @@ namespace GoAwayEdge
                     InstallRoutine.Install(null);
                     Environment.Exit(0);
                 }
-
                 if (args.Contains("-u"))
                 {
                     InstallRoutine.Uninstall(null);

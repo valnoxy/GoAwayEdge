@@ -60,4 +60,9 @@
     <PackageReference Include="WPF-UI" Version="3.0.4" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
   </ItemGroup>
+  <ItemGroup>
+    <Compile Update="UserInterface\ControlCenter\ControlCenter.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+  </ItemGroup>
 </Project>

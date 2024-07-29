@@ -7,25 +7,28 @@
     <Compile Update="App.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="MessageUI.xaml.cs">
+    <Compile Update="UserInterface\ControlCenter\Pages\HomeScreen.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="Pages\Installation.xaml.cs">
+    <Compile Update="UserInterface\MessageUI.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="Pages\InstallationSuccess.xaml.cs">
+    <Compile Update="UserInterface\Setup\Pages\Installation.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="Installer.xaml.cs">
+    <Compile Update="UserInterface\Setup\Pages\InstallationSuccess.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="Pages\License.xaml.cs">
+    <Compile Update="UserInterface\Setup\Installer.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="Pages\Settings.xaml.cs">
+    <Compile Update="UserInterface\Setup\Pages\License.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="Pages\Welcome.xaml.cs">
+    <Compile Update="UserInterface\Setup\Pages\Settings.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="UserInterface\Setup\Pages\Welcome.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>
@@ -33,10 +36,16 @@
     <Page Update="App.xaml">
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="MessageUI.xaml">
+    <Page Update="UserInterface\ControlCenter\Pages\HomeScreen.xaml">
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="Pages\Welcome.xaml">
+    <Page Update="UserInterface\MessageUI.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="UserInterface\ControlCenter\ControlCenter.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="UserInterface\Setup\Pages\Welcome.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Resource Update="Localization\ResourceDictionary.ko-KR.xaml">
@@ -60,19 +69,19 @@
     <Resource Update="Localization\ResourceDictionary.xaml">
       <SubType>Designer</SubType>
     </Resource>
-    <Page Update="Pages\Installation.xaml">
+    <Page Update="UserInterface\Setup\Pages\Installation.xaml">
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="Pages\InstallationSuccess.xaml">
+    <Page Update="UserInterface\Setup\Pages\InstallationSuccess.xaml">
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="Installer.xaml">
+    <Page Update="UserInterface\Setup\Installer.xaml">
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="Pages\License.xaml">
+    <Page Update="UserInterface\Setup\Pages\License.xaml">
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="Pages\Settings.xaml">
+    <Page Update="UserInterface\Setup\Pages\Settings.xaml">
       <SubType>Designer</SubType>
     </Page>
   </ItemGroup>
