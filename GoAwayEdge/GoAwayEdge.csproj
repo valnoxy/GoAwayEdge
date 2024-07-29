@@ -12,7 +12,7 @@
     <AssemblyName>GoAwayEdge</AssemblyName>
     <Company>Exploitox</Company>
     <Authors>valnoxy</Authors>
-    <Version>2.0.0.160</Version>
+    <Version>2.0.0.192</Version>
     <Copyright>Copyright © 2018 - 2024 Exploitox. All rights reserved.</Copyright>
     <PackageProjectUrl>https://github.com/valnoxy/GoAwayEdge</PackageProjectUrl>
     <RepositoryUrl>https://github.com/valnoxy/GoAwayEdge</RepositoryUrl>
@@ -61,7 +61,7 @@
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Update="UserInterface\ControlCenter\ControlCenter.xaml.cs">
+    <Compile Update="UserInterface\ControlPanel\ControlPanel.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>

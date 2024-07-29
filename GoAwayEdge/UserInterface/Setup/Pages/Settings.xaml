@@ -104,6 +104,30 @@
                     </ui:CardControl.Header>
                 </ui:CardControl>
             </StackPanel>
+
+            <StackPanel Margin="0,10,0,0" x:Name="ControlPanelStackPanel">
+                <ui:CardControl Icon="{ui:SymbolIcon Settings32}">
+                    <ui:CardControl.Header>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Column="0" VerticalAlignment="Center">
+                                <TextBlock
+                                    FontSize="13"
+                                    FontWeight="Medium"
+                                    Text="{DynamicResource SettingsControlPanelTitle}" />
+                                <TextBlock
+                                    FontSize="12"
+                                    Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                                    Text="{DynamicResource SettingsControlPanelDescription}"/>
+                            </StackPanel>
+                            <ui:ToggleSwitch Grid.Column="1" x:Name="ControlPanelSwitch" Click="ControlPanelSwitch_OnClick"/>
+                        </Grid>
+                    </ui:CardControl.Header>
+                </ui:CardControl>
+            </StackPanel>
         </StackPanel>
     </ScrollViewer>
 </UserControl>

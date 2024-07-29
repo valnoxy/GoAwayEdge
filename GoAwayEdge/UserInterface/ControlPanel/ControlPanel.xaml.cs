@@ -1,25 +1,25 @@
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
+using System.IO;
 using System.Reflection;
 using System.Security.Principal;
 using System.Windows;
 using System.Windows.Threading;
 using Wpf.Ui.Controls;
 
-namespace GoAwayEdge.UserInterface.ControlCenter
+namespace GoAwayEdge.UserInterface.ControlPanel
 {
     /// <summary>
-    /// Interaktionslogik für ControlCenter.xaml
+    /// Interaktionslogik für ControlPanel.xaml
     /// </summary>
-    public partial class ControlCenter
+    public partial class ControlPanel
     {
         private readonly DispatcherTimer _timer = new()
         {
             Interval = TimeSpan.FromSeconds(1)
         };
 
-        [RequiresAssemblyFiles]
-        public ControlCenter()
+        public ControlPanel()
         {
             InitializeComponent();
 
@@ -31,7 +31,9 @@ namespace GoAwayEdge.UserInterface.ControlCenter
 
             // Get version
             var assembly = Assembly.GetExecutingAssembly();
-            var fvi = FileVersionInfo.GetVersionInfo(assembly.Location);
+            var appDirectory = AppContext.BaseDirectory;
+            var assemblyPath = Path.Combine(appDirectory, $"{assembly.GetName().Name}.exe");
+            var fvi = FileVersionInfo.GetVersionInfo(assemblyPath);
             var version = fvi.FileVersion;
             Version.Text = $"Version {version}";
 

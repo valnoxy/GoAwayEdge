@@ -52,6 +52,8 @@ namespace GoAwayEdge.UserInterface.Setup.Pages
             SearchEngineBox.SelectedIndex = 0;
             Configuration.Search = SearchEngine.Google;
             Configuration.Uninstall = false;
+            Configuration.InstallControlPanel = true;
+            ControlPanelSwitch.IsChecked = true;
         }
 
         private void EdgeChannelBox_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -134,6 +136,11 @@ namespace GoAwayEdge.UserInterface.Setup.Pages
         private void MsEdgeUninstallSwitch_OnClickUninstallSwitch_OnClick(object sender, RoutedEventArgs e)
         {
             Configuration.UninstallEdge = MsEdgeUninstallSwitch.IsChecked!.Value;
+        }
+
+        private void ControlPanelSwitch_OnClick(object sender, RoutedEventArgs e)
+        {
+            Configuration.InstallControlPanel = ControlPanelSwitch.IsChecked!.Value;
         }
     }
 }

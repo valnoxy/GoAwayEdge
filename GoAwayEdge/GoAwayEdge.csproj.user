@@ -7,10 +7,10 @@
     <Compile Update="App.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="UserInterface\ControlCenter\Pages\About.xaml.cs">
+    <Compile Update="UserInterface\ControlPanel\Pages\About.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="UserInterface\ControlCenter\Pages\HomeScreen.xaml.cs">
+    <Compile Update="UserInterface\ControlPanel\Pages\HomeScreen.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Update="UserInterface\MessageUI.xaml.cs">
@@ -45,16 +45,19 @@
     <Page Update="Assets\Copilot.xaml">
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="UserInterface\ControlCenter\Pages\About.xaml">
+    <Page Update="Assets\Settings.xaml">
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="UserInterface\ControlCenter\Pages\HomeScreen.xaml">
+    <Page Update="UserInterface\ControlPanel\Pages\About.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="UserInterface\ControlPanel\Pages\HomeScreen.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="UserInterface\MessageUI.xaml">
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="UserInterface\ControlCenter\ControlCenter.xaml">
+    <Page Update="UserInterface\ControlPanel\ControlPanel.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="UserInterface\Setup\Pages\Welcome.xaml">

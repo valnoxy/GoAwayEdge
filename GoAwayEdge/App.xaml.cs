@@ -66,9 +66,9 @@ namespace GoAwayEdge
             {
                 if (args.Contains("-ToastActivated")) // Clicked on notification, ignore it.
                     Environment.Exit(0);
-                if (args.Contains("--control-center"))
+                if (args.Contains("--control-panel"))
                 {
-                    var controlCenter = new UserInterface.ControlCenter.ControlCenter();
+                    var controlCenter = new UserInterface.ControlPanel.ControlPanel();
                     controlCenter.ShowDialog();
                     Environment.Exit(0);
                 }

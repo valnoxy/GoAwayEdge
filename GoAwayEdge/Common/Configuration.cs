@@ -32,6 +32,7 @@ namespace GoAwayEdge.Common
         public static bool Uninstall { get; set; }
         public static bool UninstallEdge { get; set; }
         public static bool NoEdgeInstalled { get; set; }
+        public static bool InstallControlPanel { get; set; }
         public static string? CustomQueryUrl { get; set; }
 
         public static string InstallDir = Path.Combine(

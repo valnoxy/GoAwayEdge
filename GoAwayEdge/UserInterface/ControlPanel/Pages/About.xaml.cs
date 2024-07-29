@@ -1,8 +1,9 @@
 ﻿using System.Diagnostics;
+using System.IO;
 using System.Reflection;
 using System.Windows;
 
-namespace GoAwayEdge.UserInterface.ControlCenter.Pages
+namespace GoAwayEdge.UserInterface.ControlPanel.Pages
 {
     /// <summary>
     /// Interaktionslogik für About.xaml
@@ -13,11 +14,12 @@ namespace GoAwayEdge.UserInterface.ControlCenter.Pages
         {
             InitializeComponent();
 
-            var version = Assembly.GetExecutingAssembly().GetName().Version!;
-            var product = FileVersionInfo.GetVersionInfo(Assembly.GetExecutingAssembly().Location).ProductName;
-            var copyright = FileVersionInfo.GetVersionInfo(Assembly.GetExecutingAssembly().Location).LegalCopyright;
-            ValueVersion.Content = $"{product} v{version}";
-            ValueCopyright.Content = copyright;
+            var assembly = Assembly.GetExecutingAssembly();
+            var appDirectory = AppContext.BaseDirectory;
+            var assemblyPath = Path.Combine(appDirectory, $"{assembly.GetName().Name}.exe");
+            var fvi = FileVersionInfo.GetVersionInfo(assemblyPath);
+            ValueVersion.Content = $"{fvi.ProductName} v{fvi.FileVersion}";
+            ValueCopyright.Content = fvi.LegalCopyright;
         }
 
         private void Homepage_OnClick(object sender, RoutedEventArgs e)
