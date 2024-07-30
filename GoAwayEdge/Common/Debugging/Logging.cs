@@ -52,7 +52,10 @@ namespace GoAwayEdge.Common.Debugging
             if (string.IsNullOrEmpty(_logFile))
                 throw new Exception("Logging class not initialized!");
             using var writer = new StreamWriter(_logFile, true);
-            writer.WriteLine($"{DateTime.Now:yyyy-MM-dd HH:mm:ss} - {level} - {message}");
+
+            var logMessage = $"{DateTime.Now:yyyy-MM-dd HH:mm:ss} - {level} - {message}";
+            writer.WriteLine(logMessage);
+            System.Diagnostics.Debug.WriteLine(logMessage);
         }
 
         private static void DeleteOldLogFiles()

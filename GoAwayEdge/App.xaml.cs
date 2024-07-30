@@ -16,6 +16,7 @@ using System.Security.Principal;
 using System.Windows;
 using GoAwayEdge.Common.Runtime;
 using GoAwayEdge.Common.Debugging;
+using GoAwayEdge.Common.Installation;
 
 namespace GoAwayEdge
 {

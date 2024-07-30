@@ -150,6 +150,10 @@ namespace GoAwayEdge.Common
                 {
                     ts.RootFolder.DeleteTask("valnoxy\\GoAwayEdge\\GoAwayEdge IFEO Validation");
                 }
+                catch (FileNotFoundException)
+                {
+                    Logging.Log("Old Task not found, skipping ...");
+                }
                 catch (Exception ex)
                 {
                     Logging.Log("Failed to delete old task: " + ex, Logging.LogLevel.ERROR);
@@ -331,6 +335,11 @@ namespace GoAwayEdge.Common
             {
                 Logging.Log("Failed to remove uninstall data: " + ex, Logging.LogLevel.ERROR);
             }
+
+            // Remove Control Panel shortcut if exists
+            var shortcutPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
+                               "Microsoft", "Windows", "Start Menu", "Programs", "GoAwayEdge.lnk");
+            if (File.Exists(shortcutPath)) File.Delete(shortcutPath);
 
             // Switch FrameWindow content to InstallationSuccess
             worker?.ReportProgress(100, "");

@@ -8,10 +8,12 @@ namespace GoAwayEdge.Common
         public static void LoadLanguage()
         {
             // Set current language model
+            const string overrideLanguage = "duh";
+
             var language = Thread.CurrentThread.CurrentCulture.ToString();
             var dict = new ResourceDictionary();
-            Logging.Log($"Trying to load language: " + language);
-            System.Diagnostics.Debug.WriteLine("Trying to load language: " + language);
+            if (!string.IsNullOrEmpty(overrideLanguage)) language = overrideLanguage;
+            Logging.Log("Trying to load language: " + language);
             dict.Source = language switch
             {
                 "en-US" => new Uri("/GoAwayEdge;component/Localization/ResourceDictionary.xaml", UriKind.Relative),
@@ -34,6 +36,13 @@ namespace GoAwayEdge.Common
                     $"Failed to load language: {ex.Message}", "OK", isMainThread: true);
                 messageUi.ShowDialog();
                 Environment.Exit(1);
+            }
+
+            if (dict.Source ==
+                new Uri("/GoAwayEdge;component/Localization/ResourceDictionary.xaml", UriKind.Relative) &&
+                language != "en-US")
+            {
+                Logging.Log($"No localization file found for language {language}, falling back to English ...", Logging.LogLevel.WARNING);
             }
         }
 

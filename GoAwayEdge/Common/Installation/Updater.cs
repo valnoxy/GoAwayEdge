@@ -1,13 +1,13 @@
-﻿using Microsoft.Toolkit.Uwp.Notifications;
-using Microsoft.Win32;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.IO;
 using System.Net;
 using System.Reflection;
 using System.Security.Cryptography;
+using Microsoft.Toolkit.Uwp.Notifications;
+using Microsoft.Win32;
 using Newtonsoft.Json;
 
-namespace GoAwayEdge.Common
+namespace GoAwayEdge.Common.Installation
 {
     internal class Updater
     {
