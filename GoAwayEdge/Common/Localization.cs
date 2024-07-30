@@ -8,7 +8,7 @@ namespace GoAwayEdge.Common
         public static void LoadLanguage()
         {
             // Set current language model
-            const string overrideLanguage = "duh";
+            const string overrideLanguage = "";
 
             var language = Thread.CurrentThread.CurrentCulture.ToString();
             var dict = new ResourceDictionary();
@@ -23,6 +23,7 @@ namespace GoAwayEdge.Common
                 "it-IT" => new Uri("/GoAwayEdge;component/Localization/ResourceDictionary.it-IT.xaml", UriKind.Relative),
                 "pl-PL" => new Uri("/GoAwayEdge;component/Localization/ResourceDictionary.pl-PL.xaml", UriKind.Relative),
                 "ko-KR" => new Uri("/GoAwayEdge;component/Localization/ResourceDictionary.ko-KR.xaml", UriKind.Relative),
+                "pt-BR" => new Uri("/GoAwayEdge;component/Localization/ResourceDictionary.pt-BR.xaml", UriKind.Relative),
                 _ => new Uri("/GoAwayEdge;component/Localization/ResourceDictionary.xaml", UriKind.Relative)
             };
             try
