@@ -1,3 +1,4 @@
+using GoAwayEdge.UserInterface.ControlPanel.Pages;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
@@ -18,6 +19,7 @@ namespace GoAwayEdge.UserInterface.ControlPanel
         {
             Interval = TimeSpan.FromSeconds(1)
         };
+        public static ControlPanel? ContentWindow;
 
         public ControlPanel()
         {

@@ -34,7 +34,7 @@
                             <ui:SymbolIcon Symbol="Home24" />
                         </ui:NavigationViewItem.Icon>
                     </ui:NavigationViewItem>
-                    <ui:NavigationViewItem Content="Microsoft Edge" NavigationCacheMode="Enabled">
+                    <ui:NavigationViewItem Content="Microsoft Edge" NavigationCacheMode="Enabled" TargetPageType="{x:Type pages:EdgeSettings}">
                         <ui:NavigationViewItem.Icon>
                             <ui:ImageIcon Source="{DynamicResource MicrosoftEdge}" Width="16"/>
                         </ui:NavigationViewItem.Icon>

@@ -10,6 +10,9 @@
     <Compile Update="UserInterface\ControlPanel\Pages\About.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="UserInterface\ControlPanel\Pages\EdgeSettings.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="UserInterface\ControlPanel\Pages\HomeScreen.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -49,6 +52,9 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Update="UserInterface\ControlPanel\Pages\About.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="UserInterface\ControlPanel\Pages\EdgeSettings.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="UserInterface\ControlPanel\Pages\HomeScreen.xaml">

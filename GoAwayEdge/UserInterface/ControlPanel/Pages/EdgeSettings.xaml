@@ -1,0 +1,88 @@
+﻿<Page x:Class="GoAwayEdge.UserInterface.ControlPanel.Pages.EdgeSettings"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:GoAwayEdge.UserInterface.ControlPanel.Pages"
+      xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="800"
+      Title="EdgeSettings">
+
+    <ScrollViewer VerticalScrollBarVisibility="Auto" Margin="12">
+        <StackPanel>
+            <ui:TextBlock FontTypography="Subtitle" Text="{DynamicResource SettingsTitle}" Foreground="{DynamicResource TextFillColorPrimaryBrush}"/>
+            <StackPanel Margin="0,5,0,0" x:Name="EdgeStackPanel">
+                <ui:CardControl Icon="{ui:SymbolIcon Channel24}">
+                    <ui:CardControl.Header>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Column="0" VerticalAlignment="Center">
+                                <TextBlock
+                                    FontSize="13"
+                                    FontWeight="Medium"
+                                    Text="{DynamicResource SettingsEdgeChannelTitle}" />
+                                <TextBlock
+                                    FontSize="12"
+                                    Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                                    Text="{DynamicResource SettingsEdgeChannelDescription}" />
+                            </StackPanel>
+                            <ComboBox Grid.Column="1" x:Name="EdgeChannelBox" Width="180"/>
+                        </Grid>
+                    </ui:CardControl.Header>
+                </ui:CardControl>
+            </StackPanel>
+
+            <StackPanel Margin="0,10,0,0">
+                <ui:CardControl Icon="{ui:SymbolIcon Search24}">
+                    <ui:CardControl.Header>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Column="0" VerticalAlignment="Center">
+                                <TextBlock
+                                    FontSize="13"
+                                    FontWeight="Medium"
+                                    Text="{DynamicResource SettingsSearchEngineTitle}" />
+                                <TextBlock
+                                    FontSize="12"
+                                    Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                                    Text="{DynamicResource SettingsSearchEngineDescription}" />
+                            </StackPanel>
+                            <ComboBox Grid.Column="1" x:Name="SearchEngineBox" Width="180"/>
+                        </Grid>
+                    </ui:CardControl.Header>
+                </ui:CardControl>
+            </StackPanel>
+
+            <StackPanel Margin="0,10,0,0" x:Name="CustomSearchPanel" Visibility="Collapsed">
+                <ui:CardControl Icon="{ui:SymbolIcon SearchSettings20}">
+                    <ui:CardControl.Header>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Column="0" VerticalAlignment="Center">
+                                <TextBlock
+                                    FontSize="13"
+                                    FontWeight="Medium"
+                                    Text="{DynamicResource SettingsCustomSearchEngineTitle}" />
+                                <TextBlock
+                                    FontSize="12"
+                                    Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                                    Text="{DynamicResource SettingsCustomSearchEngineDescription}"/>
+                            </StackPanel>
+                            <ui:TextBox Grid.Column="1" Width="300" x:Name="QueryUrlTextBox" PlaceholderText="https://www.google.com/search?q="/>
+                        </Grid>
+                    </ui:CardControl.Header>
+                </ui:CardControl>
+            </StackPanel>
+        </StackPanel>
+    </ScrollViewer>
+</Page>

@@ -18,7 +18,7 @@
                       HorizontalAlignment="Center" Margin="0,0,0,15"/>
 
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-            <ui:CardAction Width="350" Height="100" Margin="0,0,10,0">
+            <ui:CardAction Width="350" Height="100" Margin="0,0,10,0" Click="EdgeSettings_OnClick">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="100"/>

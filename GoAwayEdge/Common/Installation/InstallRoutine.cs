@@ -200,6 +200,7 @@ namespace GoAwayEdge.Common
                 var shortcutPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
                     "Microsoft", "Windows", "Start Menu", "Programs", "GoAwayEdge.lnk");
                 Shortcut.Create(Path.Combine(Configuration.InstallDir, "GoAwayEdge.exe"), "--control-panel", shortcutPath);
+                RegistryConfig.SetKey("ControlPanelIsInstalled", true);
             }
 
             // Switch FrameWindow content to InstallationSuccess

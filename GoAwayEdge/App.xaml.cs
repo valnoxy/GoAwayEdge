@@ -26,7 +26,6 @@ namespace GoAwayEdge
     public partial class App
     {
         public static bool IsDebug = false;
-        private static string? _url;
         
         public void Application_Startup(object sender, StartupEventArgs e)
         {
@@ -65,10 +64,19 @@ namespace GoAwayEdge
             }
             else if (args.Length > 0)
             {
+                if (args.Contains("--debug"))
+                    IsDebug = true;
                 if (args.Contains("-ToastActivated")) // Clicked on notification, ignore it.
                     Environment.Exit(0);
                 if (args.Contains("--control-panel"))
                 {
+                    // Check if user allowed opening the control panel
+                    if (RegistryConfig.GetKey("ControlPanelIsInstalled") != "True")
+                    {
+                        Logging.Log("Control Panel is not allowed on this system, exiting ...", Logging.LogLevel.ERROR);
+                        Environment.Exit(0);
+                        return;
+                    }
                     var controlCenter = new UserInterface.ControlPanel.ControlPanel();
                     controlCenter.ShowDialog();
                     Environment.Exit(0);
