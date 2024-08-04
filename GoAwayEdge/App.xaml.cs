@@ -77,6 +77,8 @@ namespace GoAwayEdge
                         Environment.Exit(0);
                         return;
                     }
+
+                    Configuration.InitialEnvironment();
                     var controlCenter = new UserInterface.ControlPanel.ControlPanel();
                     controlCenter.ShowDialog();
                     Environment.Exit(0);
@@ -86,7 +88,7 @@ namespace GoAwayEdge
                     foreach (var arg in args)
                     {
                         if (arg.StartsWith("-se:"))
-                            Configuration.Search = ParseSearchEngine(arg);
+                            Configuration.Search = ArgumentParse.ParseSearchEngine(arg);
                         if (arg.Contains("--url:"))
                         {
                             Configuration.CustomQueryUrl = ParseCustomSearchEngine(arg);
@@ -230,15 +232,6 @@ namespace GoAwayEdge
             }
 
             Configuration.InitialEnvironment();
-            try
-            {
-                Configuration.Search = ParseSearchEngine(RegistryConfig.GetKey("SearchEngine"));
-            }
-            catch
-            {
-                // ignored
-            }
-
             ArgumentParse.Parse(args);
             Environment.Exit(0);
         }
@@ -250,29 +243,6 @@ namespace GoAwayEdge
                          && (uriResult.Scheme == Uri.UriSchemeHttp || uriResult.Scheme == Uri.UriSchemeHttps);
             return result ? argParsed : null;
         }
-
-        private static SearchEngine ParseSearchEngine(string argument)
-        {
-            var arg = argument;
-            if (argument.StartsWith("-se:"))
-                arg = argument.Remove(0, 4);
-            
-            return arg.ToLower() switch
-            {
-                "google" => SearchEngine.Google,
-                "bing" => SearchEngine.Bing,
-                "duckduckgo" => SearchEngine.DuckDuckGo,
-                "yahoo" => SearchEngine.Yahoo,
-                "yandex" => SearchEngine.Yandex,
-                "ecosia" => SearchEngine.Ecosia,
-                "ask" => SearchEngine.Ask,
-                "qwant" => SearchEngine.Qwant,
-                "perplexity" => SearchEngine.Perplexity,
-                "custom" => SearchEngine.Custom,
-                _ => SearchEngine.Google // Fallback search engine
-            };
-        }
-        
         private static bool IsAdministrator()
         {
             var identity = WindowsIdentity.GetCurrent();

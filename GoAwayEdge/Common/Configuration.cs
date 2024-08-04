@@ -1,9 +1,10 @@
 ﻿using System.IO;
+using System.Windows;
 using Microsoft.Win32;
 
 namespace GoAwayEdge.Common
 {
-    internal enum SearchEngine
+    public enum SearchEngine
     {
         Google,
         Bing,
@@ -17,7 +18,7 @@ namespace GoAwayEdge.Common
         Custom
     }
 
-    internal enum EdgeChannel
+    public enum EdgeChannel
     {
         Stable,
         Beta,
@@ -60,6 +61,20 @@ namespace GoAwayEdge.Common
 
                 FileConfiguration.EdgePath = RegistryConfig.GetKey("EdgeFilePath");
                 FileConfiguration.NonIfeoPath = RegistryConfig.GetKey("EdgeNonIEFOFilePath");
+
+                try
+                {
+                    Channel = Runtime.ArgumentParse.ParseEdgeChannel(RegistryConfig.GetKey("Stable"));
+                    Search = Runtime.ArgumentParse.ParseSearchEngine(RegistryConfig.GetKey("SearchEngine"));
+                    if (Search == SearchEngine.Custom)
+                    {
+                        CustomQueryUrl = RegistryConfig.GetKey("CustomQueryUrl");
+                    }
+                }
+                catch
+                {
+                    // ignored
+                }
                 return true;
             }
             catch (Exception ex)
@@ -69,6 +84,46 @@ namespace GoAwayEdge.Common
                 messageUi.ShowDialog();
                 return false;
             }
+        }
+
+        /// <summary>
+        ///     Get a list of all available Edge Channels.
+        /// </summary>
+        /// <returns>
+        ///     List of Edge Channels.
+        /// </returns>
+        public static List<string> GetEdgeChannels()
+        {
+            var list = (from edgeChannel in (EdgeChannel[])Enum.GetValues(typeof(EdgeChannel))
+                select edgeChannel.ToString()).ToList();
+            return list;
+        }
+
+
+        /// <summary>
+        ///     Get a list of all available Search Engines.
+        /// </summary>
+        /// <returns>
+        ///     List of Search Engines.
+        /// </returns>
+        public static List<string> GetSearchEngines()
+        {
+            var list = (from searchEngine in (SearchEngine[])Enum.GetValues(typeof(SearchEngine))
+                where searchEngine != SearchEngine.Custom
+                select searchEngine.ToString()).ToList();
+
+            try
+            {
+                var resourceValue =
+                    (string)Application.Current.MainWindow!.FindResource("SettingsSearchEngineCustomItem");
+                list.Add(!string.IsNullOrEmpty(resourceValue) ? resourceValue : "Custom");
+            }
+            catch
+            {
+                list.Add("Custom");
+            }
+
+            return list;
         }
     }
 
@@ -95,6 +150,8 @@ namespace GoAwayEdge.Common
         /// <summary>
         /// Create a Key in the Registry
         /// </summary>
+        /// <param name="option">Name of key</param> 
+        /// <param name="value">Value of key</param> 
         /// <param name="valueKind">Type of value</param> 
         /// <param name="isUninstall">Use the Uninstall Registry key instead.</param> 
         public static void SetKey(string option, object value, RegistryValueKind valueKind = RegistryValueKind.String, bool isUninstall = false)

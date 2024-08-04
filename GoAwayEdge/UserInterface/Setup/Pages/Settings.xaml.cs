@@ -13,35 +13,17 @@ namespace GoAwayEdge.UserInterface.Setup.Pages
         {
             InitializeComponent();
 
-            EdgeChannelBox.Items.Add("Edge Stable");
-            EdgeChannelBox.Items.Add("Edge Beta");
-            EdgeChannelBox.Items.Add("Edge Dev");
-            EdgeChannelBox.Items.Add("Edge Canary");
-            EdgeChannelBox.SelectedIndex = 0;
-            Configuration.Channel = EdgeChannel.Stable;
-
-            SearchEngineBox.Items.Add("Google");
-            SearchEngineBox.Items.Add("Bing");
-            SearchEngineBox.Items.Add("DuckDuckGo");
-            SearchEngineBox.Items.Add("Yahoo");
-            SearchEngineBox.Items.Add("Yandex");
-            SearchEngineBox.Items.Add("Ecosia");
-            SearchEngineBox.Items.Add("Ask");
-            SearchEngineBox.Items.Add("Qwant");
-            SearchEngineBox.Items.Add("Perplexity");
-
-            try
+            foreach (var edgeChannels in Configuration.GetEdgeChannels())
             {
-                Dispatcher.Invoke(() =>
-                {
-                    var resourceValue = (string)Application.Current.MainWindow!.FindResource("SettingsSearchEngineCustomItem");
-                    SearchEngineBox.Items.Add(!string.IsNullOrEmpty(resourceValue) ? resourceValue : "Custom");
-                });
+                EdgeChannelBox.Items.Add(edgeChannels);
             }
-            catch
+            EdgeChannelBox.SelectedItem = Configuration.Channel.ToString();
+
+            foreach (var searchEngine in Configuration.GetSearchEngines())
             {
-                SearchEngineBox.Items.Add("Custom");
+                SearchEngineBox.Items.Add(searchEngine);
             }
+            SearchEngineBox.SelectedItem = Configuration.Search.ToString();
 
             if (Configuration.NoEdgeInstalled)
             {
@@ -49,8 +31,6 @@ namespace GoAwayEdge.UserInterface.Setup.Pages
                 EdgeStackPanel.IsEnabled = false;
             }
 
-            SearchEngineBox.SelectedIndex = 0;
-            Configuration.Search = SearchEngine.Google;
             Configuration.Uninstall = false;
             Configuration.InstallControlPanel = true;
             ControlPanelSwitch.IsChecked = true;

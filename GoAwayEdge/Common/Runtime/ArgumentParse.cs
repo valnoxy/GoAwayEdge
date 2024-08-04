@@ -139,5 +139,39 @@ namespace GoAwayEdge.Common.Runtime
             DebugMessage.DisplayDebugMessage("GoAwayEdge", debugMessage);
             p.Start();
         }
+
+        public static EdgeChannel ParseEdgeChannel(string argument)
+        {
+            return argument.ToLower() switch
+            {
+                "stable" => EdgeChannel.Stable,
+                "beta" => EdgeChannel.Beta,
+                "dev" => EdgeChannel.Dev,
+                "canary" => EdgeChannel.Canary,
+                _ => EdgeChannel.Stable // Fallback channel
+            };
+        }
+
+        public static SearchEngine ParseSearchEngine(string argument)
+        {
+            var arg = argument;
+            if (argument.StartsWith("-se:"))
+                arg = argument.Remove(0, 4);
+
+            return arg.ToLower() switch
+            {
+                "google" => SearchEngine.Google,
+                "bing" => SearchEngine.Bing,
+                "duckduckgo" => SearchEngine.DuckDuckGo,
+                "yahoo" => SearchEngine.Yahoo,
+                "yandex" => SearchEngine.Yandex,
+                "ecosia" => SearchEngine.Ecosia,
+                "ask" => SearchEngine.Ask,
+                "qwant" => SearchEngine.Qwant,
+                "perplexity" => SearchEngine.Perplexity,
+                "custom" => SearchEngine.Custom,
+                _ => SearchEngine.Google // Fallback search engine
+            };
+        }
     }
 }

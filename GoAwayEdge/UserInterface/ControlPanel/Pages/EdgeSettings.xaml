@@ -30,7 +30,7 @@
                                     Foreground="{DynamicResource TextFillColorTertiaryBrush}"
                                     Text="{DynamicResource SettingsEdgeChannelDescription}" />
                             </StackPanel>
-                            <ComboBox Grid.Column="1" x:Name="EdgeChannelBox" Width="180"/>
+                            <ComboBox Grid.Column="1" x:Name="EdgeChannelBox" Width="180" SelectionChanged="EdgeChannelBox_OnSelectionChanged"/>
                         </Grid>
                     </ui:CardControl.Header>
                 </ui:CardControl>
@@ -54,7 +54,7 @@
                                     Foreground="{DynamicResource TextFillColorTertiaryBrush}"
                                     Text="{DynamicResource SettingsSearchEngineDescription}" />
                             </StackPanel>
-                            <ComboBox Grid.Column="1" x:Name="SearchEngineBox" Width="180"/>
+                            <ComboBox Grid.Column="1" x:Name="SearchEngineBox" Width="180" SelectionChanged="SearchEngineBox_OnSelectionChanged"/>
                         </Grid>
                     </ui:CardControl.Header>
                 </ui:CardControl>
@@ -79,6 +79,30 @@
                                     Text="{DynamicResource SettingsCustomSearchEngineDescription}"/>
                             </StackPanel>
                             <ui:TextBox Grid.Column="1" Width="300" x:Name="QueryUrlTextBox" PlaceholderText="https://www.google.com/search?q="/>
+                        </Grid>
+                    </ui:CardControl.Header>
+                </ui:CardControl>
+            </StackPanel>
+
+            <StackPanel Margin="0,10,0,0" x:Name="DisablePanel">
+                <ui:CardControl Icon="{ui:SymbolIcon Power24}">
+                    <ui:CardControl.Header>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Column="0" VerticalAlignment="Center">
+                                <TextBlock
+                                    FontSize="13"
+                                    FontWeight="Medium"
+                                    Text="{DynamicResource ControlPanelEdgePowerTitle}" />
+                                <TextBlock
+                                    FontSize="12"
+                                    Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                                    Text="{DynamicResource ControlPanelEdgePowerDescription}"/>
+                            </StackPanel>
+                            <ui:Button Grid.Column="1" x:Name="PowerToggle" Appearance="Danger" Click="PowerToggle_OnClick"/>
                         </Grid>
                     </ui:CardControl.Header>
                 </ui:CardControl>

@@ -203,6 +203,9 @@ namespace GoAwayEdge.Common
                 RegistryConfig.SetKey("ControlPanelIsInstalled", true);
             }
 
+            // Set enable flag
+            RegistryConfig.SetKey("Enabled", true);
+
             // Switch FrameWindow content to InstallationSuccess
             worker?.ReportProgress(100, "");
             Logging.Log("Installation finished.");

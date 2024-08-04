@@ -48,6 +48,18 @@
     <system:String x:Key="UninstallFinishedDescription">GoAwayEdge has been successfully removed from the system.</system:String>
     <system:String x:Key="DonateButton">Donate via PayPal</system:String>
 
+    <!-- Control Panel -->
+    <system:String x:Key="ControlPanelTitle">GoAwayEdge Control Panel</system:String>
+    <system:String x:Key="ControlPanelWelcome">Welcome to GoAwayEdge</system:String>
+    <system:String x:Key="ControlPanelWelcomeEdgeTitle">Microsoft Edge</system:String>
+    <system:String x:Key="ControlPanelWelcomeCopilotTitle">Windows Copilot</system:String>
+    <system:String x:Key="ControlPanelWelcomeEdgeDescription">Manage Search Engines and more.</system:String>
+    <system:String x:Key="ControlPanelWelcomeCopilotDescription">Manage Hotkeys and more.</system:String>
+    <system:String x:Key="ControlPanelEdgePowerTitle">Enable/Disable GoAwayEdge</system:String>
+    <system:String x:Key="ControlPanelEdgePowerDescription">Deactivate the forwarding of search queries to other browsers.</system:String>
+    <system:String x:Key="ControlPanelEdgePowerEnable">Enable GoAwayEdge</system:String>
+    <system:String x:Key="ControlPanelEdgePowerDisable">Disable GoAwayEdge</system:String>
+
     <!-- Error Handling / Notifications -->
     <system:String x:Key="FailedInitialization">Initialization failed: {0}</system:String>
     <system:String x:Key="FailedInstallation">Installation failed: {0}</system:String>
@@ -66,5 +78,9 @@
     <system:String x:Key="IfeoUpdateSuccessfulDescription">The alternative startup file of Edge has been successfully updated.</system:String>
     <system:String x:Key="IfeoCreateSuccessfulTitle">Creation successful</system:String>
     <system:String x:Key="IfeoCreateSuccessfulDescription">The alternative startup file of Edge has been successfully created.</system:String>
+    <system:String x:Key="MessageGoAwayEdgeEnabled">GoAwayEdge was successfully enabled on this system.</system:String>
+    <system:String x:Key="MessageGoAwayEdgeDisabled">GoAwayEdge was successfully disabled on this system.</system:String>
+    <system:String x:Key="FailedSetAppEnabled">Could not enable GoAwayEdge on this system: {0}</system:String>
+    <system:String x:Key="FailedSetAppDisabled">Could not disable GoAwayEdge on this system: {0}</system:String>
 
 </ResourceDictionary>

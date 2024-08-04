@@ -5,7 +5,7 @@
                  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
                  xmlns:local="clr-namespace:GoAwayEdge"
                  mc:Ignorable="d"
-                 Title="GoAwayEdge Control Panel" Height="620" Width="800"
+                 Title="{DynamicResource ControlPanelTitle}" Height="620" Width="800"
                  MinHeight="620" MinWidth="800"
                  xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
                  xmlns:pages="clr-namespace:GoAwayEdge.UserInterface.ControlPanel.Pages"
@@ -118,7 +118,7 @@
         </Grid>
 
         <ui:TitleBar
-            Title="GoAwayEdge Control Panel"
+            Title="{DynamicResource ControlPanelTitle}"
             ShowMinimize="False"
             ShowMaximize="False"
             Grid.Row="0">
@@ -127,8 +127,8 @@
             </ui:TitleBar.Icon>
         </ui:TitleBar>
 
-        <ui:Card x:Name="DebugString" Grid.Row="0" Padding="5" Margin="-315,4,0,0" Width="55">
+        <ui:Card x:Name="DebugString" Grid.Row="0" Padding="5" HorizontalAlignment="Right" Margin="0,4,50,0" Width="55">
             <TextBlock Text="Debug" />
         </ui:Card>
     </Grid>
-</ui:FluentWindow>
+</ui:FluentWindow> 

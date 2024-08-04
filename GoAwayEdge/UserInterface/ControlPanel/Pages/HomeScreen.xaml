@@ -12,7 +12,7 @@
     <StackPanel VerticalAlignment="Center">
         <Image Source="pack://application:,,,/Assets/SetupBannerIcon.png" Height="200"/>
         <ui:TextBlock FontTypography="Subtitle" 
-                      Text="Welcome to GoAwayEdge" 
+                      Text="{DynamicResource ControlPanelWelcome}" 
                       FontWeight="Bold"
                       Foreground="{DynamicResource TextFillColorPrimaryBrush}"
                       HorizontalAlignment="Center" Margin="0,0,0,15"/>
@@ -26,8 +26,14 @@
                     </Grid.ColumnDefinitions>
                     <Image Grid.Column="0" Source="{DynamicResource EdgeSettings}"/>
                     <StackPanel Grid.Column="1" VerticalAlignment="Center" Margin="15,0,0,0">
-                        <ui:TextBlock FontTypography="Subtitle" Text="Microsoft Edge" FontWeight="Bold" Foreground="{DynamicResource TextFillColorPrimaryBrush}"/>
-                        <ui:TextBlock TextWrapping="Wrap" FontSize="14" Text="Manage Search Engines and more." Foreground="{DynamicResource TextFillColorPrimaryBrush}"/>
+                        <ui:TextBlock FontTypography="Subtitle"
+                                      Text="{DynamicResource ControlPanelWelcomeEdgeTitle}"
+                                      FontWeight="Bold"
+                                      Foreground="{DynamicResource TextFillColorPrimaryBrush}"/>
+                        <ui:TextBlock TextWrapping="Wrap"
+                                      FontSize="14" 
+                                      Text="{DynamicResource ControlPanelWelcomeEdgeDescription}" 
+                                      Foreground="{DynamicResource TextFillColorPrimaryBrush}"/>
                     </StackPanel>
                 </Grid>
             </ui:CardAction>
@@ -40,8 +46,14 @@
                     </Grid.ColumnDefinitions>
                     <Image Grid.Column="0" Source="{DynamicResource CopilotSettings}"/>
                     <StackPanel Grid.Column="1" VerticalAlignment="Center" Margin="15,0,0,0">
-                        <ui:TextBlock FontTypography="Subtitle" Text="Windows Copilot" FontWeight="Bold" Foreground="{DynamicResource TextFillColorPrimaryBrush}"/>
-                        <ui:TextBlock TextWrapping="Wrap" FontSize="14" Text="Manage Hotkeys and more." Foreground="{DynamicResource TextFillColorPrimaryBrush}"/>
+                        <ui:TextBlock FontTypography="Subtitle"
+                                      Text="{DynamicResource ControlPanelWelcomeCopilotTitle}"
+                                      FontWeight="Bold" 
+                                      Foreground="{DynamicResource TextFillColorPrimaryBrush}"/>
+                        <ui:TextBlock TextWrapping="Wrap" 
+                                      FontSize="14" 
+                                      Text="{DynamicResource ControlPanelWelcomeCopilotDescription}"
+                                      Foreground="{DynamicResource TextFillColorPrimaryBrush}"/>
                     </StackPanel>
                 </Grid>
             </ui:CardAction>
