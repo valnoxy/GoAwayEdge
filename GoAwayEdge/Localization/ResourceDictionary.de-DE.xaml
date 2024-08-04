@@ -56,4 +56,20 @@
     <system:String x:Key="IfeoCreateSuccessfulTitle">Erstellung erfolgreich</system:String>
     <system:String x:Key="IfeoCreateSuccessfulDescription">Die alternative Startdatei von Edge wurde erfolgreich erstellt.</system:String>
     <system:String x:Key="SkipUpdate">Version überspringen</system:String>
+    <system:String x:Key="ControlPanelTitle">GoAwayEdge Kontrollpanel</system:String>
+    <system:String x:Key="ControlPanelWelcomeEdgeTitle">Microsoft Edge</system:String>
+    <system:String x:Key="ControlPanelWelcomeCopilotTitle">Windows Copilot</system:String>
+    <system:String x:Key="ControlPanelWelcomeEdgeDescription">Verwalte Suchmaschinen und mehr.</system:String>
+    <system:String x:Key="ControlPanelWelcomeCopilotDescription">Verwalte Hotkeys und mehr.</system:String>
+    <system:String x:Key="ControlPanelEdgePowerTitle">Aktiviere/Deaktiviere GoAwayEdge</system:String>
+    <system:String x:Key="ControlPanelEdgePowerEnable">Aktiviere GoAwayEdge</system:String>
+    <system:String x:Key="ControlPanelEdgePowerDisable">Deaktiviere GoAwaEdge</system:String>
+    <system:String x:Key="MessageGoAwayEdgeDisabled">GoAwayEdge wurde auf diesem System erfolgreich deaktiviert.</system:String>
+    <system:String x:Key="FailedSetAppEnabled">GoAwayEdge konnte auf diesem System nicht aktiviert werden: {0}</system:String>
+    <system:String x:Key="SettingsControlPanelDescription">Installiere das Kontrollpanel, um GoAwayEdge einfacher zu konfigurieren.</system:String>
+    <system:String x:Key="SettingsControlPanelTitle">Kontrollpanel installieren</system:String>
+    <system:String x:Key="ControlPanelWelcome">Willkommen bei GoAwayEdge</system:String>
+    <system:String x:Key="ControlPanelEdgePowerDescription">Deaktiviere die Weiterleitung von Suchanfragen an anderen Browsern.</system:String>
+    <system:String x:Key="MessageGoAwayEdgeEnabled">GoAwayEdge wurde auf diesem System erfolgreich aktiviert.</system:String>
+    <system:String x:Key="FailedSetAppDisabled">GoAwayEdge konnte auf diesem System nicht deaktiviert werden: {0}</system:String>
 </ResourceDictionary>
