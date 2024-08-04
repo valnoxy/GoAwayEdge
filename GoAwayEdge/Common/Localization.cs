@@ -7,7 +7,7 @@ namespace GoAwayEdge.Common
     {
         public static void LoadLanguage()
         {
-            // Set current language model
+            // Override language for testing
             const string overrideLanguage = "";
 
             var language = Thread.CurrentThread.CurrentCulture.ToString();
@@ -24,6 +24,11 @@ namespace GoAwayEdge.Common
                 "pl-PL" => new Uri("/GoAwayEdge;component/Localization/ResourceDictionary.pl-PL.xaml", UriKind.Relative),
                 "ko-KR" => new Uri("/GoAwayEdge;component/Localization/ResourceDictionary.ko-KR.xaml", UriKind.Relative),
                 "pt-BR" => new Uri("/GoAwayEdge;component/Localization/ResourceDictionary.pt-BR.xaml", UriKind.Relative),
+                "da-DK" => new Uri("/GoAwayEdge;component/Localization/ResourceDictionary.da-DK.xaml", UriKind.Relative),
+                "ja-JP" => new Uri("/GoAwayEdge;component/Localization/ResourceDictionary.ja-JP.xaml", UriKind.Relative),
+                "nl-NL" => new Uri("/GoAwayEdge;component/Localization/ResourceDictionary.nl-NL.xaml", UriKind.Relative),
+                "pt-PT" => new Uri("/GoAwayEdge;component/Localization/ResourceDictionary.pt-PT.xaml", UriKind.Relative),
+                "ro-RO" => new Uri("/GoAwayEdge;component/Localization/ResourceDictionary.ro-RO.xaml", UriKind.Relative),
                 _ => new Uri("/GoAwayEdge;component/Localization/ResourceDictionary.xaml", UriKind.Relative)
             };
             try
