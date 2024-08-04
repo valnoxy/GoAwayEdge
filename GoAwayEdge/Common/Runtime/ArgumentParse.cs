@@ -17,7 +17,14 @@ namespace GoAwayEdge.Common.Runtime
             var quotedArgs = args.Select(arg => arg.Contains(" ") ? $"\"{arg}\"" : arg);
             var argumentJoin = string.Join(" ", quotedArgs);
             DebugMessage.DisplayDebugMessage("GoAwayEdge", $"The following args are redirected (CTRL+C to copy):\n\n{argumentJoin}");
-            
+
+            if (RegistryConfig.GetKey("Enabled") == "False")
+            {
+                // Redirect to Edge
+                StartProcess(FileConfiguration.NonIfeoPath, argumentJoin, "GoAwayEdge is disabled. Redirecting everything to Edge ...");
+                return;
+            }
+
             var (isFile, isApp, singleArgument) = ParseArguments(args);
             if (_url != null)
             {

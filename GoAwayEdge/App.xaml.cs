@@ -39,63 +39,14 @@ namespace GoAwayEdge
             LocalizationManager.LoadLanguage();
 
             string[] args = e.Args;
-            if (args.Length == 0) // Opens Installer
+            switch (args.Length)
             {
-                if (IsAdministrator() == false)
+                // Opens Installer
+                case 0:
+                case 1 when args.Contains("--debug"):
                 {
-                    // Restart program and run as admin
-                    var exeName = Process.GetCurrentProcess().MainModule?.FileName;
-                    if (exeName != null)
-                    {
-                        var startInfo = new ProcessStartInfo(exeName)
-                        {
-                            Verb = "runas",
-                            UseShellExecute = true
-                        };
-                        Process.Start(startInfo);
-                    }
-                    Environment.Exit(0);
-                    return;
-                }
-
-                var installer = new UserInterface.Setup.Installer();
-                installer.ShowDialog();
-                Environment.Exit(0);
-            }
-            else if (args.Length > 0)
-            {
-                if (args.Contains("--debug"))
-                    IsDebug = true;
-                if (args.Contains("-ToastActivated")) // Clicked on notification, ignore it.
-                    Environment.Exit(0);
-                if (args.Contains("--control-panel"))
-                {
-                    // Check if user allowed opening the control panel
-                    if (RegistryConfig.GetKey("ControlPanelIsInstalled") != "True")
-                    {
-                        Logging.Log("Control Panel is not allowed on this system, exiting ...", Logging.LogLevel.ERROR);
-                        Environment.Exit(0);
-                        return;
-                    }
-
-                    Configuration.InitialEnvironment();
-                    var controlCenter = new UserInterface.ControlPanel.ControlPanel();
-                    controlCenter.ShowDialog();
-                    Environment.Exit(0);
-                }
-                if (args.Contains("-s")) // Silent Installation
-                {
-                    foreach (var arg in args)
-                    {
-                        if (arg.StartsWith("-se:"))
-                            Configuration.Search = ArgumentParse.ParseSearchEngine(arg);
-                        if (arg.Contains("--url:"))
-                        {
-                            Configuration.CustomQueryUrl = ParseCustomSearchEngine(arg);
-                            Configuration.Search = !string.IsNullOrEmpty(Configuration.CustomQueryUrl) ? SearchEngine.Custom : SearchEngine.Google;
-                        }
-                    }
-
+                    if (args.Contains("--debug"))
+                            IsDebug = true;
                     if (IsAdministrator() == false)
                     {
                         // Restart program and run as admin
@@ -105,8 +56,7 @@ namespace GoAwayEdge
                             var startInfo = new ProcessStartInfo(exeName)
                             {
                                 Verb = "runas",
-                                UseShellExecute = true,
-                                Arguments = string.Join(" ", args)
+                                UseShellExecute = true
                             };
                             Process.Start(startInfo);
                         }
@@ -114,120 +64,180 @@ namespace GoAwayEdge
                         return;
                     }
 
-                    Configuration.InitialEnvironment();
-                    InstallRoutine.Install(null);
+                    var installer = new UserInterface.Setup.Installer();
+                    installer.ShowDialog();
                     Environment.Exit(0);
+                    break;
                 }
-                if (args.Contains("-u"))
+                case > 0:
                 {
-                    InstallRoutine.Uninstall(null);
-                    Environment.Exit(0);
-                }
-                if (args.Contains("--update"))
-                {
-                    var statusEnv = Configuration.InitialEnvironment();
-                    if (statusEnv == false) Environment.Exit(1);
-
-                    // Check for app update
-                    var updateAvailable = Updater.CheckForAppUpdate();
-
-                    var updateSkipped = RegistryConfig.GetKey("SkipVersion");
-                    if (updateAvailable == updateSkipped)
+                    if (args.Contains("--debug"))
+                        IsDebug = true;
+                    if (args.Contains("-ToastActivated")) // Clicked on notification, ignore it.
                         Environment.Exit(0);
-
-                    if (!string.IsNullOrEmpty(updateAvailable))
+                    if (args.Contains("--control-panel"))
                     {
-                        var updateMessage = LocalizationManager.LocalizeValue("NewUpdateAvailable", updateAvailable);
-                        var remindMeLaterBtn = LocalizationManager.LocalizeValue("RemindMeLater");
-                        var installUpdateBtn = LocalizationManager.LocalizeValue("InstallUpdate");
-                        var skipUpdateUpdateBtn = LocalizationManager.LocalizeValue("SkipUpdate");
-
-                        var updateDialog = new MessageUi("GoAwayEdge", updateMessage, installUpdateBtn, remindMeLaterBtn, skipUpdateUpdateBtn, true);
-                        updateDialog.ShowDialog();
-                        switch (updateDialog.Summary)
+                        // Check if user allowed opening the control panel
+                        if (RegistryConfig.GetKey("ControlPanelIsInstalled") != "True")
                         {
-                            case "Btn1":
+                            Logging.Log("Control Panel is not allowed on this system, exiting ...", Logging.LogLevel.ERROR);
+                            Environment.Exit(0);
+                            return;
+                        }
+
+                        Configuration.InitialEnvironment();
+                        var controlCenter = new UserInterface.ControlPanel.ControlPanel();
+                        controlCenter.ShowDialog();
+                        Environment.Exit(0);
+                    }
+                    if (args.Contains("-s")) // Silent Installation
+                    {
+                        foreach (var arg in args)
+                        {
+                            if (arg.StartsWith("-se:"))
+                                Configuration.Search = ArgumentParse.ParseSearchEngine(arg);
+                            if (arg.Contains("--url:"))
                             {
-                                var updateResult = Updater.UpdateClient();
-                                if (!updateResult) Environment.Exit(0);
-                                break;
+                                Configuration.CustomQueryUrl = ParseCustomSearchEngine(arg);
+                                Configuration.Search = !string.IsNullOrEmpty(Configuration.CustomQueryUrl) ? SearchEngine.Custom : SearchEngine.Google;
                             }
-                            case "Btn3":
-                                RegistryConfig.SetKey("SkipVersion", updateAvailable);
-                                Environment.Exit(0);
+                        }
+
+                        if (IsAdministrator() == false)
+                        {
+                            // Restart program and run as admin
+                            var exeName = Process.GetCurrentProcess().MainModule?.FileName;
+                            if (exeName != null)
+                            {
+                                var startInfo = new ProcessStartInfo(exeName)
+                                {
+                                    Verb = "runas",
+                                    UseShellExecute = true,
+                                    Arguments = string.Join(" ", args)
+                                };
+                                Process.Start(startInfo);
+                            }
+                            Environment.Exit(0);
+                            return;
+                        }
+
+                        Configuration.InitialEnvironment();
+                        InstallRoutine.Install(null);
+                        Environment.Exit(0);
+                    }
+                    if (args.Contains("-u"))
+                    {
+                        InstallRoutine.Uninstall(null);
+                        Environment.Exit(0);
+                    }
+                    if (args.Contains("--update"))
+                    {
+                        var statusEnv = Configuration.InitialEnvironment();
+                        if (statusEnv == false) Environment.Exit(1);
+
+                        // Check for app update
+                        var updateAvailable = Updater.CheckForAppUpdate();
+
+                        var updateSkipped = RegistryConfig.GetKey("SkipVersion");
+                        if (updateAvailable == updateSkipped)
+                            Environment.Exit(0);
+
+                        if (!string.IsNullOrEmpty(updateAvailable))
+                        {
+                            var updateMessage = LocalizationManager.LocalizeValue("NewUpdateAvailable", updateAvailable);
+                            var remindMeLaterBtn = LocalizationManager.LocalizeValue("RemindMeLater");
+                            var installUpdateBtn = LocalizationManager.LocalizeValue("InstallUpdate");
+                            var skipUpdateUpdateBtn = LocalizationManager.LocalizeValue("SkipUpdate");
+
+                            var updateDialog = new MessageUi("GoAwayEdge", updateMessage, installUpdateBtn, remindMeLaterBtn, skipUpdateUpdateBtn, true);
+                            updateDialog.ShowDialog();
+                            switch (updateDialog.Summary)
+                            {
+                                case "Btn1":
+                                {
+                                    var updateResult = Updater.UpdateClient();
+                                    if (!updateResult) Environment.Exit(0);
+                                    break;
+                                }
+                                case "Btn3":
+                                    RegistryConfig.SetKey("SkipVersion", updateAvailable);
+                                    Environment.Exit(0);
+                                    break;
+                            }
+                        }
+
+                        // Validate Ifeo binary
+                        var binaryStatus = Updater.ValidateIfeoBinary();
+                        switch (binaryStatus)
+                        {
+                            case 0: // validated
+                                break;
+                            case 1: // failed validation
+                                if (IsAdministrator() == false)
+                                {
+                                    var updateNonIfeoMessage = LocalizationManager.LocalizeValue("NewNonIfeoUpdate");
+                                    var remindMeLaterBtn = LocalizationManager.LocalizeValue("RemindMeLater");
+                                    var installUpdateBtn = LocalizationManager.LocalizeValue("InstallUpdate");
+
+                                    var ifeoMessageUi = new MessageUi("GoAwayEdge", updateNonIfeoMessage, installUpdateBtn, remindMeLaterBtn);
+                                    ifeoMessageUi.ShowDialog();
+
+                                    if (ifeoMessageUi.Summary == "Btn1")
+                                    {
+                                        // Restart program and run as admin
+                                        var exeName = Process.GetCurrentProcess().MainModule?.FileName;
+                                        if (exeName != null)
+                                        {
+                                            var startInfo = new ProcessStartInfo(exeName)
+                                            {
+                                                Verb = "runas",
+                                                UseShellExecute = true,
+                                                Arguments = "--update"
+                                            };
+                                            Process.Start(startInfo);
+                                        }
+                                        Environment.Exit(0);
+                                        return;
+                                    }
+                                    Environment.Exit(0);
+                                }
+                                Updater.ModifyIfeoBinary(ModifyAction.Update);
+                                break;
+                            case 2: // missing
+                                if (IsAdministrator() == false)
+                                {
+                                    var ifeoMissingMessage = LocalizationManager.LocalizeValue("MissingIfeoFile");
+                                    var yesBtn = LocalizationManager.LocalizeValue("Yes");
+                                    var noBtn = LocalizationManager.LocalizeValue("No");
+                                    var ifeoMessageUi = new MessageUi("GoAwayEdge", ifeoMissingMessage, yesBtn, noBtn);
+                                    ifeoMessageUi.ShowDialog();
+
+                                    if (ifeoMessageUi.Summary == "Btn1")
+                                    {
+                                        // Restart program and run as admin
+                                        var exeName = Process.GetCurrentProcess().MainModule?.FileName;
+                                        if (exeName != null)
+                                        {
+                                            var startInfo = new ProcessStartInfo(exeName)
+                                            {
+                                                Verb = "runas",
+                                                UseShellExecute = true,
+                                                Arguments = "--update"
+                                            };
+                                            Process.Start(startInfo);
+                                        }
+                                        Environment.Exit(0);
+                                        return;
+                                    }
+                                    Environment.Exit(0);
+                                }
+                                Updater.ModifyIfeoBinary(ModifyAction.Create);
                                 break;
                         }
+                        Environment.Exit(0);
                     }
 
-                    // Validate Ifeo binary
-                    var binaryStatus = Updater.ValidateIfeoBinary();
-                    switch (binaryStatus)
-                    {
-                        case 0: // validated
-                            break;
-                        case 1: // failed validation
-                            if (IsAdministrator() == false)
-                            {
-                                var updateNonIfeoMessage = LocalizationManager.LocalizeValue("NewNonIfeoUpdate");
-                                var remindMeLaterBtn = LocalizationManager.LocalizeValue("RemindMeLater");
-                                var installUpdateBtn = LocalizationManager.LocalizeValue("InstallUpdate");
-
-                                var ifeoMessageUi = new MessageUi("GoAwayEdge", updateNonIfeoMessage, installUpdateBtn, remindMeLaterBtn);
-                                ifeoMessageUi.ShowDialog();
-
-                                if (ifeoMessageUi.Summary == "Btn1")
-                                {
-                                    // Restart program and run as admin
-                                    var exeName = Process.GetCurrentProcess().MainModule?.FileName;
-                                    if (exeName != null)
-                                    {
-                                        var startInfo = new ProcessStartInfo(exeName)
-                                        {
-                                            Verb = "runas",
-                                            UseShellExecute = true,
-                                            Arguments = "--update"
-                                        };
-                                        Process.Start(startInfo);
-                                    }
-                                    Environment.Exit(0);
-                                    return;
-                                }
-                                Environment.Exit(0);
-                            }
-                            Updater.ModifyIfeoBinary(ModifyAction.Update);
-                            break;
-                        case 2: // missing
-                            if (IsAdministrator() == false)
-                            {
-                                var ifeoMissingMessage = LocalizationManager.LocalizeValue("MissingIfeoFile");
-                                var yesBtn = LocalizationManager.LocalizeValue("Yes");
-                                var noBtn = LocalizationManager.LocalizeValue("No");
-                                var ifeoMessageUi = new MessageUi("GoAwayEdge", ifeoMissingMessage, yesBtn, noBtn);
-                                ifeoMessageUi.ShowDialog();
-
-                                if (ifeoMessageUi.Summary == "Btn1")
-                                {
-                                    // Restart program and run as admin
-                                    var exeName = Process.GetCurrentProcess().MainModule?.FileName;
-                                    if (exeName != null)
-                                    {
-                                        var startInfo = new ProcessStartInfo(exeName)
-                                        {
-                                            Verb = "runas",
-                                            UseShellExecute = true,
-                                            Arguments = "--update"
-                                        };
-                                        Process.Start(startInfo);
-                                    }
-                                    Environment.Exit(0);
-                                    return;
-                                }
-                                Environment.Exit(0);
-                            }
-                            Updater.ModifyIfeoBinary(ModifyAction.Create);
-                            break;
-                    }
-                    Environment.Exit(0);
+                    break;
                 }
             }
 
