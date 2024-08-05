@@ -6,6 +6,8 @@ using System.IO;
 using System.Windows;
 using System.Runtime.InteropServices;
 using System.Reflection;
+using GoAwayEdge.Common.Installation;
+using GoAwayEdge.Common.Debugging;
 
 namespace GoAwayEdge.Common
 {
@@ -148,6 +150,10 @@ namespace GoAwayEdge.Common
                 {
                     ts.RootFolder.DeleteTask("valnoxy\\GoAwayEdge\\GoAwayEdge IFEO Validation");
                 }
+                catch (FileNotFoundException)
+                {
+                    Logging.Log("Old Task not found, skipping ...");
+                }
                 catch (Exception ex)
                 {
                     Logging.Log("Failed to delete old task: " + ex, Logging.LogLevel.ERROR);
@@ -187,6 +193,18 @@ namespace GoAwayEdge.Common
                 Environment.Exit(1);
                 return;
             }
+
+            // Create Shortcut for Control Panel
+            if (Configuration.InstallControlPanel)
+            {
+                var shortcutPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
+                    "Microsoft", "Windows", "Start Menu", "Programs", "GoAwayEdge.lnk");
+                Shortcut.Create(Path.Combine(Configuration.InstallDir, "GoAwayEdge.exe"), "--control-panel", shortcutPath);
+                RegistryConfig.SetKey("ControlPanelIsInstalled", true);
+            }
+
+            // Set enable flag
+            RegistryConfig.SetKey("Enabled", true);
 
             // Switch FrameWindow content to InstallationSuccess
             worker?.ReportProgress(100, "");
@@ -321,6 +339,11 @@ namespace GoAwayEdge.Common
             {
                 Logging.Log("Failed to remove uninstall data: " + ex, Logging.LogLevel.ERROR);
             }
+
+            // Remove Control Panel shortcut if exists
+            var shortcutPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
+                               "Microsoft", "Windows", "Start Menu", "Programs", "GoAwayEdge.lnk");
+            if (File.Exists(shortcutPath)) File.Delete(shortcutPath);
 
             // Switch FrameWindow content to InstallationSuccess
             worker?.ReportProgress(100, "");

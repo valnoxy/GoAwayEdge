@@ -1,14 +1,10 @@
-<?xml version="1.0"?>
-<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                    xmlns:system="clr-namespace:System;assembly=mscorlib">
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:system="clr-namespace:System;assembly=mscorlib">
     <system:String x:Key="Title">Instalador GoAwayEdge</system:String>
     <system:String x:Key="Next">Avançar</system:String>
     <system:String x:Key="Back">Voltar</system:String>
     <system:String x:Key="Exit">Sair</system:String>
     <system:String x:Key="Yes">Sim</system:String>
     <system:String x:Key="No">Não</system:String>
-
     <!-- Welcome -->
     <system:String x:Key="WelcomeTitle">Boas-vindas</system:String>
     <system:String x:Key="WelcomeDescription">O instalador realizará todos os passos necessários para instalar o GoAwayEdge em seu sistema. Após a instalação, todas as chamadas do Edge serão redirecionadas para o seu navegador. Selecione a opção desejada para continuar.</system:String>
@@ -17,13 +13,11 @@
     <system:String x:Key="SettingsUninstallTitle">Desinstalar</system:String>
     <system:String x:Key="SettingsUninstallDescription">Desinstale o GoAwayEdge e restaure a funcionalidade do Edge.</system:String>
     <system:String x:Key="SettingsUninstallUseInstaller">Por favor, utilize o Instalador para desinstalar o GoAwayEdge.</system:String>
-
     <!-- License -->
     <system:String x:Key="LicenseTitle">Licença</system:String>
     <system:String x:Key="LicenseNote">Por favor, leia a seguinte Licença. Você deve aceitar os termos da licença antes de continuar com a instalação.</system:String>
     <system:String x:Key="LicenseAccept">Aceito esta licença.</system:String>
     <system:String x:Key="LicenseDecline">Recuso esta licença.</system:String>
-
     <!-- Settings -->
     <system:String x:Key="SettingsTitle">Configurações</system:String>
     <system:String x:Key="SettingsEdgeChannelTitle">Canal do Edge</system:String>
@@ -35,18 +29,15 @@
     <system:String x:Key="SettingsCustomSearchEngineDescription">Por favor, insira a URL de consulta do mecanismo de busca.</system:String>
     <system:String x:Key="SettingsMSEdgeUninstallTitle">Remover o Microsoft Edge (Estável)</system:String>
     <system:String x:Key="SettingsMSEdgeUninstallDescription">Remova completamente o Microsoft Edge do sistema.</system:String>
-
     <!-- Setup in progress -->
     <system:String x:Key="SetupProgressTitle">Instalação em progresso...</system:String>
     <system:String x:Key="SetupProgressDescription">Aguarde até que a instalação seja concluída.</system:String>
-
     <!-- Setup finished -->
     <system:String x:Key="SetupFinishedTitle">Instalação concluída!</system:String>
     <system:String x:Key="SetupFinishedDescription">Simplesmente abra este Instalador, se desejar personalizar o GoAwayEdge novamente.</system:String>
     <system:String x:Key="UninstallFinishedTitle">Desinstalação concluída!</system:String>
     <system:String x:Key="UninstallFinishedDescription">O GoAwayEdge foi removido com sucesso do sistema.</system:String>
     <system:String x:Key="DonateButton">Doe via PayPal</system:String>
-
     <!-- Error Handling / Notifications -->
     <system:String x:Key="FailedInitialization">Inicialização falhou: {0}</system:String>
     <system:String x:Key="FailedInstallation">Instalação falhou: {0}</system:String>
@@ -65,5 +56,6 @@
     <system:String x:Key="IfeoUpdateSuccessfulDescription">O arquivo de inicialização alternativo do Edge foi atualizado com sucesso.</system:String>
     <system:String x:Key="IfeoCreateSuccessfulTitle">Criação bem-sucedida</system:String>
     <system:String x:Key="IfeoCreateSuccessfulDescription">O arquivo de inicialização alternativo do Edge foi criado com sucesso.</system:String>
-
+    <system:String x:Key="SettingsControlPanelTitle">Instalar Painel de Controle</system:String>
+    <system:String x:Key="SettingsControlPanelDescription">Instalar o Painel de Controle para configurar o GoAwayEdge mais facilmente.</system:String>
 </ResourceDictionary>
