@@ -1,6 +1,7 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
 using GoAwayEdge.Common;
+using Wpf.Ui.Controls;
 
 namespace GoAwayEdge.UserInterface.Setup.Pages
 {
@@ -23,7 +24,19 @@ namespace GoAwayEdge.UserInterface.Setup.Pages
             {
                 SearchEngineBox.Items.Add(searchEngine);
             }
-            SearchEngineBox.SelectedItem = Configuration.Search.ToString();
+
+            if (Configuration.Search == SearchEngine.Custom)
+            {
+                SearchEngineBox.SelectedItem = LocalizationManager.LocalizeValue("SettingsSearchEngineCustomItem");
+                CustomSearchPanel.Visibility = Visibility.Visible;
+                if (Configuration.CustomQueryUrl != null) QueryUrlTextBox.Text = Configuration.CustomQueryUrl;
+                CustomUrlStatus.Symbol = Uri.TryCreate(QueryUrlTextBox.Text, UriKind.Absolute, out _)
+                    ? SymbolRegular.CheckmarkCircle24 : SymbolRegular.ErrorCircle24;
+            }
+            else
+            {
+                SearchEngineBox.SelectedItem = Configuration.Search.ToString();
+            }
 
             if (Configuration.NoEdgeInstalled)
             {
@@ -108,9 +121,18 @@ namespace GoAwayEdge.UserInterface.Setup.Pages
         
         private void QueryUrlTextBox_OnTextChanged(object sender, TextChangedEventArgs e)
         {
-            Configuration.CustomQueryUrl = QueryUrlTextBox.Text;
-            Installer.ContentWindow!.NextBtn.IsEnabled = Uri.TryCreate(QueryUrlTextBox.Text, UriKind.Absolute, out var uriResult)
-                                                         && (uriResult.Scheme == Uri.UriSchemeHttp || uriResult.Scheme == Uri.UriSchemeHttps);
+            if (Uri.TryCreate(QueryUrlTextBox.Text, UriKind.Absolute, out var uriResult)
+                && (uriResult.Scheme == Uri.UriSchemeHttp || uriResult.Scheme == Uri.UriSchemeHttps))
+            {
+                Installer.ContentWindow!.NextBtn.IsEnabled = true;
+                CustomUrlStatus.Symbol = SymbolRegular.CheckmarkCircle24;
+                Configuration.CustomQueryUrl = QueryUrlTextBox.Text;
+            }
+            else
+            {
+                Installer.ContentWindow!.NextBtn.IsEnabled = false;
+                CustomUrlStatus.Symbol = SymbolRegular.ErrorCircle24;
+            }
         }
 
         private void MsEdgeUninstallSwitch_OnClickUninstallSwitch_OnClick(object sender, RoutedEventArgs e)

@@ -2,6 +2,7 @@
 using System.Windows;
 using System.Windows.Controls;
 using GoAwayEdge.Common;
+using Wpf.Ui.Controls;
 
 namespace GoAwayEdge.UserInterface.ControlPanel.Pages
 {
@@ -27,8 +28,18 @@ namespace GoAwayEdge.UserInterface.ControlPanel.Pages
                 SearchEngineBox.Items.Add(searchEngine);
             }
 
-            SearchEngineBox.SelectedItem = Configuration.Search.ToString();
-            if (Configuration.CustomQueryUrl != null) QueryUrlTextBox.Text = Configuration.CustomQueryUrl;
+            if (Configuration.Search == SearchEngine.Custom)
+            {
+                SearchEngineBox.SelectedItem = LocalizationManager.LocalizeValue("SettingsSearchEngineCustomItem");
+                CustomSearchPanel.Visibility = Visibility.Visible;
+                if (Configuration.CustomQueryUrl != null) QueryUrlTextBox.Text = Configuration.CustomQueryUrl;
+                CustomUrlStatus.Symbol = Uri.TryCreate(QueryUrlTextBox.Text, UriKind.Absolute, out _)
+                    ? SymbolRegular.CheckmarkCircle24 : SymbolRegular.ErrorCircle24;
+            }
+            else
+            {
+                SearchEngineBox.SelectedItem = Configuration.Search.ToString();
+            }
 
             if (RegistryConfig.GetKey("Enabled") == "True")
             {
@@ -42,49 +53,85 @@ namespace GoAwayEdge.UserInterface.ControlPanel.Pages
             }
         }
 
+        private void FlushSettings()
+        {
+            try
+            {
+                RegistryConfig.SetKey("EdgeChannel", Configuration.Channel.ToString());
+                RegistryConfig.SetKey("SearchEngine", Configuration.Search);
+                if (Configuration.Search == SearchEngine.Custom)
+                {
+                    if (Configuration.CustomQueryUrl != null)
+                        RegistryConfig.SetKey("CustomQueryUrl", Configuration.CustomQueryUrl);
+                }
+                else
+                {
+                    RegistryConfig.RemoveKey("CustomQueryUrl");
+                }
+            }
+            catch (Exception ex)
+            {
+                Application.Current.Dispatcher.Invoke(() =>
+                {
+                    var errorMessage = LocalizationManager.LocalizeValue("FailedFlushSetting", ex.Message);
+                    var messageUi = new MessageUi("GoAwayEdge", errorMessage, "OK");
+                    messageUi.ShowDialog();
+                });
+            }
+        }
+
         private void SearchEngineBox_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             switch (SearchEngineBox.SelectedIndex)
             {
                 case 0:
                     Configuration.Search = SearchEngine.Google;
-                    CustomSearchPanel.Visibility = System.Windows.Visibility.Collapsed;
+                    CustomSearchPanel.Visibility = Visibility.Collapsed;
+                    FlushSettings();
                     break;
                 case 1:
                     Configuration.Search = SearchEngine.Bing;
-                    CustomSearchPanel.Visibility = System.Windows.Visibility.Collapsed;
+                    CustomSearchPanel.Visibility = Visibility.Collapsed;
+                    FlushSettings();
                     break;
                 case 2:
                     Configuration.Search = SearchEngine.DuckDuckGo;
-                    CustomSearchPanel.Visibility = System.Windows.Visibility.Collapsed;
+                    CustomSearchPanel.Visibility = Visibility.Collapsed;
+                    FlushSettings();
                     break;
                 case 3:
                     Configuration.Search = SearchEngine.Yahoo;
-                    CustomSearchPanel.Visibility = System.Windows.Visibility.Collapsed;
+                    CustomSearchPanel.Visibility = Visibility.Collapsed;
+                    FlushSettings();
                     break;
                 case 4:
                     Configuration.Search = SearchEngine.Yandex;
-                    CustomSearchPanel.Visibility = System.Windows.Visibility.Collapsed;
+                    CustomSearchPanel.Visibility = Visibility.Collapsed;
+                    FlushSettings();
                     break;
                 case 5:
                     Configuration.Search = SearchEngine.Ecosia;
-                    CustomSearchPanel.Visibility = System.Windows.Visibility.Collapsed;
+                    CustomSearchPanel.Visibility = Visibility.Collapsed;
+                    FlushSettings();
                     break;
                 case 6:
                     Configuration.Search = SearchEngine.Ask;
-                    CustomSearchPanel.Visibility = System.Windows.Visibility.Collapsed;
+                    CustomSearchPanel.Visibility = Visibility.Collapsed;
+                    FlushSettings();
                     break;
                 case 7:
                     Configuration.Search = SearchEngine.Qwant;
-                    CustomSearchPanel.Visibility = System.Windows.Visibility.Collapsed;
+                    CustomSearchPanel.Visibility = Visibility.Collapsed;
+                    FlushSettings();
                     break;
                 case 8:
                     Configuration.Search = SearchEngine.Perplexity;
-                    CustomSearchPanel.Visibility = System.Windows.Visibility.Collapsed;
+                    CustomSearchPanel.Visibility = Visibility.Collapsed;
+                    FlushSettings();
                     break;
                 case 9:
                     Configuration.Search = SearchEngine.Custom;
-                    CustomSearchPanel.Visibility = System.Windows.Visibility.Visible;
+                    CustomSearchPanel.Visibility = Visibility.Visible;
                     if (string.IsNullOrEmpty(Configuration.CustomQueryUrl))
                         Debug.WriteLine("placeholder");
                     break;
@@ -101,6 +148,7 @@ namespace GoAwayEdge.UserInterface.ControlPanel.Pages
                 3 => EdgeChannel.Canary,
                 _ => EdgeChannel.Stable
             };
+            FlushSettings();
         }
 
         private void PowerToggle_OnClick(object sender, RoutedEventArgs e)
@@ -152,6 +200,22 @@ namespace GoAwayEdge.UserInterface.ControlPanel.Pages
                         messageUi.ShowDialog();
                     });
                 }
+            }
+        }
+
+        private void QueryUrlTextBox_OnTextChanged(object sender, TextChangedEventArgs e)
+        {
+            // Test if the URL is valid
+            if (Uri.TryCreate(QueryUrlTextBox.Text, UriKind.Absolute, out var uriResult)
+                && (uriResult.Scheme == Uri.UriSchemeHttp || uriResult.Scheme == Uri.UriSchemeHttps))
+            {
+                CustomUrlStatus.Symbol = SymbolRegular.CheckmarkCircle24;
+                Configuration.CustomQueryUrl = QueryUrlTextBox.Text;
+                FlushSettings();
+            }
+            else
+            {
+                CustomUrlStatus.Symbol = SymbolRegular.ErrorCircle24;
             }
         }
     }

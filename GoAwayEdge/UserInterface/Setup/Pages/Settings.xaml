@@ -64,6 +64,7 @@
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*" />
                                 <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="Auto" />
                             </Grid.ColumnDefinitions>
                             <StackPanel Grid.Column="0" VerticalAlignment="Center">
                                 <TextBlock
@@ -75,7 +76,8 @@
                                     Foreground="{DynamicResource TextFillColorTertiaryBrush}"
                                     Text="{DynamicResource SettingsCustomSearchEngineDescription}"/>
                             </StackPanel>
-                            <ui:TextBox Grid.Column="1" Width="300" x:Name="QueryUrlTextBox" TextChanged="QueryUrlTextBox_OnTextChanged" PlaceholderText="https://www.google.com/search?q="/>
+                            <ui:SymbolIcon Grid.Column="1" x:Name="CustomUrlStatus" Margin="0,0,10,0" FontSize="18"/>
+                            <ui:TextBox Grid.Column="2" Width="300" x:Name="QueryUrlTextBox" TextChanged="QueryUrlTextBox_OnTextChanged" PlaceholderText="https://www.google.com/search?q="/>
                         </Grid>
                     </ui:CardControl.Header>
                 </ui:CardControl>

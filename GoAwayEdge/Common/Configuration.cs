@@ -1,5 +1,6 @@
 ﻿using System.IO;
 using System.Windows;
+using GoAwayEdge.Common.Debugging;
 using Microsoft.Win32;
 
 namespace GoAwayEdge.Common
@@ -165,7 +166,7 @@ namespace GoAwayEdge.Common
             }
             catch (Exception ex)
             {
-                Console.WriteLine("An error has occurred while writing to the registry: " + ex.Message);
+                Logging.Log("An error has occurred while writing to the registry: " + ex.Message, Logging.LogLevel.ERROR);
             }
         }
 
@@ -189,16 +190,16 @@ namespace GoAwayEdge.Common
                     {
                         return value.ToString()!;
                     }
-                    Console.WriteLine($"Value for key '{option}' not found in the registry.");
+                    Logging.Log($"Value for key '{option}' not found in the registry.", Logging.LogLevel.ERROR);
                     return "";
                 }
             }
             catch (Exception ex)
             {
-                Console.WriteLine("An error has occurred while reading the registry: " + ex.Message);
+                Logging.Log($"An error has occurred while reading the registry: {ex.Message}", Logging.LogLevel.ERROR);
                 return "";
             }
-            Console.WriteLine($"Registry key '{RegistryPath}' not found.");
+            Logging.Log($"Registry key '{RegistryPath}' not found.", Logging.LogLevel.ERROR);
             return "";
         }
 
@@ -213,7 +214,7 @@ namespace GoAwayEdge.Common
             {
                 using var key = isUninstall
                     ? Registry.LocalMachine.OpenSubKey(UninstallRegistryPath)
-                    : Registry.LocalMachine.OpenSubKey(RegistryPath); 
+                    : Registry.LocalMachine.OpenSubKey(RegistryPath);
                 var value = key?.GetValue(option);
                 if (value != null)
                 {
@@ -224,7 +225,7 @@ namespace GoAwayEdge.Common
             }
             catch (Exception ex)
             {
-                Console.WriteLine("An error has occurred while removing a key from the registry: " + ex.Message);
+                Logging.Log("An error has occurred while removing a key from the registry: " + ex.Message, Logging.LogLevel.ERROR);
             }
 
             return false;
@@ -248,7 +249,7 @@ namespace GoAwayEdge.Common
             }
             catch (Exception ex)
             {
-                Console.WriteLine("An error has occurred while removing a subkey from the registry: " + ex.Message);
+                Logging.Log("An error has occurred while removing a subkey from the registry: " + ex.Message, Logging.LogLevel.ERROR);
             }
 
             return false;

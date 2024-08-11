@@ -63,7 +63,7 @@
     <system:String x:Key="ControlPanelWelcomeCopilotDescription">Verwalte Hotkeys und mehr.</system:String>
     <system:String x:Key="ControlPanelEdgePowerTitle">Aktiviere/Deaktiviere GoAwayEdge</system:String>
     <system:String x:Key="ControlPanelEdgePowerEnable">Aktiviere GoAwayEdge</system:String>
-    <system:String x:Key="ControlPanelEdgePowerDisable">Deaktiviere GoAwaEdge</system:String>
+    <system:String x:Key="ControlPanelEdgePowerDisable">Deaktiviere GoAwayEdge</system:String>
     <system:String x:Key="MessageGoAwayEdgeDisabled">GoAwayEdge wurde auf diesem System erfolgreich deaktiviert.</system:String>
     <system:String x:Key="FailedSetAppEnabled">GoAwayEdge konnte auf diesem System nicht aktiviert werden: {0}</system:String>
     <system:String x:Key="SettingsControlPanelDescription">Installiere das Kontrollpanel, um GoAwayEdge einfacher zu konfigurieren.</system:String>
