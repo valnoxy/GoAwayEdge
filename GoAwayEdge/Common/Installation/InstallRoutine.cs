@@ -205,6 +205,7 @@ namespace GoAwayEdge.Common
 
             // Set enable flag
             RegistryConfig.SetKey("Enabled", true);
+            RegistryConfig.SetKey("AiProvider", "Copilot"); // Temporary
 
             // Switch FrameWindow content to InstallationSuccess
             worker?.ReportProgress(100, "");
@@ -298,8 +299,8 @@ namespace GoAwayEdge.Common
                 
                 var currentUserKey = Registry.CurrentUser.OpenSubKey(
                     @"SOFTWARE\valnoxy", true);
-                generalKey?.DeleteSubKeyTree("GoAwayEdge");
-                generalKey?.Close();
+                currentUserKey?.DeleteSubKeyTree("GoAwayEdge");
+                currentUserKey?.Close();
             }
             catch (Exception ex)
             {

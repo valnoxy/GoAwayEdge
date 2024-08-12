@@ -77,6 +77,24 @@ namespace GoAwayEdge
                         Environment.Exit(0);
                     if (args.Contains("--control-panel"))
                     {
+                        if (IsAdministrator() == false)
+                        {
+                            // Restart program and run as admin
+                            var exeName = Process.GetCurrentProcess().MainModule?.FileName;
+                            if (exeName != null)
+                            {
+                                var startInfo = new ProcessStartInfo(exeName)
+                                {
+                                    Verb = "runas",
+                                    UseShellExecute = true,
+                                    Arguments = string.Join(" ", args)
+                                };
+                                Process.Start(startInfo);
+                            }
+                            Environment.Exit(0);
+                            return;
+                        }
+
                         // Check if user allowed opening the control panel
                         if (RegistryConfig.GetKey("ControlPanelIsInstalled") != "True")
                         {
