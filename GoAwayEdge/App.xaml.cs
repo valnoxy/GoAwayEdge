@@ -90,6 +90,13 @@ namespace GoAwayEdge
                         controlCenter.ShowDialog();
                         Environment.Exit(0);
                     }
+                    if (args.Contains("--copilot-dock"))
+                    {
+                        Configuration.InitialEnvironment();
+                        var copilotDock = new UserInterface.CopilotDock.CopilotDock();
+                        copilotDock.ShowDialog();
+                        Environment.Exit(0);
+                    }
                     if (args.Contains("-s")) // Silent Installation
                     {
                         foreach (var arg in args)

@@ -16,6 +16,9 @@
     <Compile Update="UserInterface\ControlPanel\Pages\HomeScreen.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="UserInterface\CopilotDock\CopilotDock.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="UserInterface\MessageUI.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -58,6 +61,9 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Update="UserInterface\ControlPanel\Pages\HomeScreen.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="UserInterface\CopilotDock\CopilotDock.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="UserInterface\MessageUI.xaml">
