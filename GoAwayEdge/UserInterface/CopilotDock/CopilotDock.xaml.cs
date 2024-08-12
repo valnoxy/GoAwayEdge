@@ -60,17 +60,34 @@ namespace GoAwayEdge.UserInterface.CopilotDock
                 Top = 0;
 
                 // Last state
-                var lastState = RegistryConfig.GetKey("CopilotDockState", userSetting: true);
-                if (lastState == "Docked")
+                try
+                {
+                    var lastState = RegistryConfig.GetKey("CopilotDockState", userSetting: true);
+                    if (string.IsNullOrEmpty(lastState))
+                    {
+                        DockWindowToRight();
+                        _isDocked = true;
+                        DockButton.Icon = new SymbolIcon(SymbolRegular.PinOff28);
+                        RegistryConfig.SetKey("CopilotDockState", "Docked", userSetting: true);
+                    }
+                    else if (lastState == "Docked")
+                    {
+                        DockWindowToRight();
+                        _isDocked = true;
+                        DockButton.Icon = new SymbolIcon(SymbolRegular.PinOff28);
+                    }
+                    else
+                    {
+                        _isDocked = false;
+                        DockButton.Icon = new SymbolIcon(SymbolRegular.Pin28);
+                    }
+                }
+                catch
                 {
                     DockWindowToRight();
                     _isDocked = true;
                     DockButton.Icon = new SymbolIcon(SymbolRegular.PinOff28);
-                }
-                else
-                {
-                    _isDocked = false;
-                    DockButton.Icon = new SymbolIcon(SymbolRegular.Pin28);
+                    RegistryConfig.SetKey("CopilotDockState", "Docked", userSetting: true);
                 }
             }
             catch (Exception ex)
