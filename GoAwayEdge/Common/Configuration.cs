@@ -193,14 +193,26 @@ namespace GoAwayEdge.Common
         /// <param name="option">Name of key</param> 
         /// <param name="value">Value of key</param> 
         /// <param name="valueKind">Type of value</param> 
-        /// <param name="isUninstall">Use the Uninstall Registry key instead.</param> 
-        public static void SetKey(string option, object value, RegistryValueKind valueKind = RegistryValueKind.String, bool isUninstall = false)
+        /// <param name="isUninstall">Use the Uninstall Registry key instead.</param>
+        /// <param name="userSetting">Use the CurrentUser Registry key instead.</param> 
+        public static void SetKey(string option, object value, RegistryValueKind valueKind = RegistryValueKind.String,
+            bool isUninstall = false, bool userSetting = false)
         {
             try
             {
-                using var key = isUninstall
-                    ? Registry.LocalMachine.CreateSubKey(UninstallRegistryPath, RegistryKeyPermissionCheck.ReadWriteSubTree)
-                    : Registry.LocalMachine.CreateSubKey(RegistryPath, RegistryKeyPermissionCheck.ReadWriteSubTree);
+                RegistryKey? key;
+                if (userSetting)
+                {
+                    key = Registry.CurrentUser.CreateSubKey(RegistryPath, RegistryKeyPermissionCheck.ReadWriteSubTree);
+                }
+                else if (isUninstall)
+                {
+                    key = Registry.LocalMachine.CreateSubKey(UninstallRegistryPath, RegistryKeyPermissionCheck.ReadWriteSubTree);
+                }
+                else
+                {
+                    key = Registry.LocalMachine.CreateSubKey(RegistryPath, RegistryKeyPermissionCheck.ReadWriteSubTree);
+                }
                 key.SetValue(option, value, valueKind); 
             }
             catch (Exception ex)
@@ -214,14 +226,25 @@ namespace GoAwayEdge.Common
         /// </summary>
         /// <param name="option">Name of the key.</param>
         /// <param name="isUninstall">Use the Uninstall Registry key instead.</param> 
+        /// <param name="userSetting">Use the CurrentUser Registry key instead.</param> 
         /// <returns>The value of the key if it exists, otherwise null.</returns>
-        public static string GetKey(string option, bool isUninstall = false)
+        public static string GetKey(string option, bool isUninstall = false, bool userSetting = false)
         {
             try
             {
-                using var key = isUninstall
-                    ? Registry.LocalMachine.OpenSubKey(UninstallRegistryPath)
-                    : Registry.LocalMachine.OpenSubKey(RegistryPath); 
+                RegistryKey? key;
+                if (userSetting)
+                {
+                    key = Registry.CurrentUser.OpenSubKey(RegistryPath, RegistryKeyPermissionCheck.ReadWriteSubTree);
+                }
+                else if (isUninstall)
+                {
+                    key = Registry.LocalMachine.OpenSubKey(UninstallRegistryPath, RegistryKeyPermissionCheck.ReadWriteSubTree);
+                }
+                else
+                {
+                    key = Registry.LocalMachine.OpenSubKey(RegistryPath, RegistryKeyPermissionCheck.ReadWriteSubTree);
+                }
                 if (key != null)
                 {
                     var value = key.GetValue(option);
@@ -246,14 +269,25 @@ namespace GoAwayEdge.Common
         /// Removes a Key in the Registry 
         /// </summary>
         /// <param name="option">Key Name</param>
-        /// <param name="isUninstall">Use the Uninstall Registry key instead.</param> 
-        public static bool RemoveKey(string option, bool isUninstall = false)
+        /// <param name="isUninstall">Use the Uninstall Registry key instead.</param>
+        /// <param name="userSetting">Use the CurrentUser Registry key instead.</param>
+        public static bool RemoveKey(string option, bool isUninstall = false, bool userSetting = false)
         {
             try
             {
-                using var key = isUninstall
-                    ? Registry.LocalMachine.OpenSubKey(UninstallRegistryPath)
-                    : Registry.LocalMachine.OpenSubKey(RegistryPath);
+                RegistryKey? key;
+                if (userSetting)
+                {
+                    key = Registry.CurrentUser.OpenSubKey(RegistryPath, RegistryKeyPermissionCheck.ReadWriteSubTree);
+                }
+                else if (isUninstall)
+                {
+                    key = Registry.LocalMachine.OpenSubKey(UninstallRegistryPath, RegistryKeyPermissionCheck.ReadWriteSubTree);
+                }
+                else
+                {
+                    key = Registry.LocalMachine.OpenSubKey(RegistryPath, RegistryKeyPermissionCheck.ReadWriteSubTree);
+                }
                 var value = key?.GetValue(option);
                 if (value != null)
                 {
@@ -274,14 +308,25 @@ namespace GoAwayEdge.Common
         /// Removes a SubKey in the Registry 
         /// </summary> 
         /// <param name="option">SubKey Name</param> 
-        /// <param name="isUninstall">Use the Uninstall Registry key instead.</param> 
-        public static bool RemoveSubKey(string option, bool isUninstall = false)
+        /// <param name="isUninstall">Use the Uninstall Registry key instead.</param>
+        /// <param name="userSetting">Use the CurrentUser Registry key instead.</param>
+        public static bool RemoveSubKey(string option, bool isUninstall = false, bool userSetting = false)
         {
             try
             {
-                using var key = isUninstall
-                    ? Registry.LocalMachine.OpenSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall", true)
-                    : Registry.LocalMachine.OpenSubKey(RegistryPath, true);
+                RegistryKey? key;
+                if (userSetting)
+                {
+                    key = Registry.CurrentUser.OpenSubKey(RegistryPath, true);
+                }
+                else if (isUninstall)
+                {
+                    key = Registry.LocalMachine.OpenSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall", true);
+                }
+                else
+                {
+                    key = Registry.LocalMachine.OpenSubKey(RegistryPath, RegistryKeyPermissionCheck.ReadWriteSubTree);
+                }
                 key?.DeleteSubKey(option);
                 key?.Close();
                 return true;

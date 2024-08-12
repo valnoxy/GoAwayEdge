@@ -1,10 +1,12 @@
-﻿using System.IO;
+﻿using System.Diagnostics;
+using System.IO;
 using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Input;
 using GoAwayEdge.Common;
 using GoAwayEdge.Common.Debugging;
 using Microsoft.Web.WebView2.Core;
+using Wpf.Ui.Controls;
 
 namespace GoAwayEdge.UserInterface.CopilotDock
 {
@@ -17,7 +19,6 @@ namespace GoAwayEdge.UserInterface.CopilotDock
         public CopilotDock()
         {
             InitializeComponent();
-            DockWindowToRight();
             _ = InitializeWebViewAsync();
         }
 
@@ -43,6 +44,34 @@ namespace GoAwayEdge.UserInterface.CopilotDock
                     default:
                         throw new ArgumentOutOfRangeException();
                 }
+
+                // Window settings
+                var screenWidth = SystemParameters.PrimaryScreenWidth;
+                var screenHeight = SystemParameters.PrimaryScreenHeight;
+
+                Visibility = Visibility.Visible;
+                Width = screenWidth * 0.3;
+                Height = screenHeight;
+                MinWidth = 200;
+                ResizeMode = ResizeMode.CanResizeWithGrip;
+
+                // Set window position
+                Left = screenWidth - Width;
+                Top = 0;
+
+                // Last state
+                var lastState = RegistryConfig.GetKey("CopilotDockState", userSetting: true);
+                if (lastState == "Docked")
+                {
+                    DockWindowToRight();
+                    _isDocked = true;
+                    DockButton.Icon = new SymbolIcon(SymbolRegular.PinOff28);
+                }
+                else
+                {
+                    _isDocked = false;
+                    DockButton.Icon = new SymbolIcon(SymbolRegular.Pin28);
+                }
             }
             catch (Exception ex)
             {
@@ -64,6 +93,7 @@ namespace GoAwayEdge.UserInterface.CopilotDock
             var screenWidth = SystemParameters.PrimaryScreenWidth;
             var screenHeight = SystemParameters.PrimaryScreenHeight;
 
+            Visibility = Visibility.Visible;
             Width = screenWidth * 0.3;
             Height = screenHeight;
             MinWidth = 200;
@@ -162,12 +192,32 @@ namespace GoAwayEdge.UserInterface.CopilotDock
             {
                 UnregisterAppBar();
                 _isDocked = false;
+                DockButton.Icon = new SymbolIcon(SymbolRegular.Pin28);
+                RegistryConfig.SetKey("CopilotDockState", "Detached", userSetting: true);
             }
             else
             {
                 DockWindowToRight();
                 _isDocked = true;
+                DockButton.Icon = new SymbolIcon(SymbolRegular.PinOff28);
+                RegistryConfig.SetKey("CopilotDockState", "Docked", userSetting: true);
             }
         }
+
+        private void CopilotDock_OnDeactivated(object? sender, EventArgs e)
+        {
+            if (_isDocked) return;
+            var currentProcess = Process.GetCurrentProcess();
+            var currentTitle = currentProcess.MainWindowTitle;
+            var currentId = currentProcess.Id;
+            Logging.Log($"Deactivated CopilotDock (ID: {currentId}, Title: {currentTitle})", Logging.LogLevel.INFO);
+            Hide();
+        }
+
+
+        [DllImport("user32.dll")]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        private static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
+        private const int SW_HIDE = 0;
     }
 }

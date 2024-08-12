@@ -13,10 +13,12 @@
                  WindowBackdropType="Mica"
                  WindowCornerPreference="Round"
                  WindowStartupLocation="CenterScreen"
-                 MouseDown="Window_MouseDown">
+                 MouseDown="Window_MouseDown"
+                 ShowInTaskbar="False"
+                 Deactivated="CopilotDock_OnDeactivated">
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="45"/>
+            <RowDefinition Height="50"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 

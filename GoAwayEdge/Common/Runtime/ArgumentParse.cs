@@ -107,8 +107,7 @@ namespace GoAwayEdge.Common.Runtime
                 if (Configuration.Provider != AiProvider.Copilot)
                 {
                     DebugMessage.DisplayDebugMessage("GoAwayEdge", $"Opening AI Provider '{Configuration.Provider}' (Taskbar) ...");
-                    var w = new UserInterface.CopilotDock.CopilotDock();
-                    w.ShowDialog();
+                    UserInterface.CopilotDock.InterfaceManager.ShowDock();
                     return;
                 }
                 DebugMessage.DisplayDebugMessage("GoAwayEdge", $"Opening Windows Copilot (Taskbar) with following url:\n{url}");
@@ -120,8 +119,7 @@ namespace GoAwayEdge.Common.Runtime
                 if (Configuration.Provider != AiProvider.Copilot)
                 {
                     DebugMessage.DisplayDebugMessage("GoAwayEdge", $"Opening AI Provider '{Configuration.Provider}' (Hotkey) ...");
-                    var w = new UserInterface.CopilotDock.CopilotDock();
-                    w.ShowDialog();
+                    UserInterface.CopilotDock.InterfaceManager.ShowDock();
                     return;
                 }
                 DebugMessage.DisplayDebugMessage("GoAwayEdge", $"Opening Windows Copilot (Hotkey) with following url:\n{url}");

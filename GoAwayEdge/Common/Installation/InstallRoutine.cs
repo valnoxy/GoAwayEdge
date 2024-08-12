@@ -295,6 +295,11 @@ namespace GoAwayEdge.Common
                     @"SOFTWARE\valnoxy", true);
                 generalKey?.DeleteSubKeyTree("GoAwayEdge");
                 generalKey?.Close();
+                
+                var currentUserKey = Registry.CurrentUser.OpenSubKey(
+                    @"SOFTWARE\valnoxy", true);
+                generalKey?.DeleteSubKeyTree("GoAwayEdge");
+                generalKey?.Close();
             }
             catch (Exception ex)
             {
