@@ -59,6 +59,10 @@
     <system:String x:Key="ControlPanelEdgePowerDescription">Deactivate the forwarding of search queries to other browsers.</system:String>
     <system:String x:Key="ControlPanelEdgePowerEnable">Enable GoAwayEdge</system:String>
     <system:String x:Key="ControlPanelEdgePowerDisable">Disable GoAwayEdge</system:String>
+    <system:String x:Key="ControlPanelCopilotProviderTitle">Change AI Provider</system:String>
+    <system:String x:Key="ControlPanelCopilotProviderDescription">Change the provider to your favorite AI (or to your favorite website).</system:String>
+    <system:String x:Key="ControlPanelCustomCopilotProviderTitle">Custom AI Provider</system:String>
+    <system:String x:Key="ControlPanelCustomCopilotProviderDescription">Please enter the URL from the AI Provider (or your favorite website).</system:String>
 
     <!-- Error Handling / Notifications -->
     <system:String x:Key="FailedInitialization">Initialization failed: {0}</system:String>
@@ -82,5 +86,6 @@
     <system:String x:Key="MessageGoAwayEdgeDisabled">GoAwayEdge was successfully disabled on this system.</system:String>
     <system:String x:Key="FailedSetAppEnabled">Could not enable GoAwayEdge on this system: {0}</system:String>
     <system:String x:Key="FailedSetAppDisabled">Could not disable GoAwayEdge on this system: {0}</system:String>
+    <system:String x:Key="FailedFlushSetting">Could not apply the settings: {0}</system:String>
 
 </ResourceDictionary>

@@ -38,7 +38,7 @@
                 </Grid>
             </ui:CardAction>
 
-            <ui:CardAction Width="350" Height="100">
+            <ui:CardAction Width="350" Height="100" Click="CopilotSetting_OnClick">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="100"/>

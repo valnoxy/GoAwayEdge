@@ -16,5 +16,10 @@ namespace GoAwayEdge.UserInterface.ControlPanel.Pages
         {
             (Application.Current.MainWindow as ControlPanel)?.RootNavigation.Navigate(typeof(EdgeSettings));
         }
+
+        private void CopilotSetting_OnClick(object sender, RoutedEventArgs e)
+        {
+            (Application.Current.MainWindow as ControlPanel)?.RootNavigation.Navigate(typeof(CopilotSettings));
+        }
     }
 }

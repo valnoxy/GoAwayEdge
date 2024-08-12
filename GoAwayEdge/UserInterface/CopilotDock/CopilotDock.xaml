@@ -7,6 +7,7 @@
                  mc:Ignorable="d"
                  Title="GoAwayEdge - Copilot Dock" Height="450" Width="800"
                  xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+                 xmlns:wv2="clr-namespace:Microsoft.Web.WebView2.Wpf;assembly=Microsoft.Web.WebView2.Wpf"
                  Background="{ui:ThemeResource ApplicationBackgroundBrush}"
                  ExtendsContentIntoTitleBar="True"
                  WindowBackdropType="Mica"
@@ -28,8 +29,14 @@
             </StackPanel>
         </StackPanel>
         
+        <!--
         <StackPanel Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Center">
             <ui:TextBlock Text="Hello from GoAwayEdge :)" FontSize="30"/>
         </StackPanel>
+        -->
+
+        <Grid Grid.Row="1">
+            <wv2:WebView2 x:Name="WebView" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+        </Grid>
     </Grid>
 </ui:FluentWindow>

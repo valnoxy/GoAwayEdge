@@ -39,7 +39,7 @@
                             <ui:ImageIcon Source="{DynamicResource MicrosoftEdge}" Width="16"/>
                         </ui:NavigationViewItem.Icon>
                     </ui:NavigationViewItem>
-                    <ui:NavigationViewItem Content="Windows Copilot" NavigationCacheMode="Enabled">
+                    <ui:NavigationViewItem Content="Windows Copilot" NavigationCacheMode="Enabled" TargetPageType="{x:Type pages:CopilotSettings}">
                         <ui:NavigationViewItem.Icon>
                             <ui:ImageIcon Source="{DynamicResource MicrosoftCopilot}" Width="16"/>
                         </ui:NavigationViewItem.Icon>

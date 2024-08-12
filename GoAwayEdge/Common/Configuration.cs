@@ -19,6 +19,13 @@ namespace GoAwayEdge.Common
         Custom
     }
 
+    public enum AiProvider
+    {
+        Copilot,
+        ChatGPT,
+        Custom
+    }
+
     public enum EdgeChannel
     {
         Stable,
@@ -31,11 +38,13 @@ namespace GoAwayEdge.Common
     {
         public static EdgeChannel Channel { get; set; }
         public static SearchEngine Search { get; set; }
+        public static AiProvider Provider { get; set; }
         public static bool Uninstall { get; set; }
         public static bool UninstallEdge { get; set; }
         public static bool NoEdgeInstalled { get; set; }
         public static bool InstallControlPanel { get; set; }
         public static string? CustomQueryUrl { get; set; }
+        public static string? CustomProviderUrl { get; set; }
 
         public static string InstallDir = Path.Combine(
             Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles),
@@ -55,7 +64,6 @@ namespace GoAwayEdge.Common
             {
                 NoEdgeInstalled = !File.Exists(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86),
                     "Microsoft", "Edge", "Application", "msedge.exe"));
-                // RegistryConfig.SetKey("NoEdgeInstalled", NoEdgeInstalled);
 
                 if (NoEdgeInstalled)
                     return true;
@@ -65,11 +73,16 @@ namespace GoAwayEdge.Common
 
                 try
                 {
-                    Channel = Runtime.ArgumentParse.ParseEdgeChannel(RegistryConfig.GetKey("Stable"));
+                    Channel = Runtime.ArgumentParse.ParseEdgeChannel(RegistryConfig.GetKey("EdgeChannel"));
                     Search = Runtime.ArgumentParse.ParseSearchEngine(RegistryConfig.GetKey("SearchEngine"));
+                    Provider = Runtime.ArgumentParse.ParseAiProvider(RegistryConfig.GetKey("AiProvider"));
                     if (Search == SearchEngine.Custom)
                     {
                         CustomQueryUrl = RegistryConfig.GetKey("CustomQueryUrl");
+                    }
+                    if (Provider == AiProvider.Custom)
+                    {
+                        CustomProviderUrl = RegistryConfig.GetKey("CustomProviderUrl");
                     }
                 }
                 catch
@@ -112,6 +125,32 @@ namespace GoAwayEdge.Common
             var list = (from searchEngine in (SearchEngine[])Enum.GetValues(typeof(SearchEngine))
                 where searchEngine != SearchEngine.Custom
                 select searchEngine.ToString()).ToList();
+
+            try
+            {
+                var resourceValue =
+                    (string)Application.Current.MainWindow!.FindResource("SettingsSearchEngineCustomItem");
+                list.Add(!string.IsNullOrEmpty(resourceValue) ? resourceValue : "Custom");
+            }
+            catch
+            {
+                list.Add("Custom");
+            }
+
+            return list;
+        }
+
+        /// <summary>
+        ///     Get a list of all available AI Providers.
+        /// </summary>
+        /// <returns>
+        ///     List of AI Providers.
+        /// </returns>
+        public static List<string> GetAiProviders()
+        {
+            var list = (from aiProvider in (AiProvider[])Enum.GetValues(typeof(AiProvider))
+                where aiProvider != AiProvider.Custom
+                select aiProvider.ToString()).ToList();
 
             try
             {

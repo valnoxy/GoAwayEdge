@@ -1,6 +1,10 @@
-﻿using System.Runtime.InteropServices;
+﻿using System.IO;
+using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Input;
+using GoAwayEdge.Common;
+using GoAwayEdge.Common.Debugging;
+using Microsoft.Web.WebView2.Core;
 
 namespace GoAwayEdge.UserInterface.CopilotDock
 {
@@ -14,6 +18,36 @@ namespace GoAwayEdge.UserInterface.CopilotDock
         {
             InitializeComponent();
             DockWindowToRight();
+            _ = InitializeWebViewAsync();
+        }
+
+        private async Task InitializeWebViewAsync()
+        {
+            try
+            {
+                var userProfilePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "valnoxy", "GoAwayEdge");
+                Directory.CreateDirectory(userProfilePath);
+                
+                var webView2Environment = await CoreWebView2Environment.CreateAsync(userDataFolder: userProfilePath);
+                await WebView.EnsureCoreWebView2Async(webView2Environment);
+
+                switch (Configuration.Provider)
+                {
+                    case AiProvider.ChatGPT:
+                        WebView.Source = new Uri("https://chatgpt.com/");
+                        break;
+                    case AiProvider.Custom:
+                        if (Configuration.CustomProviderUrl != null)
+                            WebView.Source = new Uri(Configuration.CustomProviderUrl);
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException();
+                }
+            }
+            catch (Exception ex)
+            {
+                Logging.Log($"Failed to load WebView2 (Copilot replacement): {ex.Message}", Logging.LogLevel.ERROR);
+            }
         }
 
         // Testing

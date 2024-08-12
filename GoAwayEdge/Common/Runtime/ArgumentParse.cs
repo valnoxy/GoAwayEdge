@@ -104,12 +104,26 @@ namespace GoAwayEdge.Common.Runtime
             if (url.Contains("microsoft-edge://?ux=copilot&tcp=1&source=taskbar") ||
                 url.Contains("microsoft-edge:///?ux=copilot&tcp=1&source=taskbar"))
             {
+                if (Configuration.Provider != AiProvider.Copilot)
+                {
+                    DebugMessage.DisplayDebugMessage("GoAwayEdge", $"Opening AI Provider '{Configuration.Provider}' (Taskbar) ...");
+                    var w = new UserInterface.CopilotDock.CopilotDock();
+                    w.ShowDialog();
+                    return;
+                }
                 DebugMessage.DisplayDebugMessage("GoAwayEdge", $"Opening Windows Copilot (Taskbar) with following url:\n{url}");
             }
             // Copilot Hotkey
             else if (url.Contains("microsoft-edge://?ux=copilot&tcp=1&source=hotkey") ||
                      url.Contains("microsoft-edge:///?ux=copilot&tcp=1&source=hotkey"))
             {
+                if (Configuration.Provider != AiProvider.Copilot)
+                {
+                    DebugMessage.DisplayDebugMessage("GoAwayEdge", $"Opening AI Provider '{Configuration.Provider}' (Hotkey) ...");
+                    var w = new UserInterface.CopilotDock.CopilotDock();
+                    w.ShowDialog();
+                    return;
+                }
                 DebugMessage.DisplayDebugMessage("GoAwayEdge", $"Opening Windows Copilot (Hotkey) with following url:\n{url}");
             }
             // Default
@@ -156,6 +170,17 @@ namespace GoAwayEdge.Common.Runtime
                 "dev" => EdgeChannel.Dev,
                 "canary" => EdgeChannel.Canary,
                 _ => EdgeChannel.Stable // Fallback channel
+            };
+        }
+
+        public static AiProvider ParseAiProvider(string argument)
+        {
+            return argument.ToLower() switch
+            {
+                "copilot" => AiProvider.Copilot,
+                "chatgpt" => AiProvider.ChatGPT,
+                "custom" => AiProvider.Custom,
+                _ => AiProvider.Copilot // Fallback channel
             };
         }
 
