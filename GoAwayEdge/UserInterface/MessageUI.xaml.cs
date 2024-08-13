@@ -33,8 +33,27 @@ namespace GoAwayEdge
                 this.Btn2.Visibility = Visibility.Collapsed;
             if (btn3 is null or "")
                 this.Btn3.Visibility = Visibility.Collapsed;
-            
-            VersionLbl.Content = $"Version {Assembly.GetExecutingAssembly().GetName().Version!}";
+
+            string versionText;
+            var assembly = Assembly.GetExecutingAssembly();
+            var version = Assembly.GetExecutingAssembly().GetName().Version!;
+            try
+            {
+                var informationVersion = assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>()?.InformationalVersion;
+                if (!string.IsNullOrEmpty(informationVersion) && version.ToString() != informationVersion)
+                {
+                    versionText = $"Version {version}-{informationVersion}";
+                }
+                else
+                {
+                    versionText = $"Version {version}";
+                }
+            }
+            catch
+            {
+                versionText = $"Version {version}";
+            }
+            VersionLbl.Content = versionText;
 
             _mainThread = isMainThread;
         }

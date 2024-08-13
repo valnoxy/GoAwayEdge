@@ -14,11 +14,29 @@ namespace GoAwayEdge.UserInterface.ControlPanel.Pages
         {
             InitializeComponent();
 
+            string versionText;
             var assembly = Assembly.GetExecutingAssembly();
+            var version = Assembly.GetExecutingAssembly().GetName().Version!;
+            try
+            {
+                var informationVersion = assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>()?.InformationalVersion;
+                if (!string.IsNullOrEmpty(informationVersion) && version.ToString() != informationVersion)
+                {
+                    versionText = $"{version}-{informationVersion}";
+                }
+                else
+                {
+                    versionText = $"{version}";
+                }
+            }
+            catch
+            {
+                versionText = $"{version}";
+            }
             var appDirectory = AppContext.BaseDirectory;
             var assemblyPath = Path.Combine(appDirectory, $"{assembly.GetName().Name}.exe");
             var fvi = FileVersionInfo.GetVersionInfo(assemblyPath);
-            ValueVersion.Content = $"{fvi.ProductName} v{fvi.FileVersion}";
+            ValueVersion.Content = $"{fvi.ProductName} v{versionText}";
             ValueCopyright.Content = fvi.LegalCopyright;
         }
 
