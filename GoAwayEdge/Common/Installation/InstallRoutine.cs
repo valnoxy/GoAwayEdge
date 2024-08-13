@@ -1,15 +1,14 @@
-﻿using Microsoft.Win32.TaskScheduler;
-using Microsoft.Win32;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
-using System.Windows;
-using System.Runtime.InteropServices;
 using System.Reflection;
-using GoAwayEdge.Common.Installation;
+using System.Runtime.InteropServices;
+using System.Windows;
 using GoAwayEdge.Common.Debugging;
+using Microsoft.Win32;
+using Microsoft.Win32.TaskScheduler;
 
-namespace GoAwayEdge.Common
+namespace GoAwayEdge.Common.Installation
 {
     public partial class InstallRoutine
     {

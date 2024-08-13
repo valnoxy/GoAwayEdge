@@ -51,10 +51,20 @@ namespace GoAwayEdge.Common.Runtime
         /// <returns>A tuple with the values isFile, isApp, isOnlyEdge and singleArgument.</returns>
         private static (bool isFile, bool isApp, bool isOnlyEdge, string singleArgument) ParseArguments(string[] args)
         {
-            bool isFile = false, isApp = false, collectSingleArgument = false;
+            bool isFile = false, isApp = false, collectSingleArgument = false, isOnlyEdge = false;
             var singleArgument = string.Empty;
+            var cleanedArgs = args
+                .Where(str => str != "--debug")
+                .ToArray();
+            if (cleanedArgs.Length == 1)
+            {
+                if (File.Exists(cleanedArgs[0]) && cleanedArgs[0].EndsWith("msedge.exe"))
+                {
+                    isOnlyEdge = true;
+                }
+            }
 
-            foreach (var arg in args)
+            foreach (var arg in cleanedArgs)
             {
                 if (arg.Contains("microsoft-edge:"))
                 {
@@ -84,7 +94,7 @@ namespace GoAwayEdge.Common.Runtime
             if (singleArgument.Contains("--app-id"))
                 isApp = true;
 
-            return (isFile, isApp, singleArgument);
+            return (isFile, isApp, isOnlyEdge, singleArgument);
         }
 
         /// <summary>

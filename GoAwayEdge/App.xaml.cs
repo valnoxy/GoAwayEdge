@@ -17,6 +17,7 @@ using System.Windows;
 using GoAwayEdge.Common.Runtime;
 using GoAwayEdge.Common.Debugging;
 using GoAwayEdge.Common.Installation;
+using InstallRoutine = GoAwayEdge.Common.Installation.InstallRoutine;
 
 namespace GoAwayEdge
 {
