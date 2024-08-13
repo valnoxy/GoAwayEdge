@@ -75,14 +75,14 @@ namespace GoAwayEdge.Common
                 {
                     Channel = Runtime.ArgumentParse.ParseEdgeChannel(RegistryConfig.GetKey("EdgeChannel"));
                     Search = Runtime.ArgumentParse.ParseSearchEngine(RegistryConfig.GetKey("SearchEngine"));
-                    Provider = Runtime.ArgumentParse.ParseAiProvider(RegistryConfig.GetKey("AiProvider"));
+                    Provider = Runtime.ArgumentParse.ParseAiProvider(RegistryConfig.GetKey("AiProvider", userSetting: true));
                     if (Search == SearchEngine.Custom)
                     {
                         CustomQueryUrl = RegistryConfig.GetKey("CustomQueryUrl");
                     }
                     if (Provider == AiProvider.Custom)
                     {
-                        CustomProviderUrl = RegistryConfig.GetKey("CustomProviderUrl");
+                        CustomProviderUrl = RegistryConfig.GetKey("CustomProviderUrl", userSetting: true);
                     }
                 }
                 catch
@@ -235,15 +235,15 @@ namespace GoAwayEdge.Common
                 RegistryKey? key;
                 if (userSetting)
                 {
-                    key = Registry.CurrentUser.OpenSubKey(RegistryPath, RegistryKeyPermissionCheck.ReadWriteSubTree);
+                    key = Registry.CurrentUser.OpenSubKey(RegistryPath);
                 }
                 else if (isUninstall)
                 {
-                    key = Registry.LocalMachine.OpenSubKey(UninstallRegistryPath, RegistryKeyPermissionCheck.ReadWriteSubTree);
+                    key = Registry.LocalMachine.OpenSubKey(UninstallRegistryPath);
                 }
                 else
                 {
-                    key = Registry.LocalMachine.OpenSubKey(RegistryPath, RegistryKeyPermissionCheck.ReadWriteSubTree);
+                    key = Registry.LocalMachine.OpenSubKey(RegistryPath);
                 }
                 if (key != null)
                 {

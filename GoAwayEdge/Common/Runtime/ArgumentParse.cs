@@ -25,10 +25,14 @@ namespace GoAwayEdge.Common.Runtime
                 return;
             }
 
-            var (isFile, isApp, singleArgument) = ParseArguments(args);
+            var (isFile, isApp, isOnlyEdge, singleArgument) = ParseArguments(args);
             if (_url != null)
             {
                 HandleUrl(_url);
+            }
+            else if (isOnlyEdge)
+            {
+                StartProcess(FileConfiguration.NonIfeoPath, "", "Opening Microsoft Edge without any arguments.");
             }
             else if (isFile)
             {
@@ -44,8 +48,8 @@ namespace GoAwayEdge.Common.Runtime
         /// Parses the command line arguments to identify if a file path or app ID is present.
         /// </summary>
         /// <param name="args">The command line arguments.</param>
-        /// <returns>A tuple with the values isFile, isApp, and singleArgument.</returns>
-        private static (bool isFile, bool isApp, string singleArgument) ParseArguments(string[] args)
+        /// <returns>A tuple with the values isFile, isApp, isOnlyEdge and singleArgument.</returns>
+        private static (bool isFile, bool isApp, bool isOnlyEdge, string singleArgument) ParseArguments(string[] args)
         {
             bool isFile = false, isApp = false, collectSingleArgument = false;
             var singleArgument = string.Empty;

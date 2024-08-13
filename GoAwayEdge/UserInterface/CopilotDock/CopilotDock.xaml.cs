@@ -7,6 +7,7 @@ using GoAwayEdge.Common;
 using GoAwayEdge.Common.Debugging;
 using Microsoft.Web.WebView2.Core;
 using Wpf.Ui.Controls;
+using static GoAwayEdge.Common.AiProvider;
 
 namespace GoAwayEdge.UserInterface.CopilotDock
 {
@@ -34,14 +35,15 @@ namespace GoAwayEdge.UserInterface.CopilotDock
 
                 switch (Configuration.Provider)
                 {
-                    case AiProvider.ChatGPT:
+                    case ChatGPT:
                         WebView.Source = new Uri("https://chatgpt.com/");
                         break;
-                    case AiProvider.Custom:
+                    case Custom:
                         if (Configuration.CustomProviderUrl != null)
                             WebView.Source = new Uri(Configuration.CustomProviderUrl);
                         break;
                     default:
+                        Logging.Log($"Failed to load Provider! Provider Value '{Configuration.Provider}' in invalid!");
                         throw new ArgumentOutOfRangeException();
                 }
 

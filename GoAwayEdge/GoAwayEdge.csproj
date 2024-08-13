@@ -24,6 +24,7 @@
 		<IncludeSourceRevisionInInformationalVersion>false</IncludeSourceRevisionInInformationalVersion>
 		<AssemblyTitle>GoAwayEdge - Redirect Edge calls to your favorite browser!</AssemblyTitle>
 		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+		<IncludeNativeLibrariesForSelfExtract>true</IncludeNativeLibrariesForSelfExtract>
 	</PropertyGroup>
 	<ItemGroup>
 		<None Remove="Assets\SetupBannerIcon.png" />

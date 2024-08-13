@@ -108,12 +108,27 @@ namespace GoAwayEdge
                         controlCenter.ShowDialog();
                         Environment.Exit(0);
                     }
+
                     if (args.Contains("--copilot-dock"))
                     {
                         Configuration.InitialEnvironment();
-                        UserInterface.CopilotDock.InterfaceManager.ShowDock();
-                        Environment.Exit(0);
+
+                        if (Configuration.Provider != AiProvider.Copilot)
+                        {
+                            DebugMessage.DisplayDebugMessage("GoAwayEdge",
+                                $"Opening AI Provider '{Configuration.Provider}' (Triggered with argument) ...");
+                            UserInterface.CopilotDock.InterfaceManager.ShowDock();
+                            Environment.Exit(0);
+                        }
+                        else
+                        {
+                            IsDebug = true;
+                            DebugMessage.DisplayDebugMessage("GoAwayEdge",
+                                "You cannot open the Copilot dock if your AI provider is Copilot.");
+                            Environment.Exit(1);
+                        }
                     }
+
                     if (args.Contains("-s")) // Silent Installation
                     {
                         foreach (var arg in args)

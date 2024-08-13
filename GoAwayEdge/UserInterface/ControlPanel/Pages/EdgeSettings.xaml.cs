@@ -44,16 +44,16 @@ namespace GoAwayEdge.UserInterface.ControlPanel.Pages
             if (RegistryConfig.GetKey("Enabled") == "True")
             {
                 _appIsEnabled = true;
-                PowerToggle.Content = "Disable GoAwayEdge";
+                PowerToggle.Content = LocalizationManager.LocalizeValue("ControlPanelEdgePowerDisable"); ;
             }
             else
             {
                 _appIsEnabled = false;
-                PowerToggle.Content = "Enable GoAwayEdge";
+                PowerToggle.Content = LocalizationManager.LocalizeValue("ControlPanelEdgePowerEnable"); ;
             }
         }
 
-        private void FlushSettings()
+        private static void FlushSettings()
         {
             try
             {
@@ -132,8 +132,6 @@ namespace GoAwayEdge.UserInterface.ControlPanel.Pages
                 case 9:
                     Configuration.Search = SearchEngine.Custom;
                     CustomSearchPanel.Visibility = Visibility.Visible;
-                    if (string.IsNullOrEmpty(Configuration.CustomQueryUrl))
-                        Debug.WriteLine("placeholder");
                     break;
             }
         }

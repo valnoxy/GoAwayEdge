@@ -103,6 +103,10 @@ namespace GoAwayEdge.Common
                 return;
             }
 
+            // Kill Microsoft Edge processes
+            KillProcess("msedge");
+            KillProcess("msedge_non_ifeo");
+
             if (Configuration.UninstallEdge)
             {
                 FileConfiguration.EdgePath = msEdge;
@@ -205,7 +209,7 @@ namespace GoAwayEdge.Common
 
             // Set enable flag
             RegistryConfig.SetKey("Enabled", true);
-            RegistryConfig.SetKey("AiProvider", "Copilot"); // Temporary
+            RegistryConfig.SetKey("AiProvider", "Copilot", userSetting: true); // Temporary
 
             // Switch FrameWindow content to InstallationSuccess
             worker?.ReportProgress(100, "");
@@ -402,6 +406,15 @@ namespace GoAwayEdge.Common
             catch
             {
                 return false;
+            }
+        }
+
+        internal static void KillProcess(string processName)
+        {
+            var processes = Process.GetProcessesByName(processName);
+            foreach (var process in processes)
+            {
+                process.Kill();
             }
         }
     }

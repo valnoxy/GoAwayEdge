@@ -38,15 +38,15 @@ namespace GoAwayEdge.UserInterface.ControlPanel.Pages
         {
             try
             {
-                RegistryConfig.SetKey("AiProvider", Configuration.Provider.ToString());
+                RegistryConfig.SetKey("AiProvider", Configuration.Provider.ToString(), userSetting: true);
                 if (Configuration.Provider == AiProvider.Custom)
                 {
                     if (Configuration.CustomProviderUrl != null)
-                        RegistryConfig.SetKey("CustomProviderUrl", Configuration.CustomProviderUrl);
+                        RegistryConfig.SetKey("CustomProviderUrl", Configuration.CustomProviderUrl, userSetting: true);
                 }
                 else
                 {
-                    RegistryConfig.RemoveKey("CustomProviderUrl");
+                    RegistryConfig.RemoveKey("CustomProviderUrl", userSetting: true);
                 }
             }
             catch (Exception ex)
