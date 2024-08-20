@@ -2,9 +2,10 @@
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Windows;
-using System.Windows.Input;
 using GoAwayEdge.Common;
 using GoAwayEdge.Common.Debugging;
+using ManagedShell;
+using ManagedShell.AppBar;
 using Microsoft.Web.WebView2.Core;
 using Wpf.Ui.Controls;
 using static GoAwayEdge.Common.AiProvider;
@@ -16,9 +17,13 @@ namespace GoAwayEdge.UserInterface.CopilotDock
     /// </summary>
     public partial class CopilotDock
     {
-        private static bool _isDocked;
-        public CopilotDock()
+        public CopilotDock(ShellManager shellManager, AppBarScreen screen, AppBarEdge edge, double desiredHeight, AppBarMode mode)
+            : base(shellManager.AppBarManager, shellManager.ExplorerHelper, shellManager.FullScreenHelper, screen, edge, mode, desiredHeight)
         {
+            this.MaxHeight = SystemParameters.WorkArea.Height;
+            this.MinHeight = SystemParameters.WorkArea.Height;
+            Configuration.AppBarIsAttached = mode != AppBarMode.None;
+
             InitializeComponent();
             _ = InitializeWebViewAsync();
         }
@@ -49,51 +54,6 @@ namespace GoAwayEdge.UserInterface.CopilotDock
                         Logging.Log($"Failed to load Provider! Provider Value '{Configuration.Provider}' in invalid!");
                         throw new ArgumentOutOfRangeException();
                 }
-
-                // Window settings
-                var screenWidth = SystemParameters.PrimaryScreenWidth;
-                var screenHeight = SystemParameters.PrimaryScreenHeight;
-
-                Visibility = Visibility.Visible;
-                Width = screenWidth * 0.3;
-                Height = screenHeight;
-                MinWidth = 200;
-                ResizeMode = ResizeMode.CanResizeWithGrip;
-
-                // Set window position
-                Left = screenWidth - Width;
-                Top = 0;
-
-                // Last state
-                try
-                {
-                    var lastState = RegistryConfig.GetKey("CopilotDockState", userSetting: true);
-                    if (string.IsNullOrEmpty(lastState))
-                    {
-                        DockWindowToRight();
-                        _isDocked = true;
-                        DockButton.Icon = new SymbolIcon(SymbolRegular.PinOff28);
-                        RegistryConfig.SetKey("CopilotDockState", "Docked", userSetting: true);
-                    }
-                    else if (lastState == "Docked")
-                    {
-                        DockWindowToRight();
-                        _isDocked = true;
-                        DockButton.Icon = new SymbolIcon(SymbolRegular.PinOff28);
-                    }
-                    else
-                    {
-                        _isDocked = false;
-                        DockButton.Icon = new SymbolIcon(SymbolRegular.Pin28);
-                    }
-                }
-                catch
-                {
-                    DockWindowToRight();
-                    _isDocked = true;
-                    DockButton.Icon = new SymbolIcon(SymbolRegular.PinOff28);
-                    RegistryConfig.SetKey("CopilotDockState", "Docked", userSetting: true);
-                }
             }
             catch (Exception ex)
             {
@@ -101,134 +61,33 @@ namespace GoAwayEdge.UserInterface.CopilotDock
             }
         }
 
-        // Testing
-        private void Window_MouseDown(object sender, MouseButtonEventArgs e)
-        {
-            if (e.ChangedButton == MouseButton.Left)
-                this.DragMove();
-        }
-
-        #region Docking
-
-        private void DockWindowToRight()
-        {
-            var screenWidth = SystemParameters.PrimaryScreenWidth;
-            var screenHeight = SystemParameters.PrimaryScreenHeight;
-
-            Visibility = Visibility.Visible;
-            Width = screenWidth * 0.3;
-            Height = screenHeight;
-            MinWidth = 200;
-            ResizeMode = ResizeMode.CanResizeWithGrip;
-
-            // Set window position
-            Left = screenWidth - Width;
-            Top = 0;
-
-            // Register App Bar
-            RegisterAppBar();
-        }
-
-        [StructLayout(LayoutKind.Sequential)]
-        private struct APPBARDATA
-        {
-            public uint cbSize;
-            public IntPtr hWnd;
-            public uint uCallbackMessage;
-            public uint uEdge;
-            public RECT rc;
-            public int lParam;
-        }
-
-        [StructLayout(LayoutKind.Sequential)]
-        private struct RECT
-        {
-            public int left, top, right, bottom;
-        }
-
-        private const int ABM_NEW = 0x00000000;
-        private const int ABM_REMOVE = 0x00000001;
-        private const int ABM_SETPOS = 0x00000003;
-        private const int ABE_RIGHT = 2;
-
-        [DllImport("shell32.dll", CallingConvention = CallingConvention.StdCall)]
-        private static extern uint SHAppBarMessage(uint dwMessage, ref APPBARDATA pData);
-
-        private void RegisterAppBar()
-        {
-            APPBARDATA appBarData = new APPBARDATA();
-            appBarData.cbSize = (uint)Marshal.SizeOf(appBarData);
-            appBarData.hWnd = new System.Windows.Interop.WindowInteropHelper(this).Handle;
-            appBarData.uEdge = ABE_RIGHT;
-            appBarData.rc.left = (int)(SystemParameters.PrimaryScreenWidth - this.Width);
-            appBarData.rc.right = (int)SystemParameters.PrimaryScreenWidth;
-            appBarData.rc.top = 0;
-            appBarData.rc.bottom = (int)SystemParameters.PrimaryScreenHeight;
-
-            SHAppBarMessage(ABM_NEW, ref appBarData);
-            SHAppBarMessage(ABM_SETPOS, ref appBarData);
-        }
-
-        protected override void OnRenderSizeChanged(SizeChangedInfo sizeInfo)
-        {
-            base.OnRenderSizeChanged(sizeInfo);
-            AdjustWindowPosition();
-        }
-
-        private void AdjustWindowPosition()
-        {
-            this.Left = SystemParameters.PrimaryScreenWidth - this.Width;
-        }
-
-        protected override void OnMouseLeftButtonUp(System.Windows.Input.MouseButtonEventArgs e)
-        {
-            base.OnMouseLeftButtonUp(e);
-            if (_isDocked) RegisterAppBar();
-        }
-
-        private void UnregisterAppBar()
-        {
-            APPBARDATA appBarData = new APPBARDATA();
-            appBarData.cbSize = (uint)Marshal.SizeOf(appBarData);
-            appBarData.hWnd = new System.Windows.Interop.WindowInteropHelper(this).Handle;
-
-            SHAppBarMessage(ABM_REMOVE, ref appBarData);
-        }
-
-        protected override void OnClosed(EventArgs e)
-        {
-            base.OnClosed(e);
-            UnregisterAppBar();
-        }
-
-        #endregion
-
         private void CloseButton_OnClick(object sender, RoutedEventArgs e)
         {
+            Configuration.ShellManager.AppBarManager.SignalGracefulShutdown();
+            Configuration.ShellManager.Dispose();
             this.Close();
         }
 
         private void DockButton_OnClick(object sender, RoutedEventArgs e)
         {
-            if (_isDocked)
+            Configuration.ShellManager.AppBarManager.RegisterBar(this, Width, Height, AppBarEdge.Right);
+
+            if (Configuration.AppBarIsAttached)
             {
-                UnregisterAppBar();
-                _isDocked = false;
                 DockButton.Icon = new SymbolIcon(SymbolRegular.Pin28);
                 RegistryConfig.SetKey("CopilotDockState", "Detached", userSetting: true);
             }
             else
             {
-                DockWindowToRight();
-                _isDocked = true;
                 DockButton.Icon = new SymbolIcon(SymbolRegular.PinOff28);
                 RegistryConfig.SetKey("CopilotDockState", "Docked", userSetting: true);
             }
+            Configuration.AppBarIsAttached = !Configuration.AppBarIsAttached;
         }
 
         private void CopilotDock_OnDeactivated(object? sender, EventArgs e)
         {
-            if (_isDocked) return;
+            if (Configuration.AppBarIsAttached) return;
             var currentProcess = Process.GetCurrentProcess();
             var currentTitle = currentProcess.MainWindowTitle;
             var currentId = currentProcess.Id;

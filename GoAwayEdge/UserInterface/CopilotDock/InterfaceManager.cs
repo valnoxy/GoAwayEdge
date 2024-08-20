@@ -1,7 +1,9 @@
 ﻿using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Text;
+using GoAwayEdge.Common;
 using GoAwayEdge.Common.Debugging;
+using ManagedShell.AppBar;
 
 namespace GoAwayEdge.UserInterface.CopilotDock
 {
@@ -12,8 +14,36 @@ namespace GoAwayEdge.UserInterface.CopilotDock
             using var mutex = new Mutex(true, "GoAwayEdge_CopilotDock", out var createdNew);
             if (createdNew)
             {
+                var mode = AppBarMode.Normal;
+
+                // Last state
+                try
+                {
+                    var lastState = RegistryConfig.GetKey("CopilotDockState", userSetting: true);
+                    if (string.IsNullOrEmpty(lastState))
+                    {
+                        // Never set; leave Mode as Normal
+                        RegistryConfig.SetKey("CopilotDockState", "Docked", userSetting: true);
+                    }
+                    else if (lastState != "Docked")
+                    {
+                        // Undocked or unknown state; set to None
+                        mode = AppBarMode.None;
+                    }
+                }
+                catch
+                {
+                    // Error reading last state; set to Docked
+                    RegistryConfig.SetKey("CopilotDockState", "Docked", userSetting: true);
+                }
+
                 var closed = false;
-                var copilotDock = new CopilotDock();
+                var copilotDock = new CopilotDock(
+                    Configuration.ShellManager,
+                    AppBarScreen.FromPrimaryScreen(),
+                    AppBarEdge.Right,
+                    500, // temporary size
+                    mode);
                 copilotDock.Closed += (sender, args) => closed = true;
                 copilotDock.ShowDialog();
 
@@ -21,7 +51,7 @@ namespace GoAwayEdge.UserInterface.CopilotDock
                 {
                     Thread.Sleep(1000);
                 }
-                Logging.Log("Closed CopilotDock", Logging.LogLevel.INFO);
+                Logging.Log("Closed CopilotDock");
             }
             else
             {

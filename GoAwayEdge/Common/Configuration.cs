@@ -1,6 +1,7 @@
 ﻿using System.IO;
 using System.Windows;
 using GoAwayEdge.Common.Debugging;
+using ManagedShell;
 using Microsoft.Win32;
 
 namespace GoAwayEdge.Common
@@ -51,6 +52,9 @@ namespace GoAwayEdge.Common
             Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles),
             "valnoxy",
             "GoAwayEdge");
+        public static ShellManager ShellManager { get; set; }
+        public static bool AppBarIsAttached { get; set; }
+
 
         /// <summary>
         /// Initialize the current environment.
@@ -69,9 +73,10 @@ namespace GoAwayEdge.Common
                 if (NoEdgeInstalled)
                     return true;
 
+                ShellManager = new ShellManager();
+
                 FileConfiguration.EdgePath = RegistryConfig.GetKey("EdgeFilePath");
                 FileConfiguration.NonIfeoPath = RegistryConfig.GetKey("EdgeNonIEFOFilePath");
-
                 try
                 {
                     Channel = Runtime.ArgumentParse.ParseEdgeChannel(RegistryConfig.GetKey("EdgeChannel"));
