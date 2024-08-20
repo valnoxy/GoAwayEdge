@@ -75,6 +75,11 @@ namespace GoAwayEdge.UserInterface.ControlPanel.Pages
                     FlushSettings();
                     break;
                 case 2:
+                    Configuration.Provider = AiProvider.Gemini;
+                    CustomSearchPanel.Visibility = Visibility.Collapsed;
+                    FlushSettings();
+                    break;
+                case 3:
                     Configuration.Provider = AiProvider.Custom;
                     CustomSearchPanel.Visibility = Visibility.Visible;
                     break;
