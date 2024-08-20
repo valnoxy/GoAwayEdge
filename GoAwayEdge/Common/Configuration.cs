@@ -23,6 +23,7 @@ namespace GoAwayEdge.Common
     {
         Copilot,
         ChatGPT,
+        Gemini,
         Custom
     }
 

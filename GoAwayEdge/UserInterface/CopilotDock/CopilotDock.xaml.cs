@@ -38,6 +38,9 @@ namespace GoAwayEdge.UserInterface.CopilotDock
                     case ChatGPT:
                         WebView.Source = new Uri("https://chatgpt.com/");
                         break;
+                    case Gemini:
+                        WebView.Source = new Uri("https://gemini.google.com/");
+                        break;
                     case Custom:
                         if (Configuration.CustomProviderUrl != null)
                             WebView.Source = new Uri(Configuration.CustomProviderUrl);
