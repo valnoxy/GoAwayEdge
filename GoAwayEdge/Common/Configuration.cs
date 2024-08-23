@@ -1,4 +1,6 @@
 ﻿using System.IO;
+using System.IO.Pipes;
+using System.Threading;
 using System.Windows;
 using GoAwayEdge.Common.Debugging;
 using ManagedShell;
@@ -73,7 +75,14 @@ namespace GoAwayEdge.Common
                 if (NoEdgeInstalled)
                     return true;
 
-                ShellManager = new ShellManager();
+                if (!CopilotDockPipeAvailable())
+                {
+                    try { ShellManager = new ShellManager(); }
+                    catch (Exception ex)
+                    {
+                        Logging.Log("An error has occurred while initializing the ShellManager: " + ex.Message, Logging.LogLevel.ERROR);
+                    }
+                }
 
                 FileConfiguration.EdgePath = RegistryConfig.GetKey("EdgeFilePath");
                 FileConfiguration.NonIfeoPath = RegistryConfig.GetKey("EdgeNonIEFOFilePath");
@@ -91,9 +100,9 @@ namespace GoAwayEdge.Common
                         CustomProviderUrl = RegistryConfig.GetKey("CustomProviderUrl", userSetting: true);
                     }
                 }
-                catch
+                catch (Exception ex)
                 {
-                    // ignored
+                    Logging.Log("An error has occurred while reading the registry: " + ex.Message, Logging.LogLevel.ERROR);
                 }
                 return true;
             }
@@ -102,6 +111,26 @@ namespace GoAwayEdge.Common
                 var errorMessage = LocalizationManager.LocalizeValue("FailedInitialization", ex.Message);
                 var messageUi = new MessageUi("GoAwayEdge", errorMessage, "OK", isMainThread: true);
                 messageUi.ShowDialog();
+                return false;
+            }
+        }
+
+        public static bool CopilotDockPipeAvailable()
+        {
+            try
+            {
+                using var pipeClient = new NamedPipeClientStream(".", "CopilotDockPipe", PipeDirection.In);
+                pipeClient.Connect(1000);
+                return true;
+            }
+            catch (TimeoutException)
+            {
+                // Pipe does not exist or is not available
+                return false;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Failed to check for the pipe 'CopilotDockPipe': {ex.Message}");
                 return false;
             }
         }

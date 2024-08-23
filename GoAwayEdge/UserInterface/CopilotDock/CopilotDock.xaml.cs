@@ -1,6 +1,5 @@
 ﻿using System.Diagnostics;
 using System.IO;
-using System.Runtime.InteropServices;
 using System.Windows;
 using GoAwayEdge.Common;
 using GoAwayEdge.Common.Debugging;
@@ -17,15 +16,19 @@ namespace GoAwayEdge.UserInterface.CopilotDock
     /// </summary>
     public partial class CopilotDock
     {
+        public static CopilotDock? Instance;
         public CopilotDock(ShellManager shellManager, AppBarScreen screen, AppBarEdge edge, double desiredHeight, AppBarMode mode)
             : base(shellManager.AppBarManager, shellManager.ExplorerHelper, shellManager.FullScreenHelper, screen, edge, mode, desiredHeight)
         {
             this.MaxHeight = SystemParameters.WorkArea.Height;
             this.MinHeight = SystemParameters.WorkArea.Height;
             Configuration.AppBarIsAttached = mode != AppBarMode.None;
+            Instance = this;
 
             InitializeComponent();
             _ = InitializeWebViewAsync();
+
+            DockButton.Icon = Configuration.AppBarIsAttached ? new SymbolIcon(SymbolRegular.PinOff28) : new SymbolIcon(SymbolRegular.Pin28);
         }
 
         private async Task InitializeWebViewAsync()
@@ -70,17 +73,17 @@ namespace GoAwayEdge.UserInterface.CopilotDock
 
         private void DockButton_OnClick(object sender, RoutedEventArgs e)
         {
-            Configuration.ShellManager.AppBarManager.RegisterBar(this, Width, Height, AppBarEdge.Right);
-
             if (Configuration.AppBarIsAttached)
             {
                 DockButton.Icon = new SymbolIcon(SymbolRegular.Pin28);
                 RegistryConfig.SetKey("CopilotDockState", "Detached", userSetting: true);
+                this.AppBarMode = AppBarMode.None;
             }
             else
             {
                 DockButton.Icon = new SymbolIcon(SymbolRegular.PinOff28);
                 RegistryConfig.SetKey("CopilotDockState", "Docked", userSetting: true);
+                this.AppBarMode = AppBarMode.Normal;
             }
             Configuration.AppBarIsAttached = !Configuration.AppBarIsAttached;
         }
@@ -92,13 +95,9 @@ namespace GoAwayEdge.UserInterface.CopilotDock
             var currentTitle = currentProcess.MainWindowTitle;
             var currentId = currentProcess.Id;
             Logging.Log($"Deactivated CopilotDock (ID: {currentId}, Title: {currentTitle})", Logging.LogLevel.INFO);
-            Hide();
+            this.Visibility = Visibility.Collapsed;
         }
 
-
-        [DllImport("user32.dll")]
-        [return: MarshalAs(UnmanagedType.Bool)]
-        private static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
-        private const int SW_HIDE = 0;
+        public void ShowWindow() => this.Visibility = Visibility.Visible;
     }
 }

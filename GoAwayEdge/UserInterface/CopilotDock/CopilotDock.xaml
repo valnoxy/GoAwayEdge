@@ -23,7 +23,7 @@
 
         <StackPanel Grid.Row="0">
             <!-- This needs a custom taskbar -->
-            <ui:TextBlock Text="GoAwayEdge - Copilot Dock" FontSize="14" Margin="16,16,0,0"/>
+            <ui:TextBlock Text="GoAwayEdge - Copilot Dock" Foreground="{DynamicResource TextFillColorPrimaryBrush}" FontSize="14" Margin="16,16,0,0"/>
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,-25,16,0">
                 <ui:Button x:Name="DockButton" Icon="{ui:SymbolIcon Pin28}" FontSize="16" Margin="0,0,8,0" Click="DockButton_OnClick"/>
                 <ui:Button x:Name="CloseButton" Icon="{ui:SymbolIcon ArrowExit20}" FontSize="16" Click="CloseButton_OnClick"/>

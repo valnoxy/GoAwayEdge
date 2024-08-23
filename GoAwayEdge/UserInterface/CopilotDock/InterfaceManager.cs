@@ -1,6 +1,6 @@
-﻿using System.Diagnostics;
-using System.Runtime.InteropServices;
-using System.Text;
+﻿using System.IO.Pipes;
+using System.IO;
+using System.Windows;
 using GoAwayEdge.Common;
 using GoAwayEdge.Common.Debugging;
 using ManagedShell.AppBar;
@@ -9,6 +9,11 @@ namespace GoAwayEdge.UserInterface.CopilotDock
 {
     public class InterfaceManager
     {
+        private static AppBarWindow? _dockWindow;
+        private static NamedPipeServerStream? _pipeServer;
+        private static Thread? _pipeThread;
+        private static bool _closed = false;
+
         public static void ShowDock()
         {
             using var mutex = new Mutex(true, "GoAwayEdge_CopilotDock", out var createdNew);
@@ -37,21 +42,30 @@ namespace GoAwayEdge.UserInterface.CopilotDock
                     RegistryConfig.SetKey("CopilotDockState", "Docked", userSetting: true);
                 }
 
-                var closed = false;
-                var copilotDock = new CopilotDock(
+                _dockWindow = new CopilotDock(
                     Configuration.ShellManager,
                     AppBarScreen.FromPrimaryScreen(),
                     AppBarEdge.Right,
                     500, // temporary size
                     mode);
-                copilotDock.Closed += (sender, args) => closed = true;
-                copilotDock.ShowDialog();
 
-                while (!closed)
+                _dockWindow.Closed += (_, _) =>
                 {
+                    _closed = true;
+                    StopNamedPipeServer(); // Stop the pipe when the dock is closed
+                };
+                _dockWindow.ShowDialog();
+
+                // Dock is inactive, going now into loop...
+                while (!_closed)
+                {
+                    StartNamedPipeServer(); // Start pipe server if the dock is inactive
                     Thread.Sleep(1000);
                 }
+
+                // Dock was closed
                 Logging.Log("Closed CopilotDock");
+                Environment.Exit(0);
             }
             else
             {
@@ -60,112 +74,99 @@ namespace GoAwayEdge.UserInterface.CopilotDock
             }
         }
 
+        private static void StartNamedPipeServer()
+        {
+            if (_pipeServer != null) return;
+
+            _pipeThread = new Thread(() =>
+            {
+                try
+                {
+                    _pipeServer = new NamedPipeServerStream("CopilotDockPipe", PipeDirection.InOut);
+                    Logging.Log("Named Pipe Server opened...");
+
+                    while (true)
+                    {
+                        _pipeServer.WaitForConnection();
+
+                        using (var reader = new StreamReader(_pipeServer))
+                        {
+                            var message = reader.ReadLine();
+                            if (message == "BringToFront")
+                            {
+                                Logging.Log("Received 'BringToFront' command via Named Pipe.");
+
+                                try
+                                {
+                                    Application.Current.Dispatcher.Invoke(() =>
+                                    {
+                                        CopilotDock.Instance!.Visibility = Visibility.Visible;
+
+                                        try
+                                        {
+                                            _dockWindow.Visibility = Visibility.Visible;
+                                            _dockWindow.Activate();
+                                        }
+                                        catch (Exception ex)
+                                        {
+                                            Logging.Log("Stage 2: Failed to bring CopilotDock to the front: " + ex.Message, Logging.LogLevel.ERROR);
+                                        }
+                                    });
+                                }
+                                catch (Exception ex)
+                                {
+                                    Logging.Log("Stage 1: Failed to bring CopilotDock to the front: " + ex.Message, Logging.LogLevel.ERROR);
+                                }
+                            }
+                        }
+
+                        _pipeServer.Disconnect();
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Logging.Log("Error in Named Pipe Server: " + ex.Message, Logging.LogLevel.ERROR);
+                }
+                finally
+                {
+                    _pipeServer?.Dispose();
+                    _pipeServer = null;
+                }
+            });
+
+            _pipeThread.IsBackground = true;
+            _pipeThread.Start();
+        }
+
+
+        private static void StopNamedPipeServer()
+        {
+            if (_pipeServer != null)
+            {
+                _pipeServer.Disconnect();
+                _pipeServer.Dispose();
+                _pipeServer = null;
+            }
+
+            if (_pipeThread is not { IsAlive: true }) return;
+            _pipeThread.Join();
+            _pipeThread = null;
+        }
+
         private static void BringToFront()
         {
-            var currentProcess = Process.GetCurrentProcess();
-            var currentTitle = currentProcess.MainWindowTitle;
-            var currentId = currentProcess.Id;
-            var processes = Process.GetProcessesByName(currentProcess.ProcessName);
-            foreach (var process in processes)
+            using var pipeClient = new NamedPipeClientStream(".", "CopilotDockPipe", PipeDirection.Out);
+            try
             {
-                if (process.Id != currentProcess.Id)
-                {
-                    if (process.MainWindowHandle == IntPtr.Zero)
-                    {
-                        var handle = GetWindowHandle(process.Id, process.MainWindowTitle);
-                        if (handle != IntPtr.Zero)
-                        {
-                            // show window
-                            ShowWindow(handle, 5);
-                            // send WM_SHOWWINDOW message to toggle the visibility flag
-                            SendMessage(handle, WM_SHOWWINDOW, IntPtr.Zero, new IntPtr(SW_PARENTOPENING));
-                        }
-                    }
-                }
+                pipeClient.Connect(1000);
+                using var writer = new StreamWriter(pipeClient);
+                writer.WriteLine("BringToFront");
+                writer.Flush();
             }
-        }
-
-        // "stolen" from StackOverflow >:)
-        // https://stackoverflow.com/questions/21154693/activate-a-hidden-wpf-application-when-trying-to-run-a-second-instance
-        const int GWL_EXSTYLE = (-20);
-        const uint WS_EX_APPWINDOW = 0x40000;
-
-        const uint WM_SHOWWINDOW = 0x0018;
-        const int SW_PARENTOPENING = 3;
-
-        [DllImport("user32.dll")]
-        private static extern Boolean ShowWindow(IntPtr hWnd, Int32 nCmdShow);
-
-        [DllImport("user32.dll")]
-        static extern IntPtr SendMessage(IntPtr hWnd, UInt32 Msg, IntPtr wParam, IntPtr lParam);
-
-        [DllImport("user32.dll")]
-        private static extern bool EnumDesktopWindows(IntPtr hDesktop, EnumWindowsProc ewp, int lParam);
-
-        [DllImport("user32.dll")]
-        static extern uint GetWindowThreadProcessId(IntPtr hWnd, out int lpdwProcessId);
-
-        [DllImport("user32.dll")]
-        private static extern uint GetWindowTextLength(IntPtr hWnd);
-
-        [DllImport("user32.dll")]
-        private static extern uint GetWindowText(IntPtr hWnd, StringBuilder lpString, uint nMaxCount);
-
-        [DllImport("user32.dll", CharSet = CharSet.Auto)]
-        static extern bool GetClassName(IntPtr hWnd, StringBuilder lpClassName, int nMaxCount);
-
-        [DllImport("user32.dll")]
-        static extern int GetWindowLong(IntPtr hWnd, int nIndex);
-
-        delegate bool EnumWindowsProc(IntPtr hWnd, int lParam);
-
-        static bool IsApplicationWindow(IntPtr hWnd)
-        {
-            return (GetWindowLong(hWnd, GWL_EXSTYLE) & WS_EX_APPWINDOW) != 0;
-        }
-
-        static IntPtr GetWindowHandle(int pid, string title)
-        {
-            var result = IntPtr.Zero;
-
-            EnumWindowsProc enumerateHandle = delegate (IntPtr hWnd, int lParam)
+            catch (Exception ex)
             {
-                int id;
-                GetWindowThreadProcessId(hWnd, out id);
-
-                if (pid == id)
-                {
-                    var clsName = new StringBuilder(256);
-                    var hasClass = GetClassName(hWnd, clsName, 256);
-                    if (hasClass)
-                    {
-
-                        var maxLength = (int)GetWindowTextLength(hWnd);
-                        var builder = new StringBuilder(maxLength + 1);
-                        GetWindowText(hWnd, builder, (uint)builder.Capacity);
-
-                        var text = builder.ToString();
-                        var className = clsName.ToString();
-
-                        // There could be multiple handle associated with our pid, 
-                        // so we return the first handle that satisfy:
-                        // 1) the handle title/ caption matches our window title,
-                        // 2) the window class name starts with HwndWrapper (WPF specific)
-                        // 3) the window has WS_EX_APPWINDOW style
-
-                        if (title == text && className.StartsWith("HwndWrapper") && IsApplicationWindow(hWnd))
-                        {
-                            result = hWnd;
-                            return false;
-                        }
-                    }
-                }
-                return true;
-            };
-
-            EnumDesktopWindows(IntPtr.Zero, enumerateHandle, 0);
-
-            return result;
+                Logging.Log("Failed to connect to CopilotDock pipe: " + ex.Message, Logging.LogLevel.ERROR);
+            }
         }
     }
 }
