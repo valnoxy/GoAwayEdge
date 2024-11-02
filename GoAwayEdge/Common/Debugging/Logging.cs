@@ -14,6 +14,7 @@
  *      Backported from: https://git.heydu.net/valnoxy/xorieos/-/blob/main/srv03rtm/base/ntsetup/winnt32/modernsetup/common/logging.cs
  */
 
+using System.Diagnostics;
 using System.IO;
 using System.Reflection;
 
@@ -51,10 +52,23 @@ namespace GoAwayEdge.Common.Debugging
         {
             if (string.IsNullOrEmpty(_logFile))
                 throw new Exception("Logging class not initialized!");
-            using var writer = new StreamWriter(_logFile, true);
 
-            var logMessage = $"{DateTime.Now:yyyy-MM-dd HH:mm:ss} - {level} - {message}";
-            writer.WriteLine(logMessage);
+            // Get calling method information
+            var stackTrace = new StackTrace();
+            var callingMethod = stackTrace.GetFrame(1)?.GetMethod();
+            var callingClass = callingMethod?.DeclaringType?.FullName ?? "UnknownClass";
+            var methodName = callingMethod?.Name ?? "UnknownMethod";
+
+            // Construct the log message with calling class and method
+            var logMessage = $"{DateTime.Now:yyyy-MM-dd HH:mm:ss} - {level} - {callingClass}.{methodName} - {message}";
+
+            using (var fileStream = new FileStream(_logFile, FileMode.Append, FileAccess.Write, FileShare.ReadWrite))
+            using (var writer = new StreamWriter(fileStream))
+            {
+                writer.WriteLine(logMessage);
+            }
+
+            // Output log message to Debug console
             System.Diagnostics.Debug.WriteLine(logMessage);
         }
 
