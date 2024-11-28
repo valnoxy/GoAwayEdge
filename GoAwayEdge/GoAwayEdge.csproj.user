@@ -75,6 +75,9 @@
     <Page Update="UserInterface\ControlPanel\ControlPanel.xaml">
       <SubType>Designer</SubType>
     </Page>
+    <Page Update="UserInterface\Setup\Pages\RedirectOrRemove.xaml">
+      <SubType>Designer</SubType>
+    </Page>
     <Page Update="UserInterface\Setup\Pages\Welcome.xaml">
       <SubType>Designer</SubType>
     </Page>

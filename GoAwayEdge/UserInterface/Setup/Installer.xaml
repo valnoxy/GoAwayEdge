@@ -15,55 +15,59 @@
         ResizeMode="NoResize">
 
     <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="50"/>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="60"/>
-        </Grid.RowDefinitions>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="50"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="60"/>
+            </Grid.RowDefinitions>
 
-        <Border Grid.Row="1"
+
+            <Border Grid.Row="1"
                 CornerRadius="8,0,0,0">
-            <Frame Margin="15,10,15,10" x:Name="FrameWindow" />
-        </Border>
+                <Frame Margin="15,10,15,10" x:Name="FrameWindow" />
+            </Border>
 
-        <StatusBar
+            <StatusBar
             Grid.Row="2"
             VerticalAlignment="Bottom"
             Height="50"
             Margin="0"
-            Padding="8,2">
-            <StatusBar.ItemsPanel>
-                <ItemsPanelTemplate>
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto" />
-                            <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="Auto" />
-                        </Grid.ColumnDefinitions>
-                    </Grid>
-                </ItemsPanelTemplate>
-            </StatusBar.ItemsPanel>
+            Padding="15,2">
+                <StatusBar.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                        </Grid>
+                    </ItemsPanelTemplate>
+                </StatusBar.ItemsPanel>
 
-            <StatusBarItem Grid.Column="0">
-                <StackPanel Orientation="Horizontal">
-                    <Label Content="Version 0.0.0" x:Name="VersionLbl" VerticalAlignment="Center" Margin="0,3,0,0"/>
-                    <Separator Margin="8,0,0,0"/>
-                    <ui:HyperlinkButton NavigateUri="https://github.com/valnoxy/GoAwayEdge" VerticalContentAlignment="Bottom" Content="GitHub" Margin="3,0,0,0" Height="30"/>
-                </StackPanel>
-            </StatusBarItem>
+                <StatusBarItem Grid.Column="0">
+                    <StackPanel Orientation="Horizontal">
+                        <Label Content="Version 0.0.0" x:Name="VersionLbl" VerticalAlignment="Center" Margin="0,3,0,0"/>
+                        <Separator Margin="8,0,0,0"/>
+                        <ui:HyperlinkButton NavigateUri="https://github.com/valnoxy/GoAwayEdge" VerticalContentAlignment="Bottom" Content="GitHub" Margin="3,0,0,0" Height="30"/>
+                    </StackPanel>
+                </StatusBarItem>
 
-            <StatusBarItem Grid.Column="2">
-                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-                    <ui:Button Icon="{ui:SymbolIcon ArrowLeft16}" Content="{DynamicResource Back}" Margin="0,0,5,0" Click="BackBtn_OnClick" x:Name="BackBtn" IsEnabled="false"/>
-                    <ui:Button Icon="{ui:SymbolIcon ArrowRight16}" Content="{DynamicResource Next}" Margin="0,0,5,0" Click="NextBtn_OnClick" x:Name="NextBtn" IsEnabled="false"/>
-                </StackPanel>
-            </StatusBarItem>
-        </StatusBar>
+                <StatusBarItem Grid.Column="2">
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                        <ui:Button Icon="{ui:SymbolIcon ArrowLeft16}" Content="{DynamicResource Back}" Margin="0,0,5,0" Click="BackBtn_OnClick" x:Name="BackBtn" IsEnabled="false"/>
+                        <ui:Button Icon="{ui:SymbolIcon ArrowRight16}" Content="{DynamicResource Next}" Margin="0,0,-2,0" Click="NextBtn_OnClick" x:Name="NextBtn" IsEnabled="false"/>
+                    </StackPanel>
+                </StatusBarItem>
+            </StatusBar>
 
-        <ui:TitleBar x:Name="Bar" Title="{DynamicResource Title}" Grid.Row="0" ShowMaximize="false">
-            <ui:TitleBar.Icon>
-                <ui:ImageIcon Source="pack://application:,,,/GoAwayEdge.ico"/>
-            </ui:TitleBar.Icon>
-        </ui:TitleBar>
+            <ui:TitleBar x:Name="Bar" Title="{DynamicResource Title}" Grid.Row="0" ShowMaximize="false">
+                <ui:TitleBar.Icon>
+                    <ui:ImageIcon Source="pack://application:,,,/GoAwayEdge.ico"/>
+                </ui:TitleBar.Icon>
+            </ui:TitleBar>
+        </Grid>
+        <ContentPresenter x:Name="RootContentDialogPresenter"/>
     </Grid>
 </ui:FluentWindow>

@@ -1,4 +1,5 @@
 ﻿using System.Windows;
+using GoAwayEdge.Common;
 
 namespace GoAwayEdge.UserInterface.Setup.Pages
 {
@@ -10,6 +11,12 @@ namespace GoAwayEdge.UserInterface.Setup.Pages
         public License()
         {
             InitializeComponent();
+
+            if (Configuration.LicenseAccepted)
+            {
+                Installer.ContentWindow!.NextBtn.IsEnabled = true;
+                AcceptLicenseRadioBtn.IsChecked = true;
+            }
 
             const string license = @"MIT License
 
@@ -40,10 +47,12 @@ SOFTWARE.
         private void AcceptLicenseRb_Click(object sender, RoutedEventArgs e)
         {
             Installer.ContentWindow!.NextBtn.IsEnabled = true;
+            Configuration.LicenseAccepted = true;
         }
         private void DeclineLicenseRb_Click(object sender, RoutedEventArgs e)
         {
             Installer.ContentWindow!.NextBtn.IsEnabled = false;
+            Configuration.LicenseAccepted = false;
         }
     }
 }

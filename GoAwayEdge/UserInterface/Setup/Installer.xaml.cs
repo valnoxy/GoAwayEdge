@@ -12,8 +12,9 @@ namespace GoAwayEdge.UserInterface.Setup
     {
         internal static Installer? ContentWindow;
         public static License? LicensePage;
+        public static Settings? SettingPage;
         private static Welcome? _welcomePage;
-        private static Settings? _settingPage;
+        private static RedirectOrRemove? _redirectOrRemovePage;
 
         public Installer()
         {
@@ -43,7 +44,7 @@ namespace GoAwayEdge.UserInterface.Setup
             Configuration.InitialEnvironment();
 
             _welcomePage = new Welcome();
-            LicensePage = new License();
+            _redirectOrRemovePage = new RedirectOrRemove();
             FrameWindow.Content = _welcomePage;
             ContentWindow = this;
         }
@@ -61,10 +62,10 @@ namespace GoAwayEdge.UserInterface.Setup
                     FrameWindow.Content = new Installation();
                     break;
                 case License:
-                    NextBtn.IsEnabled = true;
+                    NextBtn.IsEnabled = false;
                     BackBtn.IsEnabled = true;
-                    _settingPage = new Settings();
-                    FrameWindow.Content = _settingPage;
+                    FrameWindow.Content = _redirectOrRemovePage;
+                    SettingPage = new Settings();
                     break;
             }
         }
@@ -73,10 +74,16 @@ namespace GoAwayEdge.UserInterface.Setup
         {
             switch (FrameWindow.Content)
             {
+                case RedirectOrRemove:
+                    NextBtn.IsEnabled = false;
+                    BackBtn.IsEnabled = true;
+                    LicensePage = new License();
+                    FrameWindow.Content = LicensePage;
+                    break;
                 case Settings:
                     NextBtn.IsEnabled = true;
                     BackBtn.IsEnabled = true;
-                    FrameWindow.Content = LicensePage;
+                    FrameWindow.Content = _redirectOrRemovePage;
                     break;
                 case License:
                     NextBtn.IsEnabled = false;

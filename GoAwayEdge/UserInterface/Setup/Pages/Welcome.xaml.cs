@@ -26,6 +26,7 @@ namespace GoAwayEdge.UserInterface.Setup.Pages
 
         private void InstallBtn_Click(object sender, RoutedEventArgs e)
         {
+            Installer.LicensePage = new License();
             Installer.ContentWindow!.FrameWindow.Content = Installer.LicensePage;
             Installer.ContentWindow!.BackBtn.IsEnabled = true;
         }

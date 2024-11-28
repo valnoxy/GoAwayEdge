@@ -16,7 +16,7 @@
             </ScrollViewer>
         </ui:Card>
 
-        <RadioButton Content="{DynamicResource LicenseAccept}" Click="AcceptLicenseRb_Click"/>
+        <RadioButton x:Name="AcceptLicenseRadioBtn" Content="{DynamicResource LicenseAccept}" Click="AcceptLicenseRb_Click"/>
         <RadioButton Content="{DynamicResource LicenseDecline}" IsChecked="true" Click="DeclineLicenseRb_Click"/>
     </StackPanel>
 </UserControl>

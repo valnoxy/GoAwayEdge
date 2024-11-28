@@ -1,4 +1,4 @@
-using System.IO;
+﻿using System.IO;
 using System.IO.Pipes;
 using System.Windows;
 using GoAwayEdge.Common.Debugging;
@@ -42,6 +42,7 @@ namespace GoAwayEdge.Common
         public static EdgeChannel Channel { get; set; }
         public static SearchEngine Search { get; set; }
         public static AiProvider Provider { get; set; }
+        public static bool LicenseAccepted { get; set; }
         public static bool Uninstall { get; set; }
         public static bool UninstallEdge { get; set; }
         public static bool NoEdgeInstalled { get; set; }
