@@ -1,6 +1,5 @@
-﻿using System.IO;
+using System.IO;
 using System.IO.Pipes;
-using System.Threading;
 using System.Windows;
 using GoAwayEdge.Common.Debugging;
 using ManagedShell;
@@ -69,14 +68,19 @@ namespace GoAwayEdge.Common
             // Check if Edge is installed
             try
             {
+                Logging.Log("Initialize environment ...");
                 NoEdgeInstalled = !File.Exists(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86),
                     "Microsoft", "Edge", "Application", "msedge.exe"));
 
                 if (NoEdgeInstalled)
+                {
+                    Logging.Log("Edge is not installed on this device - completed initialization");
                     return true;
+                }
 
                 if (!CopilotDockPipeAvailable())
                 {
+                    Logging.Log("Copilot Dock (Pipe) is not available - spawning ShellManager");
                     try { ShellManager = new ShellManager(); }
                     catch (Exception ex)
                     {
@@ -84,6 +88,7 @@ namespace GoAwayEdge.Common
                     }
                 }
 
+                Logging.Log("Fetching settings from registry ...");
                 FileConfiguration.EdgePath = RegistryConfig.GetKey("EdgeFilePath");
                 FileConfiguration.NonIfeoPath = RegistryConfig.GetKey("EdgeNonIEFOFilePath");
                 try
@@ -104,6 +109,13 @@ namespace GoAwayEdge.Common
                 {
                     Logging.Log("An error has occurred while reading the registry: " + ex.Message, Logging.LogLevel.ERROR);
                 }
+                Logging.Log($"Value of EdgePath: {FileConfiguration.EdgePath}");
+                Logging.Log($"Value of NonIfeoPath: {FileConfiguration.NonIfeoPath}");
+                Logging.Log($"Value of Channel: {Channel}");
+                Logging.Log($"Value of Search: {Search}");
+                Logging.Log($"Value of Provider: {Provider}");
+                Logging.Log($"Value of CustomQueryUrl: {CustomQueryUrl}");
+                Logging.Log($"Value of CustomProviderUrl: {CustomProviderUrl}");
                 return true;
             }
             catch (Exception ex)
@@ -119,7 +131,7 @@ namespace GoAwayEdge.Common
         {
             try
             {
-                using var pipeClient = new NamedPipeClientStream(".", "CopilotDockPipe", PipeDirection.In);
+                using var pipeClient = new NamedPipeClientStream(".", "GoAwayEdge_CopilotDockPipe", PipeDirection.In);
                 pipeClient.Connect(1000);
                 return true;
             }
@@ -128,9 +140,14 @@ namespace GoAwayEdge.Common
                 // Pipe does not exist or is not available
                 return false;
             }
+            catch (UnauthorizedAccessException ex)
+            {
+                Logging.Log($"Access Denied for Pipe 'GoAwayEdge_CopilotDockPipe': {ex.Message}", Logging.LogLevel.ERROR);
+                return true;
+            }
             catch (Exception ex)
             {
-                Console.WriteLine($"Failed to check for the pipe 'CopilotDockPipe': {ex.Message}");
+                Logging.Log($"Failed to check for the pipe 'GoAwayEdge_CopilotDockPipe': {ex.Message}", Logging.LogLevel.ERROR);
                 return false;
             }
         }
@@ -147,7 +164,6 @@ namespace GoAwayEdge.Common
                 select edgeChannel.ToString()).ToList();
             return list;
         }
-
 
         /// <summary>
         ///     Get a list of all available Search Engines.

@@ -95,9 +95,7 @@ namespace GoAwayEdge.UserInterface.CopilotDock
             var currentTitle = currentProcess.MainWindowTitle;
             var currentId = currentProcess.Id;
             Logging.Log($"Deactivated CopilotDock (ID: {currentId}, Title: {currentTitle})", Logging.LogLevel.INFO);
-            this.Visibility = Visibility.Collapsed;
+            WindowManager.HideCopilotDock();
         }
-
-        public void ShowWindow() => this.Visibility = Visibility.Visible;
     }
 }

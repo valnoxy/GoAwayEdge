@@ -22,7 +22,7 @@ namespace GoAwayEdge.Common.Debugging
 {
     internal class Logging
     {
-        private static string LogPath = Path.Combine(Path.GetTempPath(), "GoAwayEdge", "Logs");
+        private static readonly string LogPath = Path.Combine(Path.GetTempPath(), "GoAwayEdge", "Logs");
         private static string? _logFile;
 
         internal enum LogLevel { INFO, ERROR, WARNING }

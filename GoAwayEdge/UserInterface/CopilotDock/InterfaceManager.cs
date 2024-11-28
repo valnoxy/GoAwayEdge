@@ -1,24 +1,22 @@
-﻿using System.IO.Pipes;
-using System.IO;
-using System.Windows;
-using GoAwayEdge.Common;
+﻿using GoAwayEdge.Common;
 using GoAwayEdge.Common.Debugging;
+using GoAwayEdge.Common.Runtime;
 using ManagedShell.AppBar;
 
 namespace GoAwayEdge.UserInterface.CopilotDock
 {
     public class InterfaceManager
     {
-        private static AppBarWindow? _dockWindow;
-        private static NamedPipeServerStream? _pipeServer;
-        private static Thread? _pipeThread;
-        private static bool _closed = false;
+        private const string MutexName = "GoAwayEdge_CopilotDock";
+        private const string PipeName = "GoAwayEdge_CopilotDockPipe";
+        private static readonly NamedPipeManager PipeManager = new(PipeName);
 
         public static void ShowDock()
         {
-            using var mutex = new Mutex(true, "GoAwayEdge_CopilotDock", out var createdNew);
+            using var mutex = new Mutex(true, MutexName, out var createdNew);
             if (createdNew)
             {
+                PipeManager.StartServer();
                 var mode = AppBarMode.Normal;
 
                 // Last state
@@ -42,26 +40,27 @@ namespace GoAwayEdge.UserInterface.CopilotDock
                     RegistryConfig.SetKey("CopilotDockState", "Docked", userSetting: true);
                 }
 
-                _dockWindow = new CopilotDock(
-                    Configuration.ShellManager,
+                // PipeManager configuration
+                PipeManager.MessageReceived += (message) =>
+                {
+                    Logging.Log($"Message received: {message}");
+                    if (message.Contains("BringToFront"))
+                    {
+                        WindowManager.ShowHiddenCopilotDock();
+                    }
+                };
+
+                PipeManager.ErrorOccurred += (ex) =>
+                {
+                    Logging.Log($"Error occurred: {ex.Message}", Logging.LogLevel.ERROR);
+                };
+
+                WindowManager.ShowCopilotDockAsync(Common.Configuration.ShellManager,
                     AppBarScreen.FromPrimaryScreen(),
                     AppBarEdge.Right,
                     500, // temporary size
                     mode);
 
-                _dockWindow.Closed += (_, _) =>
-                {
-                    _closed = true;
-                    StopNamedPipeServer(); // Stop the pipe when the dock is closed
-                };
-                _dockWindow.ShowDialog();
-
-                // Dock is inactive, going now into loop...
-                while (!_closed)
-                {
-                    StartNamedPipeServer(); // Start pipe server if the dock is inactive
-                    Thread.Sleep(1000);
-                }
 
                 // Dock was closed
                 Logging.Log("Closed CopilotDock");
@@ -69,103 +68,8 @@ namespace GoAwayEdge.UserInterface.CopilotDock
             }
             else
             {
-                // check if dock is in background
-                BringToFront();
-            }
-        }
-
-        private static void StartNamedPipeServer()
-        {
-            if (_pipeServer != null) return;
-
-            _pipeThread = new Thread(() =>
-            {
-                try
-                {
-                    _pipeServer = new NamedPipeServerStream("CopilotDockPipe", PipeDirection.InOut);
-                    Logging.Log("Named Pipe Server opened...");
-
-                    while (true)
-                    {
-                        _pipeServer.WaitForConnection();
-
-                        using (var reader = new StreamReader(_pipeServer))
-                        {
-                            var message = reader.ReadLine();
-                            if (message == "BringToFront")
-                            {
-                                Logging.Log("Received 'BringToFront' command via Named Pipe.");
-
-                                try
-                                {
-                                    Application.Current.Dispatcher.Invoke(() =>
-                                    {
-                                        CopilotDock.Instance!.Visibility = Visibility.Visible;
-
-                                        try
-                                        {
-                                            _dockWindow.Visibility = Visibility.Visible;
-                                            _dockWindow.Activate();
-                                        }
-                                        catch (Exception ex)
-                                        {
-                                            Logging.Log("Stage 2: Failed to bring CopilotDock to the front: " + ex.Message, Logging.LogLevel.ERROR);
-                                        }
-                                    });
-                                }
-                                catch (Exception ex)
-                                {
-                                    Logging.Log("Stage 1: Failed to bring CopilotDock to the front: " + ex.Message, Logging.LogLevel.ERROR);
-                                }
-                            }
-                        }
-
-                        _pipeServer.Disconnect();
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Logging.Log("Error in Named Pipe Server: " + ex.Message, Logging.LogLevel.ERROR);
-                }
-                finally
-                {
-                    _pipeServer?.Dispose();
-                    _pipeServer = null;
-                }
-            });
-
-            _pipeThread.IsBackground = true;
-            _pipeThread.Start();
-        }
-
-
-        private static void StopNamedPipeServer()
-        {
-            if (_pipeServer != null)
-            {
-                _pipeServer.Disconnect();
-                _pipeServer.Dispose();
-                _pipeServer = null;
-            }
-
-            if (_pipeThread is not { IsAlive: true }) return;
-            _pipeThread.Join();
-            _pipeThread = null;
-        }
-
-        private static void BringToFront()
-        {
-            using var pipeClient = new NamedPipeClientStream(".", "CopilotDockPipe", PipeDirection.Out);
-            try
-            {
-                pipeClient.Connect(1000);
-                using var writer = new StreamWriter(pipeClient);
-                writer.WriteLine("BringToFront");
-                writer.Flush();
-            }
-            catch (Exception ex)
-            {
-                Logging.Log("Failed to connect to CopilotDock pipe: " + ex.Message, Logging.LogLevel.ERROR);
+                PipeManager.SendMessage("BringToFront");
+                Environment.Exit(0); // Exit the second instance
             }
         }
     }
