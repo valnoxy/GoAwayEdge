@@ -75,7 +75,7 @@ You can install GoAwayEdge silently by parsing the following arguments:
 | Switch            | Description                                                               |
 | ----------------- | ------------------------------------------------------------------------- |
 | `-s`              | Silent installation                                                       |
-| `-se:<Engine>`    | Specify the Search Engine: `Google` (default), `Bing`, `DuckDuckGo`, `Yahoo`, `Yandex`, `Ecisua`, `Ask`, `Quant`, `Perplexity`         |
+| `-se:<Engine>`    | Specify the Search Engine: `Google` (default), `Bing`, `DuckDuckGo`, `Yahoo`, `Yandex`, `Ecisua`, `Ask`, `Qwant`, `Perplexity`         |
 | `--url:<Url>`     | Custom search query url (ex: `https://google.com/search?q=`)              |
 
 <b>Example</b>:
