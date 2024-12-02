@@ -110,13 +110,6 @@ namespace GoAwayEdge.Common.Runtime
             }
         }
 
-
-        public void StopServer()
-        {
-            _isServerRunning = false;
-            _pipeThread?.Join(); // Wait for ending tasks
-        }
-
         private void HandleError(Exception ex)
         {
             Logging.Log($"Pipe error: {ex.Message}", Logging.LogLevel.ERROR);

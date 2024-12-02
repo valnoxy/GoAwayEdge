@@ -9,7 +9,6 @@ namespace GoAwayEdge.UserInterface.CopilotDock;
 public static class WindowManager
 {
     private static CopilotDock? _copilotDockInstance;
-    private static TaskCompletionSource<bool>? _closeCompletionSource;
 
     public static void ShowCopilotDockAsync(ShellManager shellManager, AppBarScreen screen, AppBarEdge edge, double desiredHeight, AppBarMode mode)
     {
@@ -29,27 +28,29 @@ public static class WindowManager
         }
         else
         {
-            _copilotDockInstance.Show();
-            _copilotDockInstance.Activate();
+            Application.Current.Dispatcher.Invoke(() =>
+            {
+                _copilotDockInstance.Show();
+                _copilotDockInstance.Activate();
+            });
         }
     }
 
     private static void OnCopilotDockClosed(object sender, System.EventArgs e)
     {
-        _closeCompletionSource?.TrySetResult(true);
         if (_copilotDockInstance != null) _copilotDockInstance.Closed -= OnCopilotDockClosed!;
         _copilotDockInstance = null;
     }
 
     public static void HideCopilotDock()
     {
-        _copilotDockInstance?.Hide();
-    }
-
-    public static void ShowHiddenCopilotDock()
-    {
-        if (_copilotDockInstance is not { IsVisible: false }) return;
-        _copilotDockInstance.Show();
-        _copilotDockInstance.Activate();
+        try
+        {
+            _copilotDockInstance?.Hide();
+        }
+        catch (Exception ex)
+        {
+            Logging.Log("Failed to hide Copilot Dock: " + ex.Message);
+        }
     }
 }

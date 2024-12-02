@@ -2,6 +2,8 @@
 using GoAwayEdge.Common.Debugging;
 using GoAwayEdge.Common.Runtime;
 using ManagedShell.AppBar;
+using System.Windows;
+using ManagedShell;
 
 namespace GoAwayEdge.UserInterface.CopilotDock
 {
@@ -46,7 +48,7 @@ namespace GoAwayEdge.UserInterface.CopilotDock
                     Logging.Log($"Message received: {message}");
                     if (message.Contains("BringToFront"))
                     {
-                        WindowManager.ShowHiddenCopilotDock();
+                        WindowManager.ShowCopilotDockAsync(Common.Configuration.ShellManager, AppBarScreen.FromPrimaryScreen(), AppBarEdge.Right, 500, mode);
                     }
                 };
 

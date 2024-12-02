@@ -68,7 +68,7 @@ namespace GoAwayEdge.UserInterface.CopilotDock
         {
             Configuration.ShellManager.AppBarManager.SignalGracefulShutdown();
             Configuration.ShellManager.Dispose();
-            this.Close();
+            Environment.Exit(0);
         }
 
         private void DockButton_OnClick(object sender, RoutedEventArgs e)
@@ -92,9 +92,8 @@ namespace GoAwayEdge.UserInterface.CopilotDock
         {
             if (Configuration.AppBarIsAttached) return;
             var currentProcess = Process.GetCurrentProcess();
-            var currentTitle = currentProcess.MainWindowTitle;
             var currentId = currentProcess.Id;
-            Logging.Log($"Deactivated CopilotDock (ID: {currentId}, Title: {currentTitle})", Logging.LogLevel.INFO);
+            Logging.Log($"Deactivated CopilotDock (PID: {currentId})");
             WindowManager.HideCopilotDock();
         }
     }
