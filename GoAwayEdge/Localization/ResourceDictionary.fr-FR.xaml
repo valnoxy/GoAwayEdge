@@ -1,4 +1,3 @@
-﻿<?xml version="1.0"?>
 <ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:system="clr-namespace:System;assembly=mscorlib">
     <system:String x:Key="Title">Installateur GoAwayEdge</system:String>
     <system:String x:Key="Next">Suivant</system:String>
@@ -6,7 +5,6 @@
     <system:String x:Key="Exit">Sortie</system:String>
     <system:String x:Key="Yes">Oui</system:String>
     <system:String x:Key="No">Non</system:String>
-
     <!-- Welcome -->
     <system:String x:Key="WelcomeTitle">Bienvenue</system:String>
     <system:String x:Key="WelcomeDescription">Le programme d'installation effectuera toutes les étapes nécessaires pour installer GoAwayEdge sur votre système. Après l'installation, tous les appels Edge seront redirigés vers votre navigateur. Veuillez sélectionner l'option souhaitée pour continuer.</system:String>
@@ -15,13 +13,11 @@
     <system:String x:Key="SettingsUninstallTitle">Désinstaller</system:String>
     <system:String x:Key="SettingsUninstallDescription">Désinstallez GoAwayEdge et rétablissez les fonctionnalités de Edge.</system:String>
     <system:String x:Key="SettingsUninstallUseInstaller">Veuillez utiliser le programme d'installation pour désinstaller GoAwayEdge.</system:String>
-
     <!-- License -->
     <system:String x:Key="LicenseTitle">Licence</system:String>
     <system:String x:Key="LicenseNote">Veuillez lire la licence suivante. Vous devez accepter les termes de la licence avant de poursuivre l'installation.</system:String>
     <system:String x:Key="LicenseAccept">J'accepte cette licence.</system:String>
     <system:String x:Key="LicenseDecline">Je refuse cette licence.</system:String>
-
     <!-- Settings -->
     <system:String x:Key="SettingsTitle">Paramètres</system:String>
     <system:String x:Key="SettingsEdgeChannelTitle">Canal de dérivation</system:String>
@@ -33,18 +29,15 @@
     <system:String x:Key="SettingsCustomSearchEngineDescription">Veuillez saisir l'URL de la requête du moteur de recherche.</system:String>
     <system:String x:Key="SettingsMSEdgeUninstallTitle">Supprimer Microsoft Edge (Stable)</system:String>
     <system:String x:Key="SettingsMSEdgeUninstallDescription">Supprimer complètement Microsoft Edge du système.</system:String>
-
     <!-- Setup in progress -->
     <system:String x:Key="SetupProgressTitle">Installation en cours ...</system:String>
     <system:String x:Key="SetupProgressDescription">Veuillez patienter jusqu'à la fin de l'installation.</system:String>
-
     <!-- Setup finished -->
     <system:String x:Key="SetupFinishedTitle">Installation terminée !</system:String>
     <system:String x:Key="SetupFinishedDescription">Ouvrez simplement ce programme d'installation si vous souhaitez personnaliser GoAwayEdge à nouveau.</system:String>
     <system:String x:Key="UninstallFinishedTitle">Désinstallation terminée !</system:String>
     <system:String x:Key="UninstallFinishedDescription">GoAwayEdge a été supprimé avec succès du système.</system:String>
     <system:String x:Key="DonateButton">Faire un don via PayPal</system:String>
-
     <!-- Error Handling / Notifications -->
     <system:String x:Key="FailedInitialization">Échec de l'initialisation : {0}</system:String>
     <system:String x:Key="FailedInstallation">L'installation a échoué : {0}</system:String>
@@ -62,5 +55,5 @@
     <system:String x:Key="IfeoUpdateSuccessfulDescription">La version non IFO de Edge a été mise à jour avec succès.</system:String>
     <system:String x:Key="IfeoCreateSuccessfulTitle">Création réussie</system:String>
     <system:String x:Key="IfeoCreateSuccessfulDescription">La version non-IEFO de Edge a été créée avec succès.</system:String>
-
+    <system:String x:Key="SkipUpdate">Sauter cette version</system:String>
 </ResourceDictionary>

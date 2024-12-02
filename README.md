@@ -35,7 +35,7 @@
     ·
     <a href="https://github.com/valnoxy/GoAwayEdge/discussions/">Discussions</a>
     ·
-    <a href="https://crowdin.com/project/goawayedge">Help me translate</a>
+    <a href="https://translate.valnoxy.dev/engage/goawayedge/">Help me translate</a>
     <br />
     <br />
     🎉 Version 1.3.4 is out. Check out the release notes
