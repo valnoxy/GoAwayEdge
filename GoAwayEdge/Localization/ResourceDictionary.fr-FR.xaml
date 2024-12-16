@@ -56,4 +56,25 @@
     <system:String x:Key="IfeoCreateSuccessfulTitle">Création réussie</system:String>
     <system:String x:Key="IfeoCreateSuccessfulDescription">La version non-IEFO de Edge a été créée avec succès.</system:String>
     <system:String x:Key="SkipUpdate">Sauter cette version</system:String>
+    <system:String x:Key="FailedSetAppDisabled">Impossible de désactiver GoAwayEdge sur ce système : {0}</system:String>
+    <system:String x:Key="ControlPanelTitle">Panneau de contrôle GoAwayEdge</system:String>
+    <system:String x:Key="ControlPanelWelcome">Bienvenue à GoAwayEdge</system:String>
+    <system:String x:Key="ControlPanelWelcomeEdgeTitle">Microsoft Edge</system:String>
+    <system:String x:Key="ControlPanelWelcomeCopilotTitle">Windows Copilot</system:String>
+    <system:String x:Key="ControlPanelWelcomeEdgeDescription">Gérer les moteurs de recherche et plus encore.</system:String>
+    <system:String x:Key="ControlPanelWelcomeCopilotDescription">Gestion des touches de raccourci et plus encore.</system:String>
+    <system:String x:Key="ControlPanelEdgePowerTitle">Activer/désactiver GoAwayEdge</system:String>
+    <system:String x:Key="ControlPanelEdgePowerDescription">Désactiver la transmission des requêtes de recherche à d'autres navigateurs.</system:String>
+    <system:String x:Key="ControlPanelEdgePowerEnable">Activer GoAwayEdge</system:String>
+    <system:String x:Key="ControlPanelEdgePowerDisable">Désactiver GoAwayEdge</system:String>
+    <system:String x:Key="SettingsControlPanelTitle">Installer le panneau de contrôle</system:String>
+    <system:String x:Key="SettingsControlPanelDescription">Installez le panneau de contrôle pour configurer GoAwayEdge plus facilement.</system:String>
+    <system:String x:Key="ControlPanelCopilotProviderTitle">Fournisseur d'IA</system:String>
+    <system:String x:Key="ControlPanelCopilotProviderDescription">Changez de fournisseur pour votre IA préférée (ou pour votre site web préféré).</system:String>
+    <system:String x:Key="ControlPanelCustomCopilotProviderTitle">Fournisseur d'IA sur mesure</system:String>
+    <system:String x:Key="ControlPanelCustomCopilotProviderDescription">Veuillez saisir l'URL du fournisseur d'IA (ou votre site web préféré).</system:String>
+    <system:String x:Key="MessageGoAwayEdgeEnabled">GoAwayEdge a été activé avec succès sur ce système.</system:String>
+    <system:String x:Key="MessageGoAwayEdgeDisabled">GoAwayEdge a été désactivé avec succès sur ce système.</system:String>
+    <system:String x:Key="FailedSetAppEnabled">Impossible d'activer GoAwayEdge sur ce système : {0}</system:String>
+    <system:String x:Key="FailedFlushSetting">Impossible d'appliquer les paramètres : {0}</system:String>
 </ResourceDictionary>
