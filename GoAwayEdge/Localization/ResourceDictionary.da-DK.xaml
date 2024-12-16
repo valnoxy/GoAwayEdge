@@ -66,4 +66,9 @@
     <system:String x:Key="SkipUpdate">Spring denne version over</system:String>
     <system:String x:Key="IfeoUpdateSuccessfulDescription">Den alternative opstartsfil for Edge er blevet opdateret.</system:String>
     <system:String x:Key="FailedSetAppDisabled">Kunne ikke deaktivere GoAwayEdge på dette system: {0}</system:String>
+    <system:String x:Key="ControlPanelCopilotProviderTitle">AI-udbyder</system:String>
+    <system:String x:Key="ControlPanelCopilotProviderDescription">Skift udbyder til din foretrukne AI (eller til din foretrukne hjemmeside).</system:String>
+    <system:String x:Key="ControlPanelCustomCopilotProviderTitle">Brugerdefineret AI-udbyder</system:String>
+    <system:String x:Key="ControlPanelCustomCopilotProviderDescription">Indtast venligst URL'en fra AI-udbyderen (eller din foretrukne hjemmeside).</system:String>
+    <system:String x:Key="FailedFlushSetting">Kunne ikke anvende indstillingerne: {0}</system:String>
 </ResourceDictionary>
