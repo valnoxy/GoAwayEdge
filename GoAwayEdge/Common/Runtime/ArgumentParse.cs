@@ -192,6 +192,8 @@ namespace GoAwayEdge.Common.Runtime
                 "copilot" => AiProvider.Copilot,
                 "chatgpt" => AiProvider.ChatGPT,
                 "gemini" => AiProvider.Gemini,
+                "github_copilot" => AiProvider.GitHub_Copilot,
+                "grok" => AiProvider.Grok,
                 "custom" => AiProvider.Custom,
                 _ => AiProvider.Copilot // Fallback channel
             };

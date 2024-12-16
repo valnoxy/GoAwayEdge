@@ -26,6 +26,8 @@ namespace GoAwayEdge.Common
         Copilot,
         ChatGPT,
         Gemini,
+        GitHub_Copilot,
+        Grok,
         Custom
     }
 
@@ -64,7 +66,7 @@ namespace GoAwayEdge.Common
         /// <returns>
         ///     Boolean status of the initialization.
         /// </returns>
-        public static bool InitialEnvironment()
+        public static bool InitialEnvironment(bool setupRunning = false)
         {
             // Check if Edge is installed
             try
@@ -79,7 +81,7 @@ namespace GoAwayEdge.Common
                     return true;
                 }
 
-                if (!CopilotDockPipeAvailable())
+                if (!IsCopilotDockPipeAvailable() && !setupRunning)
                 {
                     Logging.Log("Copilot Dock (Pipe) is not available - spawning ShellManager");
                     try { ShellManager = new ShellManager(); }
@@ -128,7 +130,7 @@ namespace GoAwayEdge.Common
             }
         }
 
-        public static bool CopilotDockPipeAvailable()
+        public static bool IsCopilotDockPipeAvailable()
         {
             try
             {
@@ -202,7 +204,7 @@ namespace GoAwayEdge.Common
         {
             var list = (from aiProvider in (AiProvider[])Enum.GetValues(typeof(AiProvider))
                 where aiProvider != AiProvider.Custom
-                select aiProvider.ToString()).ToList();
+                select aiProvider.ToString().Replace("_", " ")).ToList();
 
             try
             {

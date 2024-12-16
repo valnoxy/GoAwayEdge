@@ -13,7 +13,10 @@
         <StackPanel>
             <ui:TextBlock FontTypography="Subtitle" Text="{DynamicResource SettingsTitle}" Foreground="{DynamicResource TextFillColorPrimaryBrush}"/>
             <StackPanel Margin="0,5,0,0" x:Name="CopilotProviderStackPanel">
-                <ui:CardControl Icon="{ui:SymbolIcon Channel24}">
+                <ui:CardControl>
+                    <ui:CardControl.Icon>
+                        <ui:ImageIcon Source="{DynamicResource MicrosoftCopilot}" Width="24"/>
+                    </ui:CardControl.Icon>
                     <ui:CardControl.Header>
                         <Grid>
                             <Grid.ColumnDefinitions>
@@ -55,7 +58,7 @@
                                     Text="{DynamicResource ControlPanelCustomCopilotProviderDescription}"/>
                             </StackPanel>
                             <ui:SymbolIcon Grid.Column="1" x:Name="CustomUrlStatus" Margin="0,0,10,0" FontSize="18"/>
-                            <ui:TextBox Grid.Column="2" Width="300" x:Name="QueryProviderTextBox" PlaceholderText="https://www.google.com/search?q=" TextChanged="QueryProviderTextBox_OnTextChanged"/>
+                            <ui:TextBox Grid.Column="2" Width="300" x:Name="QueryProviderTextBox" PlaceholderText="https://example.com" TextChanged="QueryProviderTextBox_OnTextChanged"/>
                         </Grid>
                     </ui:CardControl.Header>
                 </ui:CardControl>

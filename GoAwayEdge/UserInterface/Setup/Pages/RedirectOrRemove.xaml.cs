@@ -1,5 +1,7 @@
 ﻿using System.Windows;
+using GoAwayEdge.Common.Debugging;
 using Wpf.Ui;
+using Wpf.Ui.Controls;
 using Wpf.Ui.Extensions;
 
 namespace GoAwayEdge.UserInterface.Setup.Pages
@@ -20,13 +22,13 @@ namespace GoAwayEdge.UserInterface.Setup.Pages
             Installer.ContentWindow!.NextBtn.IsEnabled = true;
         }
 
-        private void UninstallBtn_Click(object sender, RoutedEventArgs e)
+        private async void UninstallBtn_Click(object sender, RoutedEventArgs e)
         {
             var contentDialogService = new ContentDialogService();
             contentDialogService.SetDialogHost(Installer.ContentWindow!.RootContentDialogPresenter);
 
-            contentDialogService.ShowSimpleDialogAsync(
-                new SimpleContentDialogCreateOptions()
+            var result = await contentDialogService.ShowSimpleDialogAsync(
+                new SimpleContentDialogCreateOptions
                 {
                     Title = "Warning",
                     Content = "Removing Microsoft Edge can cause serious system issues, as it’s deeply integrated into Windows and essential for many features, including updates, help files, and some apps. Deleting it could result in instability or broken functionality.\n\nOnly proceed if you fully understand the risks and have a reliable backup or restore point in place.",
@@ -34,6 +36,11 @@ namespace GoAwayEdge.UserInterface.Setup.Pages
                     CloseButtonText = "Cancel"
                 }
             );
+
+            if (result == ContentDialogResult.Primary)
+            {
+                Logging.Log("User pressed 'Remove Microsoft Edge'");
+            }
         }
     }
 }

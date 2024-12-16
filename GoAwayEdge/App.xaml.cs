@@ -27,7 +27,7 @@ namespace GoAwayEdge
     public partial class App
     {
         public static bool IsDebug = false;
-        
+
         public void Application_Startup(object sender, StartupEventArgs e)
         {
 #if DEBUG
@@ -50,17 +50,7 @@ namespace GoAwayEdge
                             IsDebug = true;
                     if (IsAdministrator() == false)
                     {
-                        // Restart program and run as admin
-                        var exeName = Process.GetCurrentProcess().MainModule?.FileName;
-                        if (exeName != null)
-                        {
-                            var startInfo = new ProcessStartInfo(exeName)
-                            {
-                                Verb = "runas",
-                                UseShellExecute = true
-                            };
-                            Process.Start(startInfo);
-                        }
+                        ElevateAsAdmin();
                         Environment.Exit(0);
                         return;
                     }
@@ -80,18 +70,7 @@ namespace GoAwayEdge
                     {
                         if (IsAdministrator() == false)
                         {
-                            // Restart program and run as admin
-                            var exeName = Process.GetCurrentProcess().MainModule?.FileName;
-                            if (exeName != null)
-                            {
-                                var startInfo = new ProcessStartInfo(exeName)
-                                {
-                                    Verb = "runas",
-                                    UseShellExecute = true,
-                                    Arguments = string.Join(" ", args)
-                                };
-                                Process.Start(startInfo);
-                            }
+                            ElevateAsAdmin(string.Join(" ", args));
                             Environment.Exit(0);
                             return;
                         }
@@ -145,18 +124,7 @@ namespace GoAwayEdge
 
                         if (IsAdministrator() == false)
                         {
-                            // Restart program and run as admin
-                            var exeName = Process.GetCurrentProcess().MainModule?.FileName;
-                            if (exeName != null)
-                            {
-                                var startInfo = new ProcessStartInfo(exeName)
-                                {
-                                    Verb = "runas",
-                                    UseShellExecute = true,
-                                    Arguments = string.Join(" ", args)
-                                };
-                                Process.Start(startInfo);
-                            }
+                            ElevateAsAdmin(string.Join(" ", args));
                             Environment.Exit(0);
                             return;
                         }
@@ -223,22 +191,8 @@ namespace GoAwayEdge
                                     ifeoMessageUi.ShowDialog();
 
                                     if (ifeoMessageUi.Summary == "Btn1")
-                                    {
-                                        // Restart program and run as admin
-                                        var exeName = Process.GetCurrentProcess().MainModule?.FileName;
-                                        if (exeName != null)
-                                        {
-                                            var startInfo = new ProcessStartInfo(exeName)
-                                            {
-                                                Verb = "runas",
-                                                UseShellExecute = true,
-                                                Arguments = "--update"
-                                            };
-                                            Process.Start(startInfo);
-                                        }
-                                        Environment.Exit(0);
-                                        return;
-                                    }
+                                        ElevateAsAdmin("--update");
+
                                     Environment.Exit(0);
                                 }
                                 Updater.ModifyIfeoBinary(ModifyAction.Update);
@@ -253,22 +207,8 @@ namespace GoAwayEdge
                                     ifeoMessageUi.ShowDialog();
 
                                     if (ifeoMessageUi.Summary == "Btn1")
-                                    {
-                                        // Restart program and run as admin
-                                        var exeName = Process.GetCurrentProcess().MainModule?.FileName;
-                                        if (exeName != null)
-                                        {
-                                            var startInfo = new ProcessStartInfo(exeName)
-                                            {
-                                                Verb = "runas",
-                                                UseShellExecute = true,
-                                                Arguments = "--update"
-                                            };
-                                            Process.Start(startInfo);
-                                        }
-                                        Environment.Exit(0);
-                                        return;
-                                    }
+                                        ElevateAsAdmin("--update");
+                                    
                                     Environment.Exit(0);
                                 }
                                 Updater.ModifyIfeoBinary(ModifyAction.Create);
@@ -285,7 +225,21 @@ namespace GoAwayEdge
             ArgumentParse.Parse(args);
             Environment.Exit(0);
         }
-        
+
+        private void ElevateAsAdmin(string arguments = null)
+        {
+            // Restart program and run as admin
+            var exeName = Process.GetCurrentProcess().MainModule?.FileName;
+            if (exeName == null) return;
+            var startInfo = new ProcessStartInfo(exeName)
+            {
+                Verb = "runas",
+                UseShellExecute = true,
+                Arguments = arguments
+            };
+            Process.Start(startInfo);
+        }
+
         private static string? ParseCustomSearchEngine(string argument)
         {
             var argParsed = argument.Remove(0, 6);
@@ -293,6 +247,7 @@ namespace GoAwayEdge
                          && (uriResult.Scheme == Uri.UriSchemeHttp || uriResult.Scheme == Uri.UriSchemeHttps);
             return result ? argParsed : null;
         }
+
         private static bool IsAdministrator()
         {
             var identity = WindowsIdentity.GetCurrent();

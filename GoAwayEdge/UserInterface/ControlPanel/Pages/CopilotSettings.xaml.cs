@@ -18,7 +18,7 @@ namespace GoAwayEdge.UserInterface.ControlPanel.Pages
             {
                 CopilotProviderBox.Items.Add(aiProvider);
             }
-            CopilotProviderBox.SelectedItem = Configuration.Provider.ToString();
+            CopilotProviderBox.SelectedItem = Configuration.Provider.ToString().Replace("_", " ");
 
             if (Configuration.Provider == AiProvider.Custom)
             {
@@ -30,7 +30,7 @@ namespace GoAwayEdge.UserInterface.ControlPanel.Pages
             }
             else
             {
-                CopilotProviderBox.SelectedItem = Configuration.Search.ToString();
+                CopilotProviderBox.SelectedItem = Configuration.Provider.ToString();
             }
         }
 
@@ -67,19 +67,24 @@ namespace GoAwayEdge.UserInterface.ControlPanel.Pages
                 case 0:
                     Configuration.Provider = AiProvider.Copilot;
                     CustomSearchPanel.Visibility = Visibility.Collapsed;
-                    FlushSettings();
                     break;
                 case 1:
                     Configuration.Provider = AiProvider.ChatGPT;
                     CustomSearchPanel.Visibility = Visibility.Collapsed;
-                    FlushSettings();
                     break;
                 case 2:
                     Configuration.Provider = AiProvider.Gemini;
                     CustomSearchPanel.Visibility = Visibility.Collapsed;
-                    FlushSettings();
                     break;
                 case 3:
+                    Configuration.Provider = AiProvider.GitHub_Copilot;
+                    CustomSearchPanel.Visibility = Visibility.Collapsed;
+                    break;
+                case 4:
+                    Configuration.Provider = AiProvider.Grok;
+                    CustomSearchPanel.Visibility = Visibility.Collapsed;
+                    break;
+                case 5:
                     Configuration.Provider = AiProvider.Custom;
                     CustomSearchPanel.Visibility = Visibility.Visible;
                     break;

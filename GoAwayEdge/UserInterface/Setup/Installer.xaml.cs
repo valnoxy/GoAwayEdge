@@ -41,7 +41,7 @@ namespace GoAwayEdge.UserInterface.Setup
             }
 
             VersionLbl.Content = versionText;
-            Configuration.InitialEnvironment();
+            Configuration.InitialEnvironment(setupRunning: true);
 
             _welcomePage = new Welcome();
             _redirectOrRemovePage = new RedirectOrRemove();

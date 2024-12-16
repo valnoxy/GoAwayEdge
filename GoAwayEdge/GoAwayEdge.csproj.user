@@ -45,10 +45,16 @@
     <Page Update="App.xaml">
       <SubType>Designer</SubType>
     </Page>
+    <Page Update="Assets\CopilotWhite.xaml">
+      <SubType>Designer</SubType>
+    </Page>
     <Page Update="Assets\Edge.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Assets\Copilot.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Assets\EdgeIcon.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Assets\Settings.xaml">

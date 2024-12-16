@@ -38,9 +38,28 @@ namespace GoAwayEdge.UserInterface.Setup.Pages
                 SearchEngineBox.SelectedItem = Configuration.Search.ToString();
             }
 
+            foreach (var aiProvider in Configuration.GetAiProviders())
+            {
+                CopilotProviderBox.Items.Add(aiProvider);
+            }
+            CopilotProviderBox.SelectedItem = Configuration.Provider.ToString().Replace("_", " ");
+
+            if (Configuration.Provider == AiProvider.Custom)
+            {
+                CopilotProviderBox.SelectedItem = LocalizationManager.LocalizeValue("SettingsSearchEngineCustomItem");
+                CustomSearchPanel.Visibility = Visibility.Visible;
+                if (Configuration.CustomProviderUrl != null) QueryProviderTextBox.Text = Configuration.CustomProviderUrl;
+                CustomUrlStatus.Symbol = Uri.TryCreate(QueryProviderTextBox.Text, UriKind.Absolute, out _)
+                    ? SymbolRegular.CheckmarkCircle24 : SymbolRegular.ErrorCircle24;
+            }
+            else
+            {
+                CopilotProviderBox.SelectedItem = Configuration.Search.ToString();
+            }
+
             if (Configuration.NoEdgeInstalled)
             {
-                MsEdgeRemoveStackPanel.IsEnabled = false;
+                CopilotStackPanel.IsEnabled = false;
                 EdgeStackPanel.IsEnabled = false;
             }
 
@@ -135,14 +154,55 @@ namespace GoAwayEdge.UserInterface.Setup.Pages
             }
         }
 
-        private void MsEdgeUninstallSwitch_OnClickUninstallSwitch_OnClick(object sender, RoutedEventArgs e)
-        {
-            Configuration.UninstallEdge = MsEdgeUninstallSwitch.IsChecked!.Value;
-        }
-
         private void ControlPanelSwitch_OnClick(object sender, RoutedEventArgs e)
         {
             Configuration.InstallControlPanel = ControlPanelSwitch.IsChecked!.Value;
+        }
+
+        private void CopilotProviderBox_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            switch (CopilotProviderBox.SelectedIndex)
+            {
+                case 0:
+                    Configuration.Provider = AiProvider.Copilot;
+                    CustomAiPanel.Visibility = Visibility.Collapsed;
+                    break;
+                case 1:
+                    Configuration.Provider = AiProvider.ChatGPT;
+                    CustomAiPanel.Visibility = Visibility.Collapsed;
+                    break;
+                case 2:
+                    Configuration.Provider = AiProvider.Gemini;
+                    CustomAiPanel.Visibility = Visibility.Collapsed;
+                    break;
+                case 3:
+                    Configuration.Provider = AiProvider.GitHub_Copilot;
+                    CustomAiPanel.Visibility = Visibility.Collapsed;
+                    break;
+                case 4:
+                    Configuration.Provider = AiProvider.Grok;
+                    CustomAiPanel.Visibility = Visibility.Collapsed;
+                    break;
+                case 5:
+                    Configuration.Provider = AiProvider.Custom;
+                    CustomAiPanel.Visibility = Visibility.Visible;
+                    break;
+            }
+        }
+
+        private void QueryProviderTextBox_OnTextChanged(object sender, TextChangedEventArgs e)
+        {
+            // Test if the URL is valid
+            if (Uri.TryCreate(QueryProviderTextBox.Text, UriKind.Absolute, out var uriResult)
+                && (uriResult.Scheme == Uri.UriSchemeHttp || uriResult.Scheme == Uri.UriSchemeHttps))
+            {
+                CustomUrlStatus.Symbol = SymbolRegular.CheckmarkCircle24;
+                Configuration.CustomProviderUrl = QueryProviderTextBox.Text;
+            }
+            else
+            {
+                CustomUrlStatus.Symbol = SymbolRegular.ErrorCircle24;
+            }
         }
     }
 }

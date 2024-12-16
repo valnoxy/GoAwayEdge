@@ -59,7 +59,7 @@
     <system:String x:Key="ControlPanelEdgePowerDescription">Deactivate the forwarding of search queries to other browsers.</system:String>
     <system:String x:Key="ControlPanelEdgePowerEnable">Enable GoAwayEdge</system:String>
     <system:String x:Key="ControlPanelEdgePowerDisable">Disable GoAwayEdge</system:String>
-    <system:String x:Key="ControlPanelCopilotProviderTitle">Change AI Provider</system:String>
+    <system:String x:Key="ControlPanelCopilotProviderTitle">AI Provider</system:String>
     <system:String x:Key="ControlPanelCopilotProviderDescription">Change the provider to your favorite AI (or to your favorite website).</system:String>
     <system:String x:Key="ControlPanelCustomCopilotProviderTitle">Custom AI Provider</system:String>
     <system:String x:Key="ControlPanelCustomCopilotProviderDescription">Please enter the URL from the AI Provider (or your favorite website).</system:String>

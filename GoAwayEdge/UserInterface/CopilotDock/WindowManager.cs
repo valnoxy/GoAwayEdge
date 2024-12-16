@@ -36,12 +36,6 @@ public static class WindowManager
         }
     }
 
-    private static void OnCopilotDockClosed(object sender, System.EventArgs e)
-    {
-        if (_copilotDockInstance != null) _copilotDockInstance.Closed -= OnCopilotDockClosed!;
-        _copilotDockInstance = null;
-    }
-
     public static void HideCopilotDock()
     {
         try

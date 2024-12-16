@@ -48,7 +48,7 @@ namespace GoAwayEdge.UserInterface.CopilotDock
                     Logging.Log($"Message received: {message}");
                     if (message.Contains("BringToFront"))
                     {
-                        WindowManager.ShowCopilotDockAsync(Common.Configuration.ShellManager, AppBarScreen.FromPrimaryScreen(), AppBarEdge.Right, 500, mode);
+                        WindowManager.ShowCopilotDockAsync(Common.Configuration.ShellManager, AppBarScreen.FromPrimaryScreen(), AppBarEdge.Right, 500, mode); // Dummy data
                     }
                 };
 

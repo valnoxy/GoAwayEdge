@@ -20,8 +20,8 @@ namespace GoAwayEdge.UserInterface.CopilotDock
         public CopilotDock(ShellManager shellManager, AppBarScreen screen, AppBarEdge edge, double desiredHeight, AppBarMode mode)
             : base(shellManager.AppBarManager, shellManager.ExplorerHelper, shellManager.FullScreenHelper, screen, edge, mode, desiredHeight)
         {
-            this.MaxHeight = SystemParameters.WorkArea.Height;
-            this.MinHeight = SystemParameters.WorkArea.Height;
+            MaxHeight = SystemParameters.WorkArea.Height;
+            MinHeight = SystemParameters.WorkArea.Height;
             Configuration.AppBarIsAttached = mode != AppBarMode.None;
             Instance = this;
 
@@ -49,10 +49,17 @@ namespace GoAwayEdge.UserInterface.CopilotDock
                     case Gemini:
                         WebView.Source = new Uri("https://gemini.google.com/");
                         break;
+                    case GitHub_Copilot:
+                        WebView.Source = new Uri("https://github.com/copilot");
+                        break;
+                    case Grok:
+                        WebView.Source = new Uri("https://x.com/i/grok");
+                        break;
                     case Custom:
                         if (Configuration.CustomProviderUrl != null)
                             WebView.Source = new Uri(Configuration.CustomProviderUrl);
                         break;
+                    case Copilot:
                     default:
                         Logging.Log($"Failed to load Provider! Provider Value '{Configuration.Provider}' in invalid!");
                         throw new ArgumentOutOfRangeException();

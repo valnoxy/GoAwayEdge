@@ -20,8 +20,8 @@
     <system:String x:Key="LicenseDecline">Ich lehne diese Lizenz ab.</system:String>
     <!-- Settings -->
     <system:String x:Key="SettingsTitle">Einstellungen</system:String>
-    <system:String x:Key="SettingsEdgeChannelTitle">Edge Channel</system:String>
-    <system:String x:Key="SettingsEdgeChannelDescription">Wählen Sie den installierten Microsoft Edge Channel aus.</system:String>
+    <system:String x:Key="SettingsEdgeChannelTitle">Edge Kanal</system:String>
+    <system:String x:Key="SettingsEdgeChannelDescription">Wählen Sie den installierten Microsoft Edge Kanal aus.</system:String>
     <system:String x:Key="SettingsSearchEngineTitle">Suchmaschine</system:String>
     <system:String x:Key="SettingsSearchEngineDescription">Wählen Sie Ihre bevorzugte Suchmaschine.</system:String>
     <system:String x:Key="SettingsSearchEngineCustomItem">Benutzerdefiniert</system:String>
@@ -72,4 +72,8 @@
     <system:String x:Key="ControlPanelEdgePowerDescription">Deaktiviere die Weiterleitung von Suchanfragen an anderen Browsern.</system:String>
     <system:String x:Key="MessageGoAwayEdgeEnabled">GoAwayEdge wurde auf diesem System erfolgreich aktiviert.</system:String>
     <system:String x:Key="FailedSetAppDisabled">GoAwayEdge konnte auf diesem System nicht deaktiviert werden: {0}</system:String>
+    <system:String x:Key="ControlPanelCopilotProviderTitle">KI Anbieter</system:String>
+    <system:String x:Key="ControlPanelCopilotProviderDescription">Wechseln Sie den Anbieter Ihrer bevorzugten KI (oder zu Ihrer bevorzugten Webseite).</system:String>
+    <system:String x:Key="ControlPanelCustomCopilotProviderTitle">Benutzerdefinierter KI Anbieter</system:String>
+    <system:String x:Key="ControlPanelCustomCopilotProviderDescription">Bitte geben Sie die URL des KI-Anbieters (oder einer Webseite) ein.</system:String>
 </ResourceDictionary>
