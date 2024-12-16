@@ -76,4 +76,5 @@
     <system:String x:Key="ControlPanelCopilotProviderDescription">Wechseln Sie den Anbieter Ihrer bevorzugten KI (oder zu Ihrer bevorzugten Webseite).</system:String>
     <system:String x:Key="ControlPanelCustomCopilotProviderTitle">Benutzerdefinierter KI Anbieter</system:String>
     <system:String x:Key="ControlPanelCustomCopilotProviderDescription">Bitte geben Sie die URL des KI-Anbieters (oder einer Webseite) ein.</system:String>
+    <system:String x:Key="FailedFlushSetting">Die Einstellungen konnten nicht übernommen werden: {0}</system:String>
 </ResourceDictionary>
