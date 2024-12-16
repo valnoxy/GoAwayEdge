@@ -15,8 +15,8 @@
 
         <Image Grid.Column="0" Source="pack://application:,,,/Assets/SetupBannerIcon.png" Height="200"/>
         <StackPanel Grid.Column="1" VerticalAlignment="Center">
-            <ui:TextBlock FontTypography="Subtitle" Text="Redirect or Remove?" FontWeight="Bold" Foreground="{DynamicResource TextFillColorPrimaryBrush}"/>
-            <ui:TextBlock TextWrapping="Wrap" FontSize="14" Text="Do you want to redirect all calls from Edge to another browser, or completely remove Edge?" Foreground="{DynamicResource TextFillColorPrimaryBrush}"/>
+            <ui:TextBlock FontTypography="Subtitle" Text="{DynamicResource RedirectRemoveTitle}" FontWeight="Bold" Foreground="{DynamicResource TextFillColorPrimaryBrush}"/>
+            <ui:TextBlock TextWrapping="Wrap" FontSize="14" Text="{DynamicResource RedirectRemoveDescription}" Foreground="{DynamicResource TextFillColorPrimaryBrush}"/>
             <ui:CardAction
                 Margin="0,20,0,8"
                 Click="InstallBtn_Click"
@@ -25,11 +25,11 @@
                     <TextBlock
                         Margin="0,0,0,4"
                         FontWeight="Medium"
-                        Text="Redirect everything" />
+                        Text="{DynamicResource RedirectEverythingTitle}" />
                     <TextBlock
                         FontSize="12"
                         Foreground="{DynamicResource TextFillColorTertiaryBrush}"
-                        Text="Redirect all calls from Edge to your favorite browser." />
+                        Text="{DynamicResource RedirectEverythingDescription}" />
                 </StackPanel>
             </ui:CardAction>
             <ui:CardAction

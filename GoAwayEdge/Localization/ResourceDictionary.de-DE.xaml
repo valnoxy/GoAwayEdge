@@ -5,6 +5,7 @@
     <system:String x:Key="Exit">Beenden</system:String>
     <system:String x:Key="Yes">Ja</system:String>
     <system:String x:Key="No">Nein</system:String>
+    <system:String x:Key="Default">Standard</system:String>
     <!-- Welcome -->
     <system:String x:Key="WelcomeTitle">Willkommen</system:String>
     <system:String x:Key="WelcomeDescription">Das Installationsprogramm führt alle notwendigen Schritte durch, um GoAwayEdge auf Ihrem System zu installieren. Nach der Installation werden alle Edge-Aufrufe an Ihren Browser weitergeleitet. Bitte wählen Sie die gewünschte Option, um fortzufahren.</system:String>
@@ -18,6 +19,11 @@
     <system:String x:Key="LicenseNote">Bitte lesen Sie die folgende Lizenz. Sie müssen die Lizenzbedingungen akzeptieren, bevor Sie mit der Installation fortfahren können.</system:String>
     <system:String x:Key="LicenseAccept">Ich akzeptiere diese Lizenz.</system:String>
     <system:String x:Key="LicenseDecline">Ich lehne diese Lizenz ab.</system:String>
+    <!-- Redirect or Remove -->
+    <system:String x:Key="RedirectRemoveTitle">Umleiten oder Entfernen?</system:String>
+    <system:String x:Key="RedirectRemoveDescription">Sollen alle Aufrufe von Edge auf einen anderen Browser umgeleitet werden, oder soll Edge vollständig entfernt werden?</system:String>
+    <system:String x:Key="RedirectEverythingTitle">Alles umleiten (Empfohlen)</system:String>
+    <system:String x:Key="RedirectEverythingDescription">Leite alle Aufrufe von Edge auf deinen Lieblingsbrowser um.</system:String>
     <!-- Settings -->
     <system:String x:Key="SettingsTitle">Einstellungen</system:String>
     <system:String x:Key="SettingsEdgeChannelTitle">Edge Kanal</system:String>
@@ -64,6 +70,10 @@
     <system:String x:Key="ControlPanelEdgePowerTitle">Aktiviere/Deaktiviere GoAwayEdge</system:String>
     <system:String x:Key="ControlPanelEdgePowerEnable">Aktiviere GoAwayEdge</system:String>
     <system:String x:Key="ControlPanelEdgePowerDisable">Deaktiviere GoAwayEdge</system:String>
+    <system:String x:Key="ControlPanelWeatherProviderTitle">Wetterdienst</system:String>
+    <system:String x:Key="ControlPanelWeatherProviderDescription">Wechsel den Anbieter zu Ihres bevorzugten Wetterdienstes.</system:String>
+    <system:String x:Key="ControlPanelCustomWeatherProviderTitle">Benutzerdefinierter Wetterdienst</system:String>
+    <system:String x:Key="ControlPanelCustomWeatherProviderDescription">Bitte geben Sie die URL des Wetterdienstes ein.</system:String>
     <system:String x:Key="MessageGoAwayEdgeDisabled">GoAwayEdge wurde auf diesem System erfolgreich deaktiviert.</system:String>
     <system:String x:Key="FailedSetAppEnabled">GoAwayEdge konnte auf diesem System nicht aktiviert werden: {0}</system:String>
     <system:String x:Key="SettingsControlPanelDescription">Installiere das Kontrollpanel, um GoAwayEdge einfacher zu konfigurieren.</system:String>

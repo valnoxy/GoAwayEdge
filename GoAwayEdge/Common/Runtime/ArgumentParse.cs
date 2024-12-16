@@ -118,9 +118,9 @@ namespace GoAwayEdge.Common.Runtime
             if (url.Contains("microsoft-edge://?ux=copilot&tcp=1&source=taskbar") ||
                 url.Contains("microsoft-edge:///?ux=copilot&tcp=1&source=taskbar"))
             {
-                if (Configuration.Provider != AiProvider.Copilot)
+                if (Configuration.AiProvider != AiProvider.Copilot)
                 {
-                    DebugMessage.DisplayDebugMessage("GoAwayEdge", $"Opening AI Provider '{Configuration.Provider}' (Taskbar) ...");
+                    DebugMessage.DisplayDebugMessage("GoAwayEdge", $"Opening AI Provider '{Configuration.AiProvider}' (Taskbar) ...");
                     UserInterface.CopilotDock.InterfaceManager.ShowDock();
                     return;
                 }
@@ -130,13 +130,22 @@ namespace GoAwayEdge.Common.Runtime
             else if (url.Contains("microsoft-edge://?ux=copilot&tcp=1&source=hotkey") ||
                      url.Contains("microsoft-edge:///?ux=copilot&tcp=1&source=hotkey"))
             {
-                if (Configuration.Provider != AiProvider.Copilot)
+                if (Configuration.AiProvider != AiProvider.Copilot)
                 {
-                    DebugMessage.DisplayDebugMessage("GoAwayEdge", $"Opening AI Provider '{Configuration.Provider}' (Hotkey) ...");
+                    DebugMessage.DisplayDebugMessage("GoAwayEdge", $"Opening AI Provider '{Configuration.AiProvider}' (Hotkey) ...");
                     UserInterface.CopilotDock.InterfaceManager.ShowDock();
                     return;
                 }
                 DebugMessage.DisplayDebugMessage("GoAwayEdge", $"Opening Windows Copilot (Hotkey) with following url:\n{url}");
+            }
+            // Weather Provider
+            else if (url.Contains("%3Floc%3D") && url.Contains("msn.com")) // ?loc=
+            {
+                var parsedUrl = UrlParse.Parse(url);
+                var parsedWeather = Weather.ParseUrl(parsedUrl);
+                DebugMessage.DisplayDebugMessage("GoAwayEdge", $"Opening Weather URL in default browser:\n\n{parsedWeather}");
+                p.StartInfo.FileName = parsedWeather;
+                p.StartInfo.Arguments = string.Empty;
             }
             // Default
             else
@@ -195,7 +204,7 @@ namespace GoAwayEdge.Common.Runtime
                 "github_copilot" => AiProvider.GitHub_Copilot,
                 "grok" => AiProvider.Grok,
                 "custom" => AiProvider.Custom,
-                _ => AiProvider.Copilot // Fallback channel
+                _ => AiProvider.Copilot // Fallback provider
             };
         }
 
@@ -218,6 +227,18 @@ namespace GoAwayEdge.Common.Runtime
                 "perplexity" => SearchEngine.Perplexity,
                 "custom" => SearchEngine.Custom,
                 _ => SearchEngine.Google // Fallback search engine
+            };
+        }
+
+        public static WeatherProvider ParseWeatherProvider(string argument)
+        {
+            return argument.ToLower() switch
+            {
+                "default" => WeatherProvider.Default,
+                "weathercom" => WeatherProvider.WeatherCom,
+                "accuweather" => WeatherProvider.AccuWeather,
+                "custom" => WeatherProvider.Custom,
+                _ => WeatherProvider.Default // Fallback provider
             };
         }
     }

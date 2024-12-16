@@ -72,6 +72,28 @@ namespace GoAwayEdge.Common.Installation
                     RegistryConfig.RemoveKey("CustomQueryUrl");
                 }
 
+                RegistryConfig.SetKey("AiProvider", Configuration.AiProvider, userSetting: true);
+                if (Configuration.AiProvider == AiProvider.Custom)
+                {
+                    if (Configuration.CustomAiProviderUrl != null)
+                        RegistryConfig.SetKey("CustomAiProviderUrl", Configuration.CustomAiProviderUrl, userSetting: true);
+                }
+                else
+                {
+                    RegistryConfig.RemoveKey("CustomAiProviderUrl", userSetting: true);
+                }
+
+                RegistryConfig.SetKey("WeatherProvider", Configuration.WeatherProvider, userSetting: true);
+                if (Configuration.WeatherProvider == WeatherProvider.Custom)
+                {
+                    if (Configuration.CustomWeatherProviderUrl != null)
+                        RegistryConfig.SetKey("CustomWeatherProviderUrl", Configuration.CustomWeatherProviderUrl, userSetting: true);
+                }
+                else
+                {
+                    RegistryConfig.RemoveKey("CustomWeatherProviderUrl", userSetting: true);
+                }
+
                 status = Register.ImageFileExecutionOption(
                     Register.IfeoType.msedge, 
                     Path.Combine(Configuration.InstallDir, "GoAwayEdge.exe"),
@@ -208,7 +230,6 @@ namespace GoAwayEdge.Common.Installation
 
             // Set enable flag
             RegistryConfig.SetKey("Enabled", true);
-            RegistryConfig.SetKey("AiProvider", "Copilot", userSetting: true); // Temporary
 
             // Switch FrameWindow content to InstallationSuccess
             worker?.ReportProgress(100, "");

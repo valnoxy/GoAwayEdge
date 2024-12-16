@@ -41,7 +41,7 @@ namespace GoAwayEdge.UserInterface.CopilotDock
                 var webView2Environment = await CoreWebView2Environment.CreateAsync(userDataFolder: userProfilePath);
                 await WebView.EnsureCoreWebView2Async(webView2Environment);
 
-                switch (Configuration.Provider)
+                switch (Configuration.AiProvider)
                 {
                     case ChatGPT:
                         WebView.Source = new Uri("https://chatgpt.com/");
@@ -56,12 +56,12 @@ namespace GoAwayEdge.UserInterface.CopilotDock
                         WebView.Source = new Uri("https://x.com/i/grok");
                         break;
                     case Custom:
-                        if (Configuration.CustomProviderUrl != null)
-                            WebView.Source = new Uri(Configuration.CustomProviderUrl);
+                        if (Configuration.CustomAiProviderUrl != null)
+                            WebView.Source = new Uri(Configuration.CustomAiProviderUrl);
                         break;
                     case Copilot:
                     default:
-                        Logging.Log($"Failed to load Provider! Provider Value '{Configuration.Provider}' in invalid!");
+                        Logging.Log($"Failed to load AiProvider! AiProvider Value '{Configuration.AiProvider}' in invalid!");
                         throw new ArgumentOutOfRangeException();
                 }
             }

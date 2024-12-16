@@ -1,6 +1,6 @@
 ﻿/*
  * GoAwayEdge
- * Copyright (c) 2018 - 2024 valnoxy.
+ * Copyright (c) 2018 - 2025 Exploitox (valnoxy).
  *
  * GoAwayEdge is licensed under MIT License (https://github.com/valnoxy/GoAwayEdge/blob/main/LICENSE).
  * So you are allowed to use freely and modify the application.
@@ -93,10 +93,10 @@ namespace GoAwayEdge
                     {
                         Configuration.InitialEnvironment();
 
-                        if (Configuration.Provider != AiProvider.Copilot)
+                        if (Configuration.AiProvider != AiProvider.Copilot)
                         {
                             DebugMessage.DisplayDebugMessage("GoAwayEdge",
-                                $"Opening AI Provider '{Configuration.Provider}' (Triggered with argument) ...");
+                                $"Opening AI Provider '{Configuration.AiProvider}' (Triggered with argument) ...");
                             UserInterface.CopilotDock.InterfaceManager.ShowDock();
                             Environment.Exit(0);
                         }

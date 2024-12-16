@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System.ComponentModel;
+using System.IO;
 using System.IO.Pipes;
 using System.Windows;
 using GoAwayEdge.Common.Debugging;
@@ -39,24 +40,39 @@ namespace GoAwayEdge.Common
         Canary
     }
 
+    public enum WeatherProvider
+    {
+        Default,
+
+        [Description("https://weather.com/{country-code}/weather/today/l/{latitude},{longitude}")]
+        WeatherCom,
+
+        [Description("https://www.accuweather.com/{short-country-code}/search-locations?query={latitude},{longitude}")]
+        AccuWeather,
+
+        Custom
+    }
+
     internal class Configuration
     {
         public static EdgeChannel Channel { get; set; }
         public static SearchEngine Search { get; set; }
-        public static AiProvider Provider { get; set; }
+        public static AiProvider AiProvider { get; set; }
+        public static WeatherProvider WeatherProvider { get; set; }
         public static bool LicenseAccepted { get; set; }
         public static bool Uninstall { get; set; }
         public static bool UninstallEdge { get; set; }
         public static bool NoEdgeInstalled { get; set; }
         public static bool InstallControlPanel { get; set; }
         public static string? CustomQueryUrl { get; set; }
-        public static string? CustomProviderUrl { get; set; }
+        public static string? CustomAiProviderUrl { get; set; }
+        public static string? CustomWeatherProviderUrl { get; set; }
 
         public static string InstallDir = Path.Combine(
             Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles),
             "valnoxy",
             "GoAwayEdge");
-        public static ShellManager ShellManager { get; set; }
+        public static ShellManager? ShellManager { get; set; }
         public static bool AppBarIsAttached { get; set; }
 
 
@@ -98,14 +114,19 @@ namespace GoAwayEdge.Common
                 {
                     Channel = Runtime.ArgumentParse.ParseEdgeChannel(RegistryConfig.GetKey("EdgeChannel"));
                     Search = Runtime.ArgumentParse.ParseSearchEngine(RegistryConfig.GetKey("SearchEngine"));
-                    Provider = Runtime.ArgumentParse.ParseAiProvider(RegistryConfig.GetKey("AiProvider", userSetting: true));
+                    AiProvider = Runtime.ArgumentParse.ParseAiProvider(RegistryConfig.GetKey("AiProvider", userSetting: true));
+                    WeatherProvider = Runtime.ArgumentParse.ParseWeatherProvider(RegistryConfig.GetKey("WeatherProvider", userSetting: true));
                     if (Search == SearchEngine.Custom)
                     {
                         CustomQueryUrl = RegistryConfig.GetKey("CustomQueryUrl");
                     }
-                    if (Provider == AiProvider.Custom)
+                    if (AiProvider == AiProvider.Custom)
                     {
-                        CustomProviderUrl = RegistryConfig.GetKey("CustomProviderUrl", userSetting: true);
+                        CustomAiProviderUrl = RegistryConfig.GetKey("CustomAiProviderUrl", userSetting: true);
+                    }
+                    if (WeatherProvider == WeatherProvider.Custom)
+                    {
+                        CustomWeatherProviderUrl = RegistryConfig.GetKey("CustomWeatherProviderUrl", userSetting: true);
                     }
                 }
                 catch (Exception ex)
@@ -116,9 +137,11 @@ namespace GoAwayEdge.Common
                 Logging.Log($"Value of NonIfeoPath: {FileConfiguration.NonIfeoPath}");
                 Logging.Log($"Value of Channel: {Channel}");
                 Logging.Log($"Value of Search: {Search}");
-                Logging.Log($"Value of Provider: {Provider}");
+                Logging.Log($"Value of AiProvider: {AiProvider}");
+                Logging.Log($"Value of WeatherProvider: {WeatherProvider}");
                 Logging.Log($"Value of CustomQueryUrl: {CustomQueryUrl}");
-                Logging.Log($"Value of CustomProviderUrl: {CustomProviderUrl}");
+                Logging.Log($"Value of CustomAiProviderUrl: {CustomAiProviderUrl}");
+                Logging.Log($"Value of CustomWeatherProviderUrl: {CustomWeatherProviderUrl}");
                 return true;
             }
             catch (Exception ex)
@@ -218,6 +241,80 @@ namespace GoAwayEdge.Common
             }
 
             return list;
+        }
+
+        /// <summary>
+        ///     Get a list of all available AI Providers.
+        /// </summary>
+        /// <returns>
+        ///     List of AI Providers.
+        /// </returns>
+        public static List<string> GetWeatherProviders()
+        {
+            var list = (from weatherProvider in (WeatherProvider[])Enum.GetValues(typeof(WeatherProvider))
+                where (weatherProvider != WeatherProvider.Custom && weatherProvider != WeatherProvider.Default)
+                select weatherProvider.ToString().Replace("_", " ")).ToList();
+
+            try
+            {
+                var resourceValueCustom =
+                    (string)Application.Current.MainWindow!.FindResource("SettingsSearchEngineCustomItem");
+                list.Add(!string.IsNullOrEmpty(resourceValueCustom) ? resourceValueCustom : "Custom");
+            }
+            catch
+            {
+                list.Add("Custom");
+            }
+
+            try
+            {
+                var resourceValueDefault =
+                    (string)Application.Current.MainWindow!.FindResource("Default");
+                list.Insert(0, !string.IsNullOrEmpty(resourceValueDefault) ? resourceValueDefault : "Default");
+            }
+            catch
+            {
+                list.Insert(0, "Default");
+            }
+
+            return list;
+        }
+
+        /// <summary>
+        /// Retrieves the description of an enumeration value based on the <see cref="DescriptionAttribute"/>.
+        /// </summary>
+        /// <param name="value">The enumeration value for which to retrieve the description.</param>
+        /// <returns>
+        /// The description defined by the <see cref="DescriptionAttribute"/> if it exists; 
+        /// otherwise, the string representation of the enumeration value.
+        /// </returns>
+        /// <example>
+        /// Example usage:
+        /// <code>
+        /// public enum SampleEnum
+        /// {
+        ///     [Description("First Value")]
+        ///     First,
+        ///     
+        ///     [Description("Second Value")]
+        ///     Second,
+        ///     
+        ///     Third // No DescriptionAttribute
+        /// }
+        /// 
+        /// var value = SampleEnum.First;
+        /// string description = GetEnumDescription(value); // "First Value"
+        /// 
+        /// value = SampleEnum.Third;
+        /// description = GetEnumDescription(value); // "Third"
+        /// </code>
+        /// </example>
+        public static string GetEnumDescription(Enum value)
+        {
+            var fieldInfo = value.GetType().GetField(value.ToString());
+            var attributes = (DescriptionAttribute[])fieldInfo!.GetCustomAttributes(typeof(DescriptionAttribute), false);
+
+            return attributes.Length > 0 ? attributes[0].Description : value.ToString();
         }
     }
 

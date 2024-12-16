@@ -23,6 +23,7 @@ namespace GoAwayEdge.UserInterface.ControlPanel.Pages
             }
             EdgeChannelBox.SelectedItem = Configuration.Channel.ToString();
 
+            // Search Engine
             foreach (var searchEngine in Configuration.GetSearchEngines())
             {
                 SearchEngineBox.Items.Add(searchEngine);
@@ -40,6 +41,25 @@ namespace GoAwayEdge.UserInterface.ControlPanel.Pages
             {
                 SearchEngineBox.SelectedItem = Configuration.Search.ToString();
             }
+
+            // Weather Provider
+            foreach (var weatherProvider in Configuration.GetWeatherProviders())
+            {
+                WeatherProviderBox.Items.Add(weatherProvider);
+            }
+            WeatherProviderBox.SelectedItem = Configuration.WeatherProvider.ToString().Replace("_", " ");
+
+            if (Configuration.WeatherProvider == WeatherProvider.Custom)
+            {
+                WeatherProviderBox.SelectedItem = LocalizationManager.LocalizeValue("SettingsSearchEngineCustomItem");
+                CustomWeatherPanel.Visibility = Visibility.Visible;
+                if (Configuration.CustomWeatherProviderUrl != null) QueryWeatherProviderTextBox.Text = Configuration.CustomWeatherProviderUrl;
+                CustomWeatherUrlStatus.Symbol = Uri.TryCreate(QueryWeatherProviderTextBox.Text, UriKind.Absolute, out _)
+                    ? SymbolRegular.CheckmarkCircle24 : SymbolRegular.ErrorCircle24;
+            }
+
+            if (Configuration.WeatherProvider == WeatherProvider.Default)
+                WeatherProviderBox.SelectedItem = LocalizationManager.LocalizeValue("Default");
 
             if (RegistryConfig.GetKey("Enabled") == "True")
             {
@@ -67,6 +87,17 @@ namespace GoAwayEdge.UserInterface.ControlPanel.Pages
                 else
                 {
                     RegistryConfig.RemoveKey("CustomQueryUrl");
+                }
+
+                RegistryConfig.SetKey("WeatherProvider", Configuration.WeatherProvider, userSetting: true);
+                if (Configuration.WeatherProvider == WeatherProvider.Custom)
+                {
+                    if (Configuration.CustomWeatherProviderUrl != null)
+                        RegistryConfig.SetKey("CustomWeatherProviderUrl", Configuration.CustomWeatherProviderUrl, userSetting: true);
+                }
+                else
+                {
+                    RegistryConfig.RemoveKey("CustomWeatherProviderUrl", userSetting: true);
                 }
             }
             catch (Exception ex)
@@ -134,6 +165,30 @@ namespace GoAwayEdge.UserInterface.ControlPanel.Pages
                     CustomSearchPanel.Visibility = Visibility.Visible;
                     break;
             }
+        }
+
+        private void WeatherProviderBox_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            switch (WeatherProviderBox.SelectedIndex)
+            {
+                case 0:
+                    Configuration.WeatherProvider = WeatherProvider.Default;
+                    CustomWeatherPanel.Visibility = Visibility.Collapsed;
+                    break;
+                case 1:
+                    Configuration.WeatherProvider = WeatherProvider.WeatherCom;
+                    CustomWeatherPanel.Visibility = Visibility.Collapsed;
+                    break;
+                case 2:
+                    Configuration.WeatherProvider = WeatherProvider.AccuWeather;
+                    CustomWeatherPanel.Visibility = Visibility.Collapsed;
+                    break;
+                case 3:
+                    Configuration.WeatherProvider = WeatherProvider.Custom;
+                    CustomWeatherPanel.Visibility = Visibility.Visible;
+                    break;
+            }
+            FlushSettings();
         }
 
         private void EdgeChannelBox_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -214,6 +269,22 @@ namespace GoAwayEdge.UserInterface.ControlPanel.Pages
             else
             {
                 CustomUrlStatus.Symbol = SymbolRegular.ErrorCircle24;
+            }
+        }
+
+        private void QueryWeatherProviderTextBox_OnTextChanged(object sender, TextChangedEventArgs e)
+        {
+            // Test if the URL is valid
+            if (Uri.TryCreate(QueryWeatherProviderTextBox.Text, UriKind.Absolute, out var uriResult)
+                && (uriResult.Scheme == Uri.UriSchemeHttp || uriResult.Scheme == Uri.UriSchemeHttps))
+            {
+                CustomWeatherUrlStatus.Symbol = SymbolRegular.CheckmarkCircle24;
+                Configuration.CustomWeatherProviderUrl = QueryWeatherProviderTextBox.Text;
+                FlushSettings();
+            }
+            else
+            {
+                CustomWeatherUrlStatus.Symbol = SymbolRegular.ErrorCircle24;
             }
         }
     }

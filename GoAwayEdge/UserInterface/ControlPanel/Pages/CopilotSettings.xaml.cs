@@ -18,19 +18,19 @@ namespace GoAwayEdge.UserInterface.ControlPanel.Pages
             {
                 CopilotProviderBox.Items.Add(aiProvider);
             }
-            CopilotProviderBox.SelectedItem = Configuration.Provider.ToString().Replace("_", " ");
+            CopilotProviderBox.SelectedItem = Configuration.AiProvider.ToString().Replace("_", " ");
 
-            if (Configuration.Provider == AiProvider.Custom)
+            if (Configuration.AiProvider == AiProvider.Custom)
             {
                 CopilotProviderBox.SelectedItem = LocalizationManager.LocalizeValue("SettingsSearchEngineCustomItem");
                 CustomSearchPanel.Visibility = Visibility.Visible;
-                if (Configuration.CustomProviderUrl != null) QueryProviderTextBox.Text = Configuration.CustomProviderUrl;
+                if (Configuration.CustomAiProviderUrl != null) QueryProviderTextBox.Text = Configuration.CustomAiProviderUrl;
                 CustomUrlStatus.Symbol = Uri.TryCreate(QueryProviderTextBox.Text, UriKind.Absolute, out _)
                     ? SymbolRegular.CheckmarkCircle24 : SymbolRegular.ErrorCircle24;
             }
             else
             {
-                CopilotProviderBox.SelectedItem = Configuration.Provider.ToString();
+                CopilotProviderBox.SelectedItem = Configuration.AiProvider.ToString();
             }
         }
 
@@ -38,15 +38,15 @@ namespace GoAwayEdge.UserInterface.ControlPanel.Pages
         {
             try
             {
-                RegistryConfig.SetKey("AiProvider", Configuration.Provider.ToString(), userSetting: true);
-                if (Configuration.Provider == AiProvider.Custom)
+                RegistryConfig.SetKey("AiProvider", Configuration.AiProvider.ToString(), userSetting: true);
+                if (Configuration.AiProvider == AiProvider.Custom)
                 {
-                    if (Configuration.CustomProviderUrl != null)
-                        RegistryConfig.SetKey("CustomProviderUrl", Configuration.CustomProviderUrl, userSetting: true);
+                    if (Configuration.CustomAiProviderUrl != null)
+                        RegistryConfig.SetKey("CustomAiProviderUrl", Configuration.CustomAiProviderUrl, userSetting: true);
                 }
                 else
                 {
-                    RegistryConfig.RemoveKey("CustomProviderUrl", userSetting: true);
+                    RegistryConfig.RemoveKey("CustomAiProviderUrl", userSetting: true);
                 }
             }
             catch (Exception ex)
@@ -65,27 +65,27 @@ namespace GoAwayEdge.UserInterface.ControlPanel.Pages
             switch (CopilotProviderBox.SelectedIndex)
             {
                 case 0:
-                    Configuration.Provider = AiProvider.Copilot;
+                    Configuration.AiProvider = AiProvider.Copilot;
                     CustomSearchPanel.Visibility = Visibility.Collapsed;
                     break;
                 case 1:
-                    Configuration.Provider = AiProvider.ChatGPT;
+                    Configuration.AiProvider = AiProvider.ChatGPT;
                     CustomSearchPanel.Visibility = Visibility.Collapsed;
                     break;
                 case 2:
-                    Configuration.Provider = AiProvider.Gemini;
+                    Configuration.AiProvider = AiProvider.Gemini;
                     CustomSearchPanel.Visibility = Visibility.Collapsed;
                     break;
                 case 3:
-                    Configuration.Provider = AiProvider.GitHub_Copilot;
+                    Configuration.AiProvider = AiProvider.GitHub_Copilot;
                     CustomSearchPanel.Visibility = Visibility.Collapsed;
                     break;
                 case 4:
-                    Configuration.Provider = AiProvider.Grok;
+                    Configuration.AiProvider = AiProvider.Grok;
                     CustomSearchPanel.Visibility = Visibility.Collapsed;
                     break;
                 case 5:
-                    Configuration.Provider = AiProvider.Custom;
+                    Configuration.AiProvider = AiProvider.Custom;
                     CustomSearchPanel.Visibility = Visibility.Visible;
                     break;
             }
@@ -99,7 +99,7 @@ namespace GoAwayEdge.UserInterface.ControlPanel.Pages
                 && (uriResult.Scheme == Uri.UriSchemeHttp || uriResult.Scheme == Uri.UriSchemeHttps))
             {
                 CustomUrlStatus.Symbol = SymbolRegular.CheckmarkCircle24;
-                Configuration.CustomProviderUrl = QueryProviderTextBox.Text;
+                Configuration.CustomAiProviderUrl = QueryProviderTextBox.Text;
                 FlushSettings();
             }
             else

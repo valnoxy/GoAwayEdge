@@ -86,6 +86,56 @@
                 </ui:CardControl>
             </StackPanel>
 
+            <StackPanel Margin="0,10,0,0" x:Name="WeatherStackPanel">
+                <ui:CardControl Icon="{ui:SymbolIcon WeatherCloudy24}">
+                    <ui:CardControl.Header>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Column="0" VerticalAlignment="Center">
+                                <TextBlock
+                        FontSize="13"
+                        FontWeight="Medium"
+                        Text="{DynamicResource ControlPanelWeatherProviderTitle}" />
+                                <TextBlock
+                        FontSize="12"
+                        Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                        Text="{DynamicResource ControlPanelWeatherProviderDescription}" />
+                            </StackPanel>
+                            <ComboBox Grid.Column="1" x:Name="WeatherProviderBox" Width="180" SelectionChanged="WeatherProviderBox_OnSelectionChanged"/>
+                        </Grid>
+                    </ui:CardControl.Header>
+                </ui:CardControl>
+            </StackPanel>
+
+            <StackPanel Margin="0,10,0,0" x:Name="CustomWeatherPanel" Visibility="Collapsed">
+                <ui:CardControl Icon="{ui:SymbolIcon SearchSettings20}">
+                    <ui:CardControl.Header>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Column="0" VerticalAlignment="Center">
+                                <TextBlock
+                        FontSize="13"
+                        FontWeight="Medium"
+                        Text="{DynamicResource ControlPanelCustomWeatherProviderTitle}" />
+                                <TextBlock
+                        FontSize="12"
+                        Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                        Text="{DynamicResource ControlPanelCustomWeatherProviderDescription}"/>
+                            </StackPanel>
+                            <ui:SymbolIcon Grid.Column="1" x:Name="CustomWeatherUrlStatus" Margin="0,0,10,0" FontSize="18"/>
+                            <ui:TextBox Grid.Column="2" Width="300" x:Name="QueryWeatherProviderTextBox" PlaceholderText="https://my-weather.com/{country-code}/{latitude},{longitude}" TextChanged="QueryWeatherProviderTextBox_OnTextChanged"/>
+                        </Grid>
+                    </ui:CardControl.Header>
+                </ui:CardControl>
+            </StackPanel>
+
             <StackPanel Margin="0,10,0,0" x:Name="DisablePanel">
                 <ui:CardControl Icon="{ui:SymbolIcon Power24}">
                     <ui:CardControl.Header>

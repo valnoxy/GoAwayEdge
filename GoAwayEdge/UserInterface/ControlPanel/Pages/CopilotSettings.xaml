@@ -15,7 +15,7 @@
             <StackPanel Margin="0,5,0,0" x:Name="CopilotProviderStackPanel">
                 <ui:CardControl>
                     <ui:CardControl.Icon>
-                        <ui:ImageIcon Source="{DynamicResource MicrosoftCopilot}" Width="24"/>
+                        <ui:ImageIcon Source="{DynamicResource CopilotIcon}" Width="24"/>
                     </ui:CardControl.Icon>
                     <ui:CardControl.Header>
                         <Grid>

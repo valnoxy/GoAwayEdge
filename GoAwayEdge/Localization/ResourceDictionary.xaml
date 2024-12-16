@@ -7,6 +7,7 @@
     <system:String x:Key="Exit">Exit</system:String>
     <system:String x:Key="Yes">Yes</system:String>
     <system:String x:Key="No">No</system:String>
+    <system:String x:Key="Default">Default</system:String>
 
     <!-- Welcome -->
     <system:String x:Key="WelcomeTitle">Welcome</system:String>
@@ -22,6 +23,12 @@
     <system:String x:Key="LicenseNote">Please read the following License. You must accept the terms of the license before continuing with the installation.</system:String>
     <system:String x:Key="LicenseAccept">I accept this license.</system:String>
     <system:String x:Key="LicenseDecline">I decline this license.</system:String>
+
+    <!-- Redirect or Remove -->
+    <system:String x:Key="RedirectRemoveTitle">Redirect or Remove?</system:String>
+    <system:String x:Key="RedirectRemoveDescription">Do you want to redirect all calls from Edge to another browser, or completely remove Edge?</system:String>
+    <system:String x:Key="RedirectEverythingTitle">Redirect everything</system:String>
+    <system:String x:Key="RedirectEverythingDescription">Redirect all calls from Edge to your favorite browser.</system:String>
 
     <!-- Settings -->
     <system:String x:Key="SettingsTitle">Settings</system:String>
@@ -63,6 +70,10 @@
     <system:String x:Key="ControlPanelCopilotProviderDescription">Change the provider to your favorite AI (or to your favorite website).</system:String>
     <system:String x:Key="ControlPanelCustomCopilotProviderTitle">Custom AI Provider</system:String>
     <system:String x:Key="ControlPanelCustomCopilotProviderDescription">Please enter the URL from the AI Provider (or your favorite website).</system:String>
+    <system:String x:Key="ControlPanelWeatherProviderTitle">Weather Service</system:String>
+    <system:String x:Key="ControlPanelWeatherProviderDescription">Change the service to your favorite Weather website.</system:String>
+    <system:String x:Key="ControlPanelCustomWeatherProviderTitle">Custom Weather Service</system:String>
+    <system:String x:Key="ControlPanelCustomWeatherProviderDescription">Please enter the URL from the Weather Service.</system:String>
 
     <!-- Error Handling / Notifications -->
     <system:String x:Key="FailedInitialization">Initialization failed: {0}</system:String>

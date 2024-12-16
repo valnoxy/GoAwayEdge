@@ -12,8 +12,8 @@
 		<AssemblyName>GoAwayEdge</AssemblyName>
 		<Company>Exploitox</Company>
 		<Authors>valnoxy</Authors>
-		<Version>2.0.0.231</Version>
-		<Copyright>Copyright © 2018 - 2024 Exploitox. All rights reserved.</Copyright>
+		<Version>2.0.0.257</Version>
+		<Copyright>Copyright © 2018 - 2025 Exploitox. All rights reserved.</Copyright>
 		<PackageProjectUrl>https://github.com/valnoxy/GoAwayEdge</PackageProjectUrl>
 		<RepositoryUrl>https://github.com/valnoxy/GoAwayEdge</RepositoryUrl>
 		<StartupObject>GoAwayEdge.App</StartupObject>
