@@ -1,0 +1,217 @@
+﻿<UserControl x:Class="GoAwayEdge.UserInterface.Setup.Pages.Settings"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <ScrollViewer VerticalScrollBarVisibility="Auto" Margin="0">
+        <StackPanel>
+            <ui:TextBlock FontTypography="Subtitle" Text="{DynamicResource SettingsTitle}" Foreground="{DynamicResource TextFillColorPrimaryBrush}"/>
+            <StackPanel Margin="0,5,0,0" x:Name="EdgeStackPanel">
+                <ui:CardControl>
+                    <ui:CardControl.Icon>
+                        <ui:ImageIcon Source="{DynamicResource EdgeIcon}" Width="24"/>
+                    </ui:CardControl.Icon>
+                    <ui:CardControl.Header>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Column="0" VerticalAlignment="Center">
+                                <TextBlock
+                                    FontSize="13"
+                                    FontWeight="Medium"
+                                    Text="{DynamicResource SettingsEdgeChannelTitle}" />
+                                <TextBlock
+                                    FontSize="12"
+                                    Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                                    Text="{DynamicResource SettingsEdgeChannelDescription}" />
+                            </StackPanel>
+                            <ComboBox Grid.Column="1" x:Name="EdgeChannelBox" Width="180" SelectionChanged="EdgeChannelBox_OnSelectionChanged"/>
+                        </Grid>
+                    </ui:CardControl.Header>
+                </ui:CardControl>
+            </StackPanel>
+
+            <StackPanel Margin="0,10,0,0">
+                <ui:CardControl Icon="{ui:SymbolIcon Search24}">
+                    <ui:CardControl.Header>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Column="0" VerticalAlignment="Center">
+                                <TextBlock
+                                    FontSize="13"
+                                    FontWeight="Medium"
+                                    Text="{DynamicResource SettingsSearchEngineTitle}" />
+                                <TextBlock
+                                    FontSize="12"
+                                    Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                                    Text="{DynamicResource SettingsSearchEngineDescription}" />
+                            </StackPanel>
+                            <ComboBox Grid.Column="1" x:Name="SearchEngineBox" Width="180" SelectionChanged="SearchEngineBox_OnSelectionChanged"/>
+                        </Grid>
+                    </ui:CardControl.Header>
+                </ui:CardControl>
+            </StackPanel>
+
+            <StackPanel Margin="0,10,0,0" x:Name="CustomSearchPanel" Visibility="Collapsed">
+                <ui:CardControl Icon="{ui:SymbolIcon SearchSettings20}">
+                    <ui:CardControl.Header>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Column="0" VerticalAlignment="Center">
+                                <TextBlock
+                                    FontSize="13"
+                                    FontWeight="Medium"
+                                    Text="{DynamicResource SettingsCustomSearchEngineTitle}" />
+                                <TextBlock
+                                    FontSize="12"
+                                    Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                                    Text="{DynamicResource SettingsCustomSearchEngineDescription}"/>
+                            </StackPanel>
+                            <ui:SymbolIcon Grid.Column="1" x:Name="CustomUrlStatus" Margin="0,0,10,0" FontSize="18"/>
+                            <ui:TextBox Grid.Column="2" Width="300" x:Name="QueryUrlTextBox" TextChanged="QueryUrlTextBox_OnTextChanged" PlaceholderText="https://www.google.com/search?q="/>
+                        </Grid>
+                    </ui:CardControl.Header>
+                </ui:CardControl>
+            </StackPanel>
+
+            <StackPanel Margin="0,10,0,0" x:Name="CopilotStackPanel">
+                <ui:CardControl>
+                    <ui:CardControl.Icon>
+                        <ui:ImageIcon Source="{DynamicResource CopilotIcon}" Width="24"/>
+                    </ui:CardControl.Icon>
+                    <ui:CardControl.Header>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Column="0" VerticalAlignment="Center">
+                                <TextBlock
+                                    FontSize="13"
+                                    FontWeight="Medium"
+                                    Text="{DynamicResource ControlPanelCopilotProviderTitle}" />
+                                <TextBlock
+                                    FontSize="12"
+                                    Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                                    Text="{DynamicResource ControlPanelCopilotProviderDescription}" />
+                            </StackPanel>
+                            <ComboBox Grid.Column="1" x:Name="CopilotProviderBox" Width="180" SelectionChanged="CopilotProviderBox_OnSelectionChanged"/>
+                        </Grid>
+                    </ui:CardControl.Header>
+                </ui:CardControl>
+            </StackPanel>
+
+            <StackPanel Margin="0,10,0,0" x:Name="CustomAiPanel" Visibility="Collapsed">
+                <ui:CardControl Icon="{ui:SymbolIcon SearchSettings20}">
+                    <ui:CardControl.Header>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Column="0" VerticalAlignment="Center">
+                                <TextBlock
+                                    FontSize="13"
+                                    FontWeight="Medium"
+                                    Text="{DynamicResource ControlPanelCustomCopilotProviderTitle}" />
+                                <TextBlock
+                                    FontSize="12"
+                                    Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                                    Text="{DynamicResource ControlPanelCustomCopilotProviderDescription}"/>
+                            </StackPanel>
+                            <ui:SymbolIcon Grid.Column="1" x:Name="CustomAiUrlStatus" Margin="0,0,10,0" FontSize="18"/>
+                            <ui:TextBox Grid.Column="2" Width="300" x:Name="QueryAiProviderTextBox" PlaceholderText="https://example.com" TextChanged="QueryAiProviderTextBox_OnTextChanged"/>
+                        </Grid>
+                    </ui:CardControl.Header>
+                </ui:CardControl>
+            </StackPanel>
+
+            <StackPanel Margin="0,10,0,0" x:Name="WeatherStackPanel">
+                <ui:CardControl Icon="{ui:SymbolIcon WeatherCloudy24}">
+                    <ui:CardControl.Header>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Column="0" VerticalAlignment="Center">
+                                <TextBlock
+                                    FontSize="13"
+                                    FontWeight="Medium"
+                                    Text="{DynamicResource ControlPanelWeatherProviderTitle}" />
+                                <TextBlock
+                                    FontSize="12"
+                                    Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                                    Text="{DynamicResource ControlPanelWeatherProviderDescription}" />
+                            </StackPanel>
+                            <ComboBox Grid.Column="1" x:Name="WeatherProviderBox" Width="180" SelectionChanged="WeatherProviderBox_OnSelectionChanged"/>
+                        </Grid>
+                    </ui:CardControl.Header>
+                </ui:CardControl>
+            </StackPanel>
+
+            <StackPanel Margin="0,10,0,0" x:Name="CustomWeatherPanel" Visibility="Collapsed">
+                <ui:CardControl Icon="{ui:SymbolIcon SearchSettings20}">
+                    <ui:CardControl.Header>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Column="0" VerticalAlignment="Center">
+                                <TextBlock
+                                    FontSize="13"
+                                    FontWeight="Medium"
+                                    Text="{DynamicResource ControlPanelCustomWeatherProviderTitle}" />
+                                <TextBlock
+                                    FontSize="12"
+                                    Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                                    Text="{DynamicResource ControlPanelCustomWeatherProviderDescription}"/>
+                            </StackPanel>
+                            <ui:SymbolIcon Grid.Column="1" x:Name="CustomWeatherUrlStatus" Margin="0,0,10,0" FontSize="18"/>
+                            <ui:TextBox Grid.Column="2" Width="300" x:Name="QueryWeatherProviderTextBox" PlaceholderText="https://my-weather.com/{country-code}/{latitude},{longitude}" TextChanged="QueryWeatherProviderTextBox_OnTextChanged"/>
+                        </Grid>
+                    </ui:CardControl.Header>
+                </ui:CardControl>
+            </StackPanel>
+
+            <StackPanel Margin="0,10,0,0" x:Name="ControlPanelStackPanel">
+                <ui:CardControl Icon="{ui:SymbolIcon Settings32}">
+                    <ui:CardControl.Header>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Column="0" VerticalAlignment="Center">
+                                <TextBlock
+                                    FontSize="13"
+                                    FontWeight="Medium"
+                                    Text="{DynamicResource SettingsControlPanelTitle}" />
+                                <TextBlock
+                                    FontSize="12"
+                                    Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                                    Text="{DynamicResource SettingsControlPanelDescription}"/>
+                            </StackPanel>
+                            <ui:ToggleSwitch Grid.Column="1" x:Name="ControlPanelSwitch" Click="ControlPanelSwitch_OnClick"/>
+                        </Grid>
+                    </ui:CardControl.Header>
+                </ui:CardControl>
+            </StackPanel>
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>
