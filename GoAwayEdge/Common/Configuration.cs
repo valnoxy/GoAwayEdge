@@ -10,25 +10,55 @@ namespace GoAwayEdge.Common
 {
     public enum SearchEngine
     {
+        [Description("https://www.google.com/search?q=")]
         Google,
+        
+        [Description("https://www.bing.com/search?q=")]
         Bing,
+        
+        [Description("https://duckduckgo.com/?q=")]
         DuckDuckGo,
+        
+        [Description("https://search.yahoo.com/search?p=")]
         Yahoo,
+        
+        [Description("https://yandex.com/search/?text=")]
         Yandex,
+        
+        [Description("https://www.ecosia.org/search?q=")]
         Ecosia,
+        
+        [Description("https://www.ask.com/web?q=")]
         Ask,
+        
+        [Description("https://qwant.com/?q=")]
         Qwant,
+        
+        [Description("https://www.perplexity.ai/search?copilot=false&q=")]
         Perplexity,
+
         Custom
     }
 
     public enum AiProvider
     {
+        Default,
+
+        [Description("https://copilot.microsoft.com/")]
         Copilot,
+
+        [Description("https://chatgpt.com/")]
         ChatGPT,
+        
+        [Description("https://gemini.google.com/")]
         Gemini,
+        
+        [Description("https://github.com/copilot")]
         GitHub_Copilot,
+        
+        [Description("https://x.com/i/grok")]
         Grok,
+        
         Custom
     }
 
@@ -72,6 +102,12 @@ namespace GoAwayEdge.Common
             Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles),
             "valnoxy",
             "GoAwayEdge");
+
+        public static string UserDir = Path.Combine(
+            Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
+            "valnoxy",
+            "GoAwayEdge");
+
         public static ShellManager? ShellManager { get; set; }
         public static bool AppBarIsAttached { get; set; }
 
@@ -226,7 +262,7 @@ namespace GoAwayEdge.Common
         public static List<string> GetAiProviders()
         {
             var list = (from aiProvider in (AiProvider[])Enum.GetValues(typeof(AiProvider))
-                where aiProvider != AiProvider.Custom
+                where aiProvider != AiProvider.Custom && aiProvider != AiProvider.Default
                 select aiProvider.ToString().Replace("_", " ")).ToList();
 
             try
@@ -240,19 +276,30 @@ namespace GoAwayEdge.Common
                 list.Add("Custom");
             }
 
+            try
+            {
+                var resourceValueDefault =
+                    (string)Application.Current.MainWindow!.FindResource("Default");
+                list.Insert(0, !string.IsNullOrEmpty(resourceValueDefault) ? resourceValueDefault : "Default");
+            }
+            catch
+            {
+                list.Insert(0, "Default");
+            }
+
             return list;
         }
 
         /// <summary>
-        ///     Get a list of all available AI Providers.
+        ///     Get a list of all available Weather Services.
         /// </summary>
         /// <returns>
-        ///     List of AI Providers.
+        ///     List of Weather Services.
         /// </returns>
         public static List<string> GetWeatherProviders()
         {
             var list = (from weatherProvider in (WeatherProvider[])Enum.GetValues(typeof(WeatherProvider))
-                where (weatherProvider != WeatherProvider.Custom && weatherProvider != WeatherProvider.Default)
+                where weatherProvider != WeatherProvider.Custom && weatherProvider != WeatherProvider.Default
                 select weatherProvider.ToString().Replace("_", " ")).ToList();
 
             try

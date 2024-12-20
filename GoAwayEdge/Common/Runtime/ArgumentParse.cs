@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics;
 using System.IO;
+using System.Text.RegularExpressions;
 using GoAwayEdge.Common.Debugging;
 
 namespace GoAwayEdge.Common.Runtime
@@ -40,6 +41,20 @@ namespace GoAwayEdge.Common.Runtime
             }
             else if (isApp)
             {
+                const string pattern = @"--app-id=([^\s]+)";
+                const string copilotAppId = "khiogjgiicnghciboipemonlmgelhblf";
+                var match = Regex.Match(argumentJoin, pattern);
+                if (match.Success)
+                {
+                    var appId = match.Groups[1].Value;
+                    Logging.Log($"Opening PWA App with ID {appId}");
+                    if (appId == copilotAppId)
+                    {
+                        DebugMessage.DisplayDebugMessage("GoAwayEdge", $"Opening AI Provider '{Configuration.AiProvider}' (PWA) ...");
+                        UserInterface.CopilotDock.InterfaceManager.ShowDock();
+                        return;
+                    }
+                }
                 StartProcess(FileConfiguration.NonIfeoPath, singleArgument, $"Opening PWA Application with following arguments: '{singleArgument}'.");
             }
         }
@@ -198,13 +213,14 @@ namespace GoAwayEdge.Common.Runtime
         {
             return argument.ToLower() switch
             {
+                "default" => AiProvider.Default,
                 "copilot" => AiProvider.Copilot,
                 "chatgpt" => AiProvider.ChatGPT,
                 "gemini" => AiProvider.Gemini,
                 "github_copilot" => AiProvider.GitHub_Copilot,
                 "grok" => AiProvider.Grok,
                 "custom" => AiProvider.Custom,
-                _ => AiProvider.Copilot // Fallback provider
+                _ => AiProvider.Default // Fallback provider
             };
         }
 

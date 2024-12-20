@@ -29,8 +29,12 @@ namespace GoAwayEdge.Common.Runtime
             // Decode Url
             encodedUrl = encodedUrl.Contains("redirect") ? DotSlash(encodedUrl) : DecodeUrlString(encodedUrl);
 
+            // Get new URL
+            var definedEngineUrl = Configuration.Search == SearchEngine.Custom
+                ? Configuration.CustomQueryUrl : Configuration.GetEnumDescription(Configuration.Search);
+
             // Replace Search Engine
-            encodedUrl = encodedUrl.Replace("https://www.bing.com/search?q=", DefineEngine(Configuration.Search));
+            encodedUrl = encodedUrl.Replace("https://www.bing.com/search?q=", definedEngineUrl);
 
 #if DEBUG
             var uriMessageUi = new MessageUi("GoAwayEdge",
@@ -39,34 +43,6 @@ namespace GoAwayEdge.Common.Runtime
 #endif
             var uri = new Uri(encodedUrl);
             return uri.ToString();
-        }
-
-        private static string DefineEngine(SearchEngine engine)
-        {
-            var customQueryUrl = string.Empty;
-            try
-            {
-                customQueryUrl = RegistryConfig.GetKey("CustomQueryUrl");
-            }
-            catch
-            {
-                // ignore; not an valid object
-            }
-
-            return engine switch
-            {
-                SearchEngine.Google => "https://www.google.com/search?q=",
-                SearchEngine.Bing => "https://www.bing.com/search?q=",
-                SearchEngine.DuckDuckGo => "https://duckduckgo.com/?q=",
-                SearchEngine.Yahoo => "https://search.yahoo.com/search?p=",
-                SearchEngine.Yandex => "https://yandex.com/search/?text=",
-                SearchEngine.Ecosia => "https://www.ecosia.org/search?q=",
-                SearchEngine.Ask => "https://www.ask.com/web?q=",
-                SearchEngine.Qwant => "https://qwant.com/?q=",
-                SearchEngine.Perplexity => "https://www.perplexity.ai/search?copilot=false&q=",
-                SearchEngine.Custom => customQueryUrl,
-                _ => "https://www.google.com/search?q="
-            };
         }
 
         private static string DecodeUrlString(string url)

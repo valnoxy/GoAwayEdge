@@ -290,6 +290,28 @@ namespace GoAwayEdge.Common.Installation
                 return;
             }
 
+            // Remove user directory
+            try
+            {
+                if (Directory.Exists(Configuration.UserDir))
+                {
+                    var dir = new DirectoryInfo(Configuration.UserDir);
+                    dir.Delete(true);
+                }
+            }
+            catch (Exception ex)
+            {
+                Logging.Log("Failed to delete user directory: " + ex, Logging.LogLevel.ERROR);
+                Application.Current.Dispatcher.Invoke(() =>
+                {
+                    var errorMessage = LocalizationManager.LocalizeValue("FailedUninstallation", ex.Message);
+                    var messageUi = new MessageUi("GoAwayEdge", errorMessage, "OK");
+                    messageUi.ShowDialog();
+                });
+                Environment.Exit(1);
+                return;
+            }
+
             // Remove Ifeo & Uri handler from registry
             try
             {

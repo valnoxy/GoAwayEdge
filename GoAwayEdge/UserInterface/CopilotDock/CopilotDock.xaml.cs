@@ -41,28 +41,13 @@ namespace GoAwayEdge.UserInterface.CopilotDock
                 var webView2Environment = await CoreWebView2Environment.CreateAsync(userDataFolder: userProfilePath);
                 await WebView.EnsureCoreWebView2Async(webView2Environment);
 
-                switch (Configuration.AiProvider)
+                var providerUrl = Configuration.AiProvider == Custom
+                    ? Configuration.CustomAiProviderUrl : Configuration.GetEnumDescription(Configuration.AiProvider);
+                if (providerUrl != null) WebView.Source = new Uri(providerUrl);
+                else
                 {
-                    case ChatGPT:
-                        WebView.Source = new Uri("https://chatgpt.com/");
-                        break;
-                    case Gemini:
-                        WebView.Source = new Uri("https://gemini.google.com/");
-                        break;
-                    case GitHub_Copilot:
-                        WebView.Source = new Uri("https://github.com/copilot");
-                        break;
-                    case Grok:
-                        WebView.Source = new Uri("https://x.com/i/grok");
-                        break;
-                    case Custom:
-                        if (Configuration.CustomAiProviderUrl != null)
-                            WebView.Source = new Uri(Configuration.CustomAiProviderUrl);
-                        break;
-                    case Copilot:
-                    default:
-                        Logging.Log($"Failed to load AiProvider! AiProvider Value '{Configuration.AiProvider}' in invalid!");
-                        throw new ArgumentOutOfRangeException();
+                    Logging.Log($"Failed to load AiProvider! AiProvider Value '{Configuration.AiProvider}' in invalid!");
+                    throw new ArgumentOutOfRangeException();
                 }
             }
             catch (Exception ex)
@@ -73,8 +58,12 @@ namespace GoAwayEdge.UserInterface.CopilotDock
 
         private void CloseButton_OnClick(object sender, RoutedEventArgs e)
         {
-            Configuration.ShellManager.AppBarManager.SignalGracefulShutdown();
-            Configuration.ShellManager.Dispose();
+            if (Configuration.ShellManager != null)
+            {
+                Configuration.ShellManager.AppBarManager.SignalGracefulShutdown();
+                Configuration.ShellManager.Dispose();
+            }
+
             Environment.Exit(0);
         }
 
@@ -84,13 +73,13 @@ namespace GoAwayEdge.UserInterface.CopilotDock
             {
                 DockButton.Icon = new SymbolIcon(SymbolRegular.Pin28);
                 RegistryConfig.SetKey("CopilotDockState", "Detached", userSetting: true);
-                this.AppBarMode = AppBarMode.None;
+                AppBarMode = AppBarMode.None;
             }
             else
             {
                 DockButton.Icon = new SymbolIcon(SymbolRegular.PinOff28);
                 RegistryConfig.SetKey("CopilotDockState", "Docked", userSetting: true);
-                this.AppBarMode = AppBarMode.Normal;
+                AppBarMode = AppBarMode.Normal;
             }
             Configuration.AppBarIsAttached = !Configuration.AppBarIsAttached;
         }

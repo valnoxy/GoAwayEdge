@@ -83,8 +83,8 @@
     <system:String x:Key="MessageGoAwayEdgeEnabled">GoAwayEdge wurde auf diesem System erfolgreich aktiviert.</system:String>
     <system:String x:Key="FailedSetAppDisabled">GoAwayEdge konnte auf diesem System nicht deaktiviert werden: {0}</system:String>
     <system:String x:Key="ControlPanelCopilotProviderTitle">KI Anbieter</system:String>
-    <system:String x:Key="ControlPanelCopilotProviderDescription">Wechseln Sie den Anbieter Ihrer bevorzugten KI (oder zu Ihrer bevorzugten Webseite).</system:String>
+    <system:String x:Key="ControlPanelCopilotProviderDescription">Wechsel den Anbieter Ihrer bevorzugten KI (oder zu Ihrer bevorzugten Webseite).</system:String>
     <system:String x:Key="ControlPanelCustomCopilotProviderTitle">Benutzerdefinierter KI Anbieter</system:String>
-    <system:String x:Key="ControlPanelCustomCopilotProviderDescription">Bitte geben Sie die URL des KI-Anbieters (oder einer Webseite) ein.</system:String>
+    <system:String x:Key="ControlPanelCustomCopilotProviderDescription">Bitte gebe die URL des KI-Anbieters (oder einer Webseite) ein.</system:String>
     <system:String x:Key="FailedFlushSetting">Die Einstellungen konnten nicht übernommen werden: {0}</system:String>
 </ResourceDictionary>

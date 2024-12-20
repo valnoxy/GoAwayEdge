@@ -32,6 +32,10 @@ namespace GoAwayEdge.UserInterface.ControlPanel.Pages
             {
                 CopilotProviderBox.SelectedItem = Configuration.AiProvider.ToString();
             }
+
+            if (Configuration.AiProvider == AiProvider.Default)
+                CopilotProviderBox.SelectedItem = LocalizationManager.LocalizeValue("Default");
+
         }
 
         private void FlushSettings()
@@ -65,26 +69,30 @@ namespace GoAwayEdge.UserInterface.ControlPanel.Pages
             switch (CopilotProviderBox.SelectedIndex)
             {
                 case 0:
-                    Configuration.AiProvider = AiProvider.Copilot;
+                    Configuration.AiProvider = AiProvider.Default;
                     CustomSearchPanel.Visibility = Visibility.Collapsed;
                     break;
                 case 1:
-                    Configuration.AiProvider = AiProvider.ChatGPT;
+                    Configuration.AiProvider = AiProvider.Copilot;
                     CustomSearchPanel.Visibility = Visibility.Collapsed;
                     break;
                 case 2:
-                    Configuration.AiProvider = AiProvider.Gemini;
+                    Configuration.AiProvider = AiProvider.ChatGPT;
                     CustomSearchPanel.Visibility = Visibility.Collapsed;
                     break;
                 case 3:
-                    Configuration.AiProvider = AiProvider.GitHub_Copilot;
+                    Configuration.AiProvider = AiProvider.Gemini;
                     CustomSearchPanel.Visibility = Visibility.Collapsed;
                     break;
                 case 4:
-                    Configuration.AiProvider = AiProvider.Grok;
+                    Configuration.AiProvider = AiProvider.GitHub_Copilot;
                     CustomSearchPanel.Visibility = Visibility.Collapsed;
                     break;
                 case 5:
+                    Configuration.AiProvider = AiProvider.Grok;
+                    CustomSearchPanel.Visibility = Visibility.Collapsed;
+                    break;
+                case 6:
                     Configuration.AiProvider = AiProvider.Custom;
                     CustomSearchPanel.Visibility = Visibility.Visible;
                     break;

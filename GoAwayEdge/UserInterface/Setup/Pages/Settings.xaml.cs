@@ -53,6 +53,9 @@ namespace GoAwayEdge.UserInterface.Setup.Pages
                     ? SymbolRegular.CheckmarkCircle24 : SymbolRegular.ErrorCircle24;
             }
 
+            if (Configuration.AiProvider == AiProvider.Default)
+                CopilotProviderBox.SelectedItem = LocalizationManager.LocalizeValue("Default");
+
             // Weather Provider
             foreach (var weatherProvider in Configuration.GetWeatherProviders())
             {
@@ -184,26 +187,30 @@ namespace GoAwayEdge.UserInterface.Setup.Pages
             switch (CopilotProviderBox.SelectedIndex)
             {
                 case 0:
-                    Configuration.AiProvider = AiProvider.Copilot;
+                    Configuration.AiProvider = AiProvider.Default;
                     CustomAiPanel.Visibility = Visibility.Collapsed;
                     break;
                 case 1:
-                    Configuration.AiProvider = AiProvider.ChatGPT;
+                    Configuration.AiProvider = AiProvider.Copilot;
                     CustomAiPanel.Visibility = Visibility.Collapsed;
                     break;
                 case 2:
-                    Configuration.AiProvider = AiProvider.Gemini;
+                    Configuration.AiProvider = AiProvider.ChatGPT;
                     CustomAiPanel.Visibility = Visibility.Collapsed;
                     break;
                 case 3:
-                    Configuration.AiProvider = AiProvider.GitHub_Copilot;
+                    Configuration.AiProvider = AiProvider.Gemini;
                     CustomAiPanel.Visibility = Visibility.Collapsed;
                     break;
                 case 4:
-                    Configuration.AiProvider = AiProvider.Grok;
+                    Configuration.AiProvider = AiProvider.GitHub_Copilot;
                     CustomAiPanel.Visibility = Visibility.Collapsed;
                     break;
                 case 5:
+                    Configuration.AiProvider = AiProvider.Grok;
+                    CustomAiPanel.Visibility = Visibility.Collapsed;
+                    break;
+                case 6:
                     Configuration.AiProvider = AiProvider.Custom;
                     CustomAiPanel.Visibility = Visibility.Visible;
                     break;

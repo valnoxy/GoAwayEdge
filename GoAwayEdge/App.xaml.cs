@@ -93,7 +93,7 @@ namespace GoAwayEdge
                     {
                         Configuration.InitialEnvironment();
 
-                        if (Configuration.AiProvider != AiProvider.Copilot)
+                        if (Configuration.AiProvider != AiProvider.Default)
                         {
                             DebugMessage.DisplayDebugMessage("GoAwayEdge",
                                 $"Opening AI Provider '{Configuration.AiProvider}' (Triggered with argument) ...");
@@ -104,7 +104,7 @@ namespace GoAwayEdge
                         {
                             IsDebug = true;
                             DebugMessage.DisplayDebugMessage("GoAwayEdge",
-                                "You cannot open the Copilot dock if your AI provider is Copilot.");
+                                "You cannot open the Copilot dock if your AI provider is set to default");
                             Environment.Exit(1);
                         }
                     }
