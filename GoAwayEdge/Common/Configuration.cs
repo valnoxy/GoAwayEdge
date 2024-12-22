@@ -86,10 +86,6 @@ namespace GoAwayEdge.Common
 
     internal class Configuration
     {
-        [DllImport("shell32.dll", CharSet = CharSet.Unicode, SetLastError = true)]
-        private static extern int SetCurrentProcessExplicitAppUserModelID(string appID);
-
-
         public static EdgeChannel Channel { get; set; }
         public static SearchEngine Search { get; set; }
         public static AiProvider AiProvider { get; set; }
@@ -189,10 +185,6 @@ namespace GoAwayEdge.Common
                 Logging.Log($"Value of CustomWeatherProviderUrl: {CustomWeatherProviderUrl}");
                 Logging.Log($"Value of CopilotExternalApp: {CopilotExternalApp}");
                 Logging.Log($"Value of CopilotExternalAppArgument: {CopilotExternalAppArgument}");
-
-                // Test AUMID
-                int result = SetCurrentProcessExplicitAppUserModelID("dev.valnoxy.GoAwayEdge");
-                Logging.Log($"Result of AUMID: {result}");
                 return true;
             }
             catch (Exception ex)
