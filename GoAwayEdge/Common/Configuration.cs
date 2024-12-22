@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel;
 using System.IO;
 using System.IO.Pipes;
+using System.Runtime.InteropServices;
 using System.Windows;
 using GoAwayEdge.Common.Debugging;
 using ManagedShell;
@@ -10,10 +11,10 @@ namespace GoAwayEdge.Common
 {
     public enum SearchEngine
     {
-        [Description("https://www.google.com/search?q=")]
+        [Description("https://google.com/search?q=")]
         Google,
         
-        [Description("https://www.bing.com/search?q=")]
+        [Description("https://bing.com/search?q=")]
         Bing,
         
         [Description("https://duckduckgo.com/?q=")]
@@ -25,16 +26,16 @@ namespace GoAwayEdge.Common
         [Description("https://yandex.com/search/?text=")]
         Yandex,
         
-        [Description("https://www.ecosia.org/search?q=")]
+        [Description("https://ecosia.org/search?q=")]
         Ecosia,
         
-        [Description("https://www.ask.com/web?q=")]
+        [Description("https://ask.com/web?q=")]
         Ask,
         
         [Description("https://qwant.com/?q=")]
         Qwant,
         
-        [Description("https://www.perplexity.ai/search?copilot=false&q=")]
+        [Description("https://perplexity.ai/search?copilot=false&q=")]
         Perplexity,
 
         Custom
@@ -77,7 +78,7 @@ namespace GoAwayEdge.Common
         [Description("https://weather.com/{country-code}/weather/today/l/{latitude},{longitude}")]
         WeatherCom,
 
-        [Description("https://www.accuweather.com/{short-country-code}/search-locations?query={latitude},{longitude}")]
+        [Description("https://accuweather.com/{short-country-code}/search-locations?query={latitude},{longitude}")]
         AccuWeather,
 
         Custom
@@ -85,6 +86,10 @@ namespace GoAwayEdge.Common
 
     internal class Configuration
     {
+        [DllImport("shell32.dll", CharSet = CharSet.Unicode, SetLastError = true)]
+        private static extern int SetCurrentProcessExplicitAppUserModelID(string appID);
+
+
         public static EdgeChannel Channel { get; set; }
         public static SearchEngine Search { get; set; }
         public static AiProvider AiProvider { get; set; }
@@ -110,6 +115,8 @@ namespace GoAwayEdge.Common
 
         public static ShellManager? ShellManager { get; set; }
         public static bool AppBarIsAttached { get; set; }
+        public static string? CopilotExternalApp { get; set; }
+        public static string? CopilotExternalAppArgument { get; set; }
 
 
         /// <summary>
@@ -152,6 +159,8 @@ namespace GoAwayEdge.Common
                     Search = Runtime.ArgumentParse.ParseSearchEngine(RegistryConfig.GetKey("SearchEngine"));
                     AiProvider = Runtime.ArgumentParse.ParseAiProvider(RegistryConfig.GetKey("AiProvider", userSetting: true));
                     WeatherProvider = Runtime.ArgumentParse.ParseWeatherProvider(RegistryConfig.GetKey("WeatherProvider", userSetting: true));
+                    CopilotExternalApp = RegistryConfig.GetKey("ExternalApp", userSetting: true);
+                    CopilotExternalAppArgument = RegistryConfig.GetKey("ExternalAppArgs", userSetting: true);
                     if (Search == SearchEngine.Custom)
                     {
                         CustomQueryUrl = RegistryConfig.GetKey("CustomQueryUrl");
@@ -178,6 +187,12 @@ namespace GoAwayEdge.Common
                 Logging.Log($"Value of CustomQueryUrl: {CustomQueryUrl}");
                 Logging.Log($"Value of CustomAiProviderUrl: {CustomAiProviderUrl}");
                 Logging.Log($"Value of CustomWeatherProviderUrl: {CustomWeatherProviderUrl}");
+                Logging.Log($"Value of CopilotExternalApp: {CopilotExternalApp}");
+                Logging.Log($"Value of CopilotExternalAppArgument: {CopilotExternalAppArgument}");
+
+                // Test AUMID
+                int result = SetCurrentProcessExplicitAppUserModelID("dev.valnoxy.GoAwayEdge");
+                Logging.Log($"Result of AUMID: {result}");
                 return true;
             }
             catch (Exception ex)

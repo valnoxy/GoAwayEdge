@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System.IO;
+using System.Windows;
 using System.Windows.Controls;
 using GoAwayEdge.Common;
 using Wpf.Ui.Controls;
@@ -36,22 +37,39 @@ namespace GoAwayEdge.UserInterface.ControlPanel.Pages
             if (Configuration.AiProvider == AiProvider.Default)
                 CopilotProviderBox.SelectedItem = LocalizationManager.LocalizeValue("Default");
 
+            if (Configuration.CopilotExternalApp != null) ExternalAppTextBox.Text = Configuration.CopilotExternalApp;
+            if (Configuration.CopilotExternalAppArgument != null) ExternalAppArgsTextBox.Text = Configuration.CopilotExternalAppArgument;
         }
 
-        private void FlushSettings()
+        private static void FlushSettings()
         {
             try
             {
-                RegistryConfig.SetKey("AiProvider", Configuration.AiProvider.ToString(), userSetting: true);
+                // Ai Provider
                 if (Configuration.AiProvider == AiProvider.Custom)
                 {
                     if (Configuration.CustomAiProviderUrl != null)
+                    {
+                        RegistryConfig.SetKey("AiProvider", Configuration.AiProvider.ToString(), userSetting: true);
                         RegistryConfig.SetKey("CustomAiProviderUrl", Configuration.CustomAiProviderUrl, userSetting: true);
+                    }
                 }
                 else
                 {
+                    RegistryConfig.SetKey("AiProvider", Configuration.AiProvider.ToString(), userSetting: true);
                     RegistryConfig.RemoveKey("CustomAiProviderUrl", userSetting: true);
                 }
+
+                // External App
+                if (Configuration.CopilotExternalApp != null)
+                    RegistryConfig.SetKey("ExternalApp", Configuration.CopilotExternalApp, userSetting: true);
+                else
+                    RegistryConfig.RemoveKey("ExternalApp", userSetting: true);
+                
+                if (Configuration.CopilotExternalAppArgument != null)
+                    RegistryConfig.SetKey("ExternalAppArgs", Configuration.CopilotExternalAppArgument, userSetting: true);
+                else
+                    RegistryConfig.RemoveKey("ExternalAppArgs", userSetting: true);
             }
             catch (Exception ex)
             {
@@ -114,6 +132,29 @@ namespace GoAwayEdge.UserInterface.ControlPanel.Pages
             {
                 CustomUrlStatus.Symbol = SymbolRegular.ErrorCircle24;
             }
+        }
+
+        private void ExternalAppTextBox_OnTextChanged(object sender, TextChangedEventArgs e)
+        {
+            // Test if the file exists
+            if (File.Exists(ExternalAppTextBox.Text))
+            {
+                ExternalAppStatus.Symbol = SymbolRegular.CheckmarkCircle24;
+                Configuration.CopilotExternalApp = ExternalAppTextBox.Text;
+                FlushSettings();
+            }
+            else
+            {
+                ExternalAppStatus.Symbol = SymbolRegular.ErrorCircle24;
+            }
+        }
+
+        private void ExternalAppArgsTextBox_OnTextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (ExternalAppStatus.Symbol != SymbolRegular.CheckmarkCircle24) return;
+            
+            Configuration.CopilotExternalAppArgument = ExternalAppArgsTextBox.Text;
+            FlushSettings();
         }
     }
 }
