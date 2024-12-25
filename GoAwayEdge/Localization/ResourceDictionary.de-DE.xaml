@@ -91,4 +91,10 @@
     <system:String x:Key="ControlPanelCustomCopilotProviderTitle">Benutzerdefinierter KI Anbieter</system:String>
     <system:String x:Key="ControlPanelCustomCopilotProviderDescription">Bitte gebe die URL des KI-Anbieters (oder einer Webseite) ein.</system:String>
     <system:String x:Key="FailedFlushSetting">Die Einstellungen konnten nicht übernommen werden: {0}</system:String>
+    <system:String x:Key="CopilotKeyTitle">Copilot Key</system:String>
+    <system:String x:Key="ControlPanelHotkeyExternalProgramTitle">Externe Anwendung</system:String>
+    <system:String x:Key="ControlPanelHotkeyExternalProgramPathTitle">Pfad zur Anwendung</system:String>
+    <system:String x:Key="ControlPanelHotkeyExternalProgramPathDescription">Wählen Sie die Anwendung, die Sie ausführen möchten.</system:String>
+    <system:String x:Key="ControlPanelHotkeyExternalProgramArgsTitle">Argumente</system:String>
+    <system:String x:Key="ControlPanelHotkeyExternalProgramArgsDescription">Definieren Sie die Argumente Ihrer Anwendung.</system:String>
 </ResourceDictionary>
