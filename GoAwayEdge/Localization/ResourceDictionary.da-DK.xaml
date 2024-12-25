@@ -71,4 +71,25 @@
     <system:String x:Key="ControlPanelCustomCopilotProviderTitle">Brugerdefineret AI-udbyder</system:String>
     <system:String x:Key="ControlPanelCustomCopilotProviderDescription">Indtast venligst URL'en fra AI-udbyderen (eller din foretrukne hjemmeside).</system:String>
     <system:String x:Key="FailedFlushSetting">Kunne ikke anvende indstillingerne: {0}</system:String>
+    <system:String x:Key="ControlPanelHotkeyExternalProgramDescription">Kør et eksternt program, når du trykker på Copilot-tasten.</system:String>
+    <system:String x:Key="SettingsUninstallEdgeWarningDescription">Fjernelse af Microsoft Edge kan forårsage alvorlige systemproblemer, da det er dybt integreret i Windows og afgørende for mange funktioner, herunder opdateringer, hjælpefiler og nogle apps. Hvis du sletter den, kan det resultere i ustabilitet eller ødelagt funktionalitet.\n\nFortsæt kun, hvis du forstår risikoen fuldt ud og har en pålidelig sikkerhedskopi eller et gendannelsespunkt på plads.</system:String>
+    <system:String x:Key="Warning">Advarsel</system:String>
+    <system:String x:Key="Cancel">Annuller</system:String>
+    <system:String x:Key="SettingsUninstallEdgeBtn">Fjern Microsoft Edge</system:String>
+    <system:String x:Key="ControlPanelWeatherProviderTitle">Vejrtjeneste</system:String>
+    <system:String x:Key="ControlPanelWeatherProviderDescription">Skift tjeneste til dit foretrukne vejr-websted.</system:String>
+    <system:String x:Key="ControlPanelCustomWeatherProviderTitle">Brugerdefineret vejrtjeneste</system:String>
+    <system:String x:Key="ControlPanelCustomWeatherProviderDescription">Indtast venligst URL'en fra vejrtjenesten.</system:String>
+    <system:String x:Key="CopilotKeyTitle">Kopilot-nøgle</system:String>
+    <system:String x:Key="ControlPanelHotkeyExternalProgramTitle">Eksternt program</system:String>
+    <system:String x:Key="ControlPanelHotkeyExternalProgramPathTitle">Vejen til ansøgning</system:String>
+    <system:String x:Key="ControlPanelHotkeyExternalProgramPathDescription">Vælg det program, du vil køre.</system:String>
+    <system:String x:Key="ControlPanelHotkeyExternalProgramArgsTitle">Argumenter</system:String>
+    <system:String x:Key="ControlPanelHotkeyExternalProgramArgsDescription">Definer argumenterne for din applikation.</system:String>
+    <system:String x:Key="ControlPanelHotkeyExternalProgramNoSource">Ingen kilde valgt</system:String>
+    <system:String x:Key="Default">Standard</system:String>
+    <system:String x:Key="RedirectRemoveTitle">Omdirigere eller fjerne?</system:String>
+    <system:String x:Key="RedirectRemoveDescription">Vil du omdirigere alle opkald fra Edge til en anden browser eller helt fjerne Edge?</system:String>
+    <system:String x:Key="RedirectEverythingTitle">Omdiriger alting</system:String>
+    <system:String x:Key="RedirectEverythingDescription">Omdiriger alle opkald fra Edge til din yndlingsbrowser.</system:String>
 </ResourceDictionary>
