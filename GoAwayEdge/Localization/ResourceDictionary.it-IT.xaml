@@ -77,4 +77,25 @@
     <system:String x:Key="FailedSetAppEnabled">Impossibile abilitare GoAwayEdge su questo sistema: {0}</system:String>
     <system:String x:Key="FailedSetAppDisabled">Impossibile disattivare GoAwayEdge su questo sistema: {0}</system:String>
     <system:String x:Key="FailedFlushSetting">Impossibile applicare le impostazioni: {0}</system:String>
+    <system:String x:Key="RedirectRemoveDescription">Volete reindirizzare tutte le chiamate da Edge a un altro browser o rimuovere completamente Edge?</system:String>
+    <system:String x:Key="SettingsUninstallEdgeWarningDescription">La rimozione di Microsoft Edge può causare seri problemi al sistema, poiché è profondamente integrato in Windows ed è essenziale per molte funzioni, tra cui gli aggiornamenti, i file di guida e alcune app. L'eliminazione potrebbe causare instabilità o interruzioni di funzionalità.\n\nProcedere solo se si conoscono bene i rischi e se si dispone di un backup affidabile o di un punto di ripristino.</system:String>
+    <system:String x:Key="Warning">Avvertenze</system:String>
+    <system:String x:Key="Cancel">Annullamento</system:String>
+    <system:String x:Key="RedirectRemoveTitle">Reindirizzare o rimuovere?</system:String>
+    <system:String x:Key="RedirectEverythingTitle">Reindirizzare tutto</system:String>
+    <system:String x:Key="RedirectEverythingDescription">Reindirizza tutte le chiamate da Edge al vostro browser preferito.</system:String>
+    <system:String x:Key="SettingsUninstallEdgeBtn">Rimuovere Microsoft Edge</system:String>
+    <system:String x:Key="ControlPanelWeatherProviderTitle">Servizio meteo</system:String>
+    <system:String x:Key="ControlPanelWeatherProviderDescription">Cambiate il servizio con il vostro sito meteo preferito.</system:String>
+    <system:String x:Key="ControlPanelCustomWeatherProviderTitle">Servizio meteo personalizzato</system:String>
+    <system:String x:Key="ControlPanelCustomWeatherProviderDescription">Inserire l'URL del servizio meteorologico.</system:String>
+    <system:String x:Key="CopilotKeyTitle">Chiave del copilota</system:String>
+    <system:String x:Key="ControlPanelHotkeyExternalProgramTitle">Programma esterno</system:String>
+    <system:String x:Key="ControlPanelHotkeyExternalProgramDescription">Eseguire un'applicazione esterna quando si preme il tasto Copilot.</system:String>
+    <system:String x:Key="ControlPanelHotkeyExternalProgramPathTitle">Percorso di applicazione</system:String>
+    <system:String x:Key="ControlPanelHotkeyExternalProgramPathDescription">Selezionare l'applicazione che si desidera eseguire.</system:String>
+    <system:String x:Key="ControlPanelHotkeyExternalProgramArgsTitle">Argomenti</system:String>
+    <system:String x:Key="ControlPanelHotkeyExternalProgramArgsDescription">Definire gli argomenti dell'applicazione.</system:String>
+    <system:String x:Key="ControlPanelHotkeyExternalProgramNoSource">Nessuna sorgente selezionata</system:String>
+    <system:String x:Key="Default">Predefinito</system:String>
 </ResourceDictionary>
