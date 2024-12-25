@@ -77,4 +77,25 @@
     <system:String x:Key="MessageGoAwayEdgeDisabled">GoAwayEdge a été désactivé avec succès sur ce système.</system:String>
     <system:String x:Key="FailedSetAppEnabled">Impossible d'activer GoAwayEdge sur ce système : {0}</system:String>
     <system:String x:Key="FailedFlushSetting">Impossible d'appliquer les paramètres : {0}</system:String>
+    <system:String x:Key="Default">Défaut</system:String>
+    <system:String x:Key="RedirectRemoveTitle">Rediriger ou supprimer ?</system:String>
+    <system:String x:Key="RedirectRemoveDescription">Voulez-vous rediriger tous les appels de Edge vers un autre navigateur, ou supprimer complètement Edge ?</system:String>
+    <system:String x:Key="RedirectEverythingDescription">Rediriger tous les appels de Edge vers votre navigateur préféré.</system:String>
+    <system:String x:Key="Warning">Avertissement</system:String>
+    <system:String x:Key="Cancel">Annuler</system:String>
+    <system:String x:Key="RedirectEverythingTitle">Tout rediriger</system:String>
+    <system:String x:Key="SettingsUninstallEdgeWarningDescription">La suppression de Microsoft Edge peut entraîner de graves problèmes pour le système, car il est profondément intégré à Windows et essentiel pour de nombreuses fonctionnalités, notamment les mises à jour, les fichiers d'aide et certaines applications. Sa suppression peut entraîner une instabilité ou des dysfonctionnements.\n\nNe procédez que si vous comprenez parfaitement les risques et si vous disposez d'une sauvegarde fiable ou d'un point de restauration.</system:String>
+    <system:String x:Key="SettingsUninstallEdgeBtn">Supprimer Microsoft Edge</system:String>
+    <system:String x:Key="ControlPanelWeatherProviderTitle">Service météorologique</system:String>
+    <system:String x:Key="ControlPanelWeatherProviderDescription">Changez le service pour votre site web météo préféré.</system:String>
+    <system:String x:Key="ControlPanelCustomWeatherProviderTitle">Service météorologique personnalisé</system:String>
+    <system:String x:Key="ControlPanelCustomWeatherProviderDescription">Veuillez saisir l'URL du service météorologique.</system:String>
+    <system:String x:Key="CopilotKeyTitle">Clé Copilote</system:String>
+    <system:String x:Key="ControlPanelHotkeyExternalProgramTitle">Programme externe</system:String>
+    <system:String x:Key="ControlPanelHotkeyExternalProgramDescription">Exécuter une application externe lorsque vous appuyez sur la touche Copilote.</system:String>
+    <system:String x:Key="ControlPanelHotkeyExternalProgramPathTitle">Chemin d'accès à l'application</system:String>
+    <system:String x:Key="ControlPanelHotkeyExternalProgramPathDescription">Sélectionnez l'application que vous souhaitez exécuter.</system:String>
+    <system:String x:Key="ControlPanelHotkeyExternalProgramArgsTitle">Arguments</system:String>
+    <system:String x:Key="ControlPanelHotkeyExternalProgramArgsDescription">Définissez les arguments de votre application.</system:String>
+    <system:String x:Key="ControlPanelHotkeyExternalProgramNoSource">Aucune source sélectionnée</system:String>
 </ResourceDictionary>
