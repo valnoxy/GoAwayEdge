@@ -37,12 +37,10 @@ namespace GoAwayEdge.Common.Debugging
 
             // Fetching the current log file
             _logFile = Path.Combine(LogPath, $"log_{DateTime.Now:yyyy-MM-dd}.txt");
-            if (!File.Exists(_logFile))
-            {
-                var version = Assembly.GetExecutingAssembly().GetName().Version!;
-                Log($"GoAwayEdge {version.Major}.{version.Minor}.{version.Build} (Build {version.Revision})");
-                Log("Logging system initialized");
-            }
+            
+            var version = Assembly.GetExecutingAssembly().GetName().Version!;
+            Log($"GoAwayEdge {version.Major}.{version.Minor}.{version.Build} (Build {version.Revision})");
+            Log("Logging system initialized");
 
             // Delete old log files
             DeleteOldLogFiles();

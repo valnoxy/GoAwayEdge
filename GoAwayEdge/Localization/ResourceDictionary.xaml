@@ -8,6 +8,8 @@
     <system:String x:Key="Yes">Yes</system:String>
     <system:String x:Key="No">No</system:String>
     <system:String x:Key="Default">Default</system:String>
+    <system:String x:Key="Warning">Warning</system:String>
+    <system:String x:Key="Cancel">Cancel</system:String>
 
     <!-- Welcome -->
     <system:String x:Key="WelcomeTitle">Welcome</system:String>
@@ -43,6 +45,8 @@
     <system:String x:Key="SettingsMSEdgeUninstallDescription">Remove Microsoft Edge completely from the system.</system:String>
     <system:String x:Key="SettingsControlPanelTitle">Install Control Panel</system:String>
     <system:String x:Key="SettingsControlPanelDescription">Install the Control Panel to configure GoAwayEdge more easily.</system:String>
+    <system:String x:Key="SettingsUninstallEdgeWarningDescription">Removing Microsoft Edge can cause serious system issues, as it’s deeply integrated into Windows and essential for many features, including updates, help files, and some apps. Deleting it could result in instability or broken functionality.\n\nOnly proceed if you fully understand the risks and have a reliable backup or restore point in place.</system:String>
+    <system:String x:Key="SettingsUninstallEdgeBtn">Remove Microsoft Edge</system:String>
 
     <!-- Setup in progress -->
     <system:String x:Key="SetupProgressTitle">Installation in progress ...</system:String>

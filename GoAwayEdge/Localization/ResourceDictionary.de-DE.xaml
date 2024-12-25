@@ -6,6 +6,8 @@
     <system:String x:Key="Yes">Ja</system:String>
     <system:String x:Key="No">Nein</system:String>
     <system:String x:Key="Default">Standard</system:String>
+    <system:String x:Key="Warning">Warnung</system:String>
+    <system:String x:Key="Cancel">Abbrechen</system:String>
     <!-- Welcome -->
     <system:String x:Key="WelcomeTitle">Willkommen</system:String>
     <system:String x:Key="WelcomeDescription">Das Installationsprogramm führt alle notwendigen Schritte durch, um GoAwayEdge auf Ihrem System zu installieren. Nach der Installation werden alle Edge-Aufrufe an Ihren Browser weitergeleitet. Bitte wählen Sie die gewünschte Option, um fortzufahren.</system:String>
@@ -35,6 +37,8 @@
     <system:String x:Key="SettingsCustomSearchEngineDescription">Bitte geben Sie die Anfrage-URL der Suchmaschine ein.</system:String>
     <system:String x:Key="SettingsMSEdgeUninstallTitle">Microsoft Edge (Stabil) entfernen</system:String>
     <system:String x:Key="SettingsMSEdgeUninstallDescription">Entferne Microsoft Edge vollständig von Ihrem System.</system:String>
+    <system:String x:Key="SettingsUninstallEdgeWarningDescription">Das Entfernen von Microsoft Edge kann zu schwerwiegenden Systemproblemen führen, da es tief in Windows integriert ist und für viele Funktionen, einschließlich Updates, Hilfedateien und einige Anwendungen, unerlässlich ist. Das Löschen kann zu Instabilität oder defekten Funktionen führen.\n\nFahren Sie nur fort, wenn Sie sich der Risiken bewusst sind und über eine zuverlässige Sicherung oder einen Wiederherstellungspunkt verfügen.</system:String>
+    <system:String x:Key="SettingsUninstallEdgeBtn">Microsoft Edge entfernen</system:String>
     <!-- Setup in progress -->
     <system:String x:Key="SetupProgressTitle">Installation läuft ...</system:String>
     <system:String x:Key="SetupProgressDescription">Bitte warten Sie, bis die Installation abgeschlossen ist.</system:String>

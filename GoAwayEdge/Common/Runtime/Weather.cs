@@ -9,11 +9,11 @@ namespace GoAwayEdge.Common.Runtime
     {
         public class GeoData
         {
-            public string L { get; set; } // City
-            public string R { get; set; } // Region
-            public string C { get; set; } // Country
-            public string I { get; set; } // Short Country code
-            public string G { get; set; } // Country code (lowercase)
+            public string? L { get; set; } // City
+            public string? R { get; set; } // Region
+            public string? C { get; set; } // Country
+            public string? I { get; set; } // Short Country code
+            public string? G { get; set; } // Country code (lowercase)
             public double X { get; set; } // longitude
             public double Y { get; set; } // latitude
         }
@@ -42,7 +42,7 @@ namespace GoAwayEdge.Common.Runtime
             var placeholders = new Dictionary<string, string>
             {
                 { "country-code", language },
-                { "short-country-code", locObject.I },
+                { "short-country-code", locObject.I! },
                 { "latitude", lat },
                 { "longitude", lon }
             };

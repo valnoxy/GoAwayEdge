@@ -48,7 +48,7 @@ namespace GoAwayEdge.Common.Runtime
                 {
                     var appId = match.Groups[1].Value;
                     Logging.Log($"Opening PWA App with ID {appId}");
-                    if (appId == copilotAppId)
+                    if (appId == copilotAppId && Common.Configuration.AiProvider != AiProvider.Default)
                     {
                         DebugMessage.DisplayDebugMessage("GoAwayEdge", $"Opening AI Provider '{Configuration.AiProvider}' (PWA) ...");
                         UserInterface.CopilotDock.InterfaceManager.ShowDock();

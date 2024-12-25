@@ -86,6 +86,12 @@ namespace GoAwayEdge.UserInterface.Setup.Pages
             Configuration.Uninstall = false;
             Configuration.InstallControlPanel = true;
             ControlPanelSwitch.IsChecked = true;
+
+            if (Configuration.UninstallEdge)
+            {
+                CopilotStackPanel.IsEnabled = false;
+                WeatherStackPanel.IsEnabled = false;
+            }
         }
 
         private void EnableNextBtnValidation()

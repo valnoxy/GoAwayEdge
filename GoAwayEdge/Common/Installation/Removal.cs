@@ -139,6 +139,8 @@ namespace GoAwayEdge.Common.Installation
                             }
                             var edgeUpdateDevKey = Registry.LocalMachine.CreateSubKey($@"SOFTWARE{node}\Microsoft\EdgeUpdateDev");
                             edgeUpdateDevKey.SetValue("AllowUninstall", 1, RegistryValueKind.DWord);
+                            var edgeUpdateKey = Registry.LocalMachine.CreateSubKey($@"SOFTWARE{node}\Microsoft\EdgeUpdate");
+                            edgeUpdateKey.SetValue("AllowUninstall", 1, RegistryValueKind.DWord);
                         }
                     }
                 }
@@ -233,19 +235,28 @@ namespace GoAwayEdge.Common.Installation
 
                         timeoutStopwatch.Stop();
                         if (timeoutStopwatch.Elapsed.TotalSeconds >= 60)
+                        {
+                            Logging.Log("Removal of Edge Updater failed: Timeout after 60 seconds.");
                             return false; // Timeout
+                        }
+
                         if (proc.ExitCode != 0 && proc.ExitCode != 19)
+                        {
+                            Logging.Log($"Removal of Edge Updater failed: Unknown error has occurred (exited with error code {proc.ExitCode})");
                             return false; // Unknown error?
+                        }
                     }
 
                     using (var proc = new Process()) // Remove Edge via setup file
                     {
+                        const string removalArgs = "--uninstall --msedge --system-level --verbose-logging --force-uninstall";
                         var psi = new ProcessStartInfo
                         {
                             FileName = edgeSetupPath,
-                            Arguments = "--uninstall --msedge --system-level --verbose-logging --force-uninstall",
+                            Arguments = removalArgs,
                             RedirectStandardOutput = true
                         };
+                        Logging.Log($"Executing \"{edgeSetupPath}\" {removalArgs}");
                         proc.StartInfo = psi;
                         proc.Start();
                         proc.WaitForExit();
@@ -259,9 +270,16 @@ namespace GoAwayEdge.Common.Installation
 
                         timeoutStopwatch.Stop();
                         if (timeoutStopwatch.Elapsed.TotalSeconds >= 60)
+                        {
+                            Logging.Log("Removal of Edge failed: Timeout after 60 seconds.");
                             return false; // Timeout
+                        }
+
                         if (proc.ExitCode != 0 && proc.ExitCode != 19)
+                        {
+                            Logging.Log($"Removal of Edge via Setup file failed: Unknown error has occurred (exited with error code {proc.ExitCode})");
                             return false; // Unknown error?
+                        }
                     }
                 }
             }

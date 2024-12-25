@@ -50,7 +50,7 @@ namespace GoAwayEdge
                             IsDebug = true;
                     if (IsAdministrator() == false)
                     {
-                        ElevateAsAdmin();
+                            ElevateAsAdmin();
                         Environment.Exit(0);
                         return;
                     }
@@ -70,7 +70,7 @@ namespace GoAwayEdge
                     {
                         if (IsAdministrator() == false)
                         {
-                            ElevateAsAdmin(string.Join(" ", args));
+                                ElevateAsAdmin(string.Join(" ", args));
                             Environment.Exit(0);
                             return;
                         }
@@ -124,7 +124,7 @@ namespace GoAwayEdge
 
                         if (IsAdministrator() == false)
                         {
-                            ElevateAsAdmin(string.Join(" ", args));
+                                ElevateAsAdmin(string.Join(" ", args));
                             Environment.Exit(0);
                             return;
                         }
@@ -191,7 +191,7 @@ namespace GoAwayEdge
                                     ifeoMessageUi.ShowDialog();
 
                                     if (ifeoMessageUi.Summary == "Btn1")
-                                        ElevateAsAdmin("--update");
+                                            ElevateAsAdmin("--update");
 
                                     Environment.Exit(0);
                                 }
@@ -207,7 +207,7 @@ namespace GoAwayEdge
                                     ifeoMessageUi.ShowDialog();
 
                                     if (ifeoMessageUi.Summary == "Btn1")
-                                        ElevateAsAdmin("--update");
+                                            ElevateAsAdmin("--update");
                                     
                                     Environment.Exit(0);
                                 }
@@ -226,7 +226,7 @@ namespace GoAwayEdge
             Environment.Exit(0);
         }
 
-        private void ElevateAsAdmin(string arguments = null)
+        private static void ElevateAsAdmin(string? arguments = null)
         {
             // Restart program and run as admin
             var exeName = Process.GetCurrentProcess().MainModule?.FileName;

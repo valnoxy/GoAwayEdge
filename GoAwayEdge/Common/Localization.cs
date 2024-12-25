@@ -57,7 +57,16 @@ namespace GoAwayEdge.Common
             try
             {
                 var localizedValue = (string)Application.Current.Resources[value]!;
-                return string.IsNullOrEmpty(localizedValue) ? value : localizedValue;
+
+                if (string.IsNullOrEmpty(localizedValue))
+                    return value;
+
+                if (localizedValue.Contains("\\n"))
+                {
+                    return localizedValue.Replace("\\n", "\n");
+                }
+
+                return localizedValue;
             }
             catch (Exception ex)
             {
@@ -70,11 +79,17 @@ namespace GoAwayEdge.Common
         {
             var localizedValue = LocalizeValue(value);
 
-            if (args is not { Length: > 0 }) return localizedValue;
-            
+            if (args is not { Length: > 0 })
+                return localizedValue;
+
             try
             {
                 localizedValue = string.Format(localizedValue, args);
+
+                if (localizedValue.Contains("\\n"))
+                {
+                    localizedValue = localizedValue.Replace("\\n", "\n");
+                }
             }
             catch (FormatException ex)
             {
@@ -84,5 +99,6 @@ namespace GoAwayEdge.Common
 
             return localizedValue;
         }
+
     }
 }

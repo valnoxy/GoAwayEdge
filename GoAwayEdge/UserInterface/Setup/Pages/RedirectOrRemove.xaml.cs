@@ -1,4 +1,5 @@
 ﻿using System.Windows;
+using GoAwayEdge.Common;
 using GoAwayEdge.Common.Debugging;
 using Wpf.Ui;
 using Wpf.Ui.Controls;
@@ -18,6 +19,8 @@ namespace GoAwayEdge.UserInterface.Setup.Pages
 
         private void InstallBtn_Click(object sender, RoutedEventArgs e)
         {
+            Configuration.UninstallEdge = false;
+            Installer.SettingPage = new Settings();
             Installer.ContentWindow!.FrameWindow.Content = Installer.SettingPage;
             Installer.ContentWindow!.NextBtn.IsEnabled = true;
         }
@@ -26,21 +29,27 @@ namespace GoAwayEdge.UserInterface.Setup.Pages
         {
             var contentDialogService = new ContentDialogService();
             contentDialogService.SetDialogHost(Installer.ContentWindow!.RootContentDialogPresenter);
+            var warningTitle = LocalizationManager.LocalizeValue("Warning");
+            var cancelBtn = LocalizationManager.LocalizeValue("Cancel");
+            var removeBtn = LocalizationManager.LocalizeValue("SettingsUninstallEdgeBtn");
+            var contentValue = LocalizationManager.LocalizeValue("SettingsUninstallEdgeWarningDescription");
+
 
             var result = await contentDialogService.ShowSimpleDialogAsync(
                 new SimpleContentDialogCreateOptions
                 {
-                    Title = "Warning",
-                    Content = "Removing Microsoft Edge can cause serious system issues, as it’s deeply integrated into Windows and essential for many features, including updates, help files, and some apps. Deleting it could result in instability or broken functionality.\n\nOnly proceed if you fully understand the risks and have a reliable backup or restore point in place.",
-                    PrimaryButtonText = "Remove Microsoft Edge",
-                    CloseButtonText = "Cancel"
+                    Title = warningTitle,
+                    Content = contentValue,
+                    PrimaryButtonText = removeBtn,
+                    CloseButtonText = cancelBtn
                 }
             );
-
-            if (result == ContentDialogResult.Primary)
-            {
-                Logging.Log("User pressed 'Remove Microsoft Edge'");
-            }
+            if (result != ContentDialogResult.Primary) return;
+            
+            Logging.Log("User pressed 'Remove Microsoft Edge'");
+            Configuration.UninstallEdge = true;
+            Installer.SettingPage = new Settings();
+            Installer.ContentWindow!.FrameWindow.Content = Installer.SettingPage;
         }
     }
 }
