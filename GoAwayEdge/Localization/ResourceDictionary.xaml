@@ -80,7 +80,7 @@
     <system:String x:Key="ControlPanelCustomWeatherProviderDescription">Please enter the URL from the Weather Service.</system:String>
     <system:String x:Key="CopilotKeyTitle">Copilot Key</system:String>
     <system:String x:Key="ControlPanelHotkeyExternalProgramTitle">External Program</system:String>
-    <system:String x:Key="ControlPanelHotkeyExternalProgramDescription">???</system:String>
+    <system:String x:Key="ControlPanelHotkeyExternalProgramDescription">Run an external application when you press the Copilot key.</system:String>
     <system:String x:Key="ControlPanelHotkeyExternalProgramPathTitle">Path to Application</system:String>
     <system:String x:Key="ControlPanelHotkeyExternalProgramPathDescription">Select the application you want to run.</system:String>
     <system:String x:Key="ControlPanelHotkeyExternalProgramArgsTitle">Arguments</system:String>
