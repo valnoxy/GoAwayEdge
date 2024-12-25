@@ -97,4 +97,6 @@
     <system:String x:Key="ControlPanelHotkeyExternalProgramPathDescription">Wählen Sie die Anwendung, die Sie ausführen möchten.</system:String>
     <system:String x:Key="ControlPanelHotkeyExternalProgramArgsTitle">Argumente</system:String>
     <system:String x:Key="ControlPanelHotkeyExternalProgramArgsDescription">Definieren Sie die Argumente Ihrer Anwendung.</system:String>
+    <system:String x:Key="ControlPanelHotkeyExternalProgramDescription">Führe beim Drücken der Copilot-Taste eine externe Anwendung aus.</system:String>
+    <system:String x:Key="ControlPanelHotkeyExternalProgramNoSource">Keine Quelle ausgewählt</system:String>
 </ResourceDictionary>
