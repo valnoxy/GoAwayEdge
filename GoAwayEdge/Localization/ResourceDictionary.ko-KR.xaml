@@ -98,4 +98,5 @@
     <system:String x:Key="RedirectRemoveDescription">Edge에서 다른 브라우저로 모든 호출을 리디렉션하거나 Edge를 완전히 제거하시겠습니까?</system:String>
     <system:String x:Key="RedirectEverythingTitle">모든 것을 리디렉션</system:String>
     <system:String x:Key="RedirectEverythingDescription">모든 통화를 Edge에서 즐겨 사용하는 브라우저로 리디렉션하세요.</system:String>
+    <system:String x:Key="SetupFinishedDescriptionWithControlPanel">이 설치 프로그램이나 제어판을 열면 GoAwayEdge를 다시 사용자 지정할 수 있습니다.</system:String>
 </ResourceDictionary>
