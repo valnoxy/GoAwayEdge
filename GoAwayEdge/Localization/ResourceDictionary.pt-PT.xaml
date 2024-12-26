@@ -92,4 +92,5 @@
     <system:String x:Key="RedirectEverythingTitle">Redirecionar tudo</system:String>
     <system:String x:Key="RedirectEverythingDescription">Redirecionar todas as chamadas do Edge para o seu browser favorito.</system:String>
     <system:String x:Key="SettingsUninstallEdgeBtn">Remover Microsoft Edge</system:String>
+    <system:String x:Key="SetupFinishedDescriptionWithControlPanel">Basta abrir este instalador ou o Painel de Controlo se pretender personalizar novamente o GoAwayEdge.</system:String>
 </ResourceDictionary>
