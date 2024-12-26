@@ -62,7 +62,7 @@
     <system:String x:Key="FailedSetAppDisabled">No se ha podido desactivar GoAwayEdge en este sistema: {0}</system:String>
     <system:String x:Key="FailedFlushSetting">No se ha podido aplicar la configuración: {0}</system:String>
     <system:String x:Key="ControlPanelEdgePowerDisable">Desactivar GoAwayEdge</system:String>
-    <system:String x:Key="SettingsUninstallEdgeWarningDescription">Eliminar Microsoft Edge puede causar graves problemas en el sistema, ya que está profundamente integrado en Windows y es esencial para muchas funciones, como las actualizaciones, los archivos de ayuda y algunas aplicaciones. Si lo eliminas, podrías provocar inestabilidad o una funcionalidad dañada.\n\n Solo procede si conoces bien los riesgos y tienes una copia de seguridad fiable o un punto de restauración.</system:String>
+    <system:String x:Key="SettingsUninstallEdgeWarningDescription">Eliminar Microsoft Edge puede causar graves problemas en el sistema, ya que está profundamente integrado en Windows y es esencial para muchas funciones, como las actualizaciones, los archivos de ayuda y algunas aplicaciones. Si lo eliminas, podrías provocar inestabilidad o una funcionalidad dañada.\n\nSolo procede si conoces bien los riesgos y tienes una copia de seguridad fiable o un punto de restauración.</system:String>
     <system:String x:Key="Warning">Advertencia</system:String>
     <system:String x:Key="Cancel">Cancelar</system:String>
     <system:String x:Key="RedirectRemoveDescription">¿Quieres redirigir todas las llamadas de Edge a otro navegador o eliminar Edge por completo?</system:String>
