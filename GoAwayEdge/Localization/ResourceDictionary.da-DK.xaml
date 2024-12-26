@@ -92,4 +92,5 @@
     <system:String x:Key="RedirectRemoveDescription">Vil du omdirigere alle opkald fra Edge til en anden browser eller helt fjerne Edge?</system:String>
     <system:String x:Key="RedirectEverythingTitle">Omdiriger alting</system:String>
     <system:String x:Key="RedirectEverythingDescription">Omdiriger alle opkald fra Edge til din yndlingsbrowser.</system:String>
+    <system:String x:Key="SetupFinishedDescriptionWithControlPanel">Du skal blot åbne dette installationsprogram eller kontrolpanelet, hvis du vil tilpasse GoAwayEdge igen.</system:String>
 </ResourceDictionary>
