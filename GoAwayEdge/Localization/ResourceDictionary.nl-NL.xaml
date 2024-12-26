@@ -92,4 +92,5 @@
     <system:String x:Key="ControlPanelHotkeyExternalProgramDescription">Een externe toepassing uitvoeren wanneer je op de Copilot-toets drukt.</system:String>
     <system:String x:Key="ControlPanelWeatherProviderDescription">Wijzig de service naar uw favoriete weerwebsite.</system:String>
     <system:String x:Key="ControlPanelCustomWeatherProviderTitle">Aangepaste weerdienst</system:String>
+    <system:String x:Key="SetupFinishedDescriptionWithControlPanel">Open gewoon dit installatieprogramma of het Configuratiescherm als je GoAwayEdge opnieuw wilt aanpassen.</system:String>
 </ResourceDictionary>
