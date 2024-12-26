@@ -98,4 +98,5 @@
     <system:String x:Key="ControlPanelWelcomeEdgeTitle">Microsoft Edge</system:String>
     <system:String x:Key="ControlPanelWelcomeCopilotTitle">Windows Copilot</system:String>
     <system:String x:Key="ControlPanelWelcomeEdgeDescription">Gerenciar mecanismos de pesquisa e muito mais.</system:String>
+    <system:String x:Key="SetupFinishedDescriptionWithControlPanel">Basta abrir esse instalador ou o Painel de Controle se quiser personalizar o GoAwayEdge novamente.</system:String>
 </ResourceDictionary>
