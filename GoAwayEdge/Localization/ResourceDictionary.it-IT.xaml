@@ -98,4 +98,5 @@
     <system:String x:Key="ControlPanelHotkeyExternalProgramArgsDescription">Definire gli argomenti dell'applicazione.</system:String>
     <system:String x:Key="ControlPanelHotkeyExternalProgramNoSource">Nessuna sorgente selezionata</system:String>
     <system:String x:Key="Default">Predefinito</system:String>
+    <system:String x:Key="SetupFinishedDescriptionWithControlPanel">È sufficiente aprire questo programma di installazione o il Pannello di controllo se si desidera personalizzare nuovamente GoAwayEdge.</system:String>
 </ResourceDictionary>
