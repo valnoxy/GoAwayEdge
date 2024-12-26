@@ -35,10 +35,10 @@
     ·
     <a href="https://github.com/valnoxy/GoAwayEdge/discussions/">Discussions</a>
     ·
-    <a href="https://crowdin.com/project/goawayedge">Help me translate</a>
+    <a href="https://translate.valnoxy.dev/engage/goawayedge/">Help me translate</a>
     <br />
     <br />
-    🎉 Version 1.3.4 is out. Check out the release notes
+    🎉 Version 2.0.0 is out. Check out the release notes
     <a href="https://github.com/valnoxy/GoAwayEdge/releases">here</a>.
     <br />
     <br />
@@ -72,17 +72,21 @@ Feel free to explore the code, contribute, or simply enjoy a browser experience 
 ## 🤫 2. Silent Installation
 You can install GoAwayEdge silently by parsing the following arguments:
 
-| Switch            | Description                                                               |
-| ----------------- | ------------------------------------------------------------------------- |
-| `-s`              | Silent installation                                                       |
-| `-se:<Engine>`    | Specify the Search Engine: `Google` (default), `Bing`, `DuckDuckGo`, `Yahoo`, `Yandex`, `Ecosia`, `Ask`, `Qwant`, `Perplexity`         |
-| `--url:<Url>`     | Custom search query url (ex: `https://google.com/search?q=`)              |
+| Switch                   | Description                                                                                                                    |
+| ------------------------ | ------------------------------------------------------------------------------------------------------------------------------ |
+| `-s`                     | Silent installation                                                                                                            |
+| `-e:<Engine>`            | Specify the Search Engine: `Google` (default), `Bing`, `DuckDuckGo`, `Yahoo`, `Yandex`, `Ecosia`, `Ask`, `Qwant`, `Perplexity` |
+| `-a:<AI Service>`        | Specify the AI Service: `Default`, `Copilot`, `ChatGPT`, `Gemini`, `GitHub_Copilot`, `Grok`                                    |
+| `-w:<Weather Service>`   | Specify the Weather Service: `Default`, `WeatherCom`, `AccuWeather`                                                            |
+| `--search-url:<Url>`     | Custom search query url (ex: `https://google.com/search?q=`)                                                                   |
+| `--ai-url:<Url>`         | Custom AI website (ex: `https://chatgpt.com`)                                                                                  |
+| `--weather-url:<Url>`    | Custom weather query url (ex: `https://my-weather.com/{country-code}/{latitude},{longitude}`)                                  |
 
 <b>Example</b>:
 
 ```bat
-GoAwayEdge.exe -s -se:DuckDuckGo
-``` 
+GoAwayEdge.exe -s -e:DuckDuckGo
+```
 
 # 🗑️ Remove GoAwayEdge
 You can uninstall GoAwayEdge just like any other application. Alternatively, you can also take this way: 
@@ -91,7 +95,7 @@ You can uninstall GoAwayEdge just like any other application. Alternatively, you
 3. Click on ```Uninstall```.
 4. Done!
 
-You can also uninstall GoAwayEdge by parsing the following argument:
+You can also silently uninstall GoAwayEdge by parsing the following argument:
 ```bat
 GoAwayEdge.exe -u
 ```
@@ -110,7 +114,7 @@ This project uses the following libraries:
 GoAwayEdge is licensed under [MIT](https://github.com/valnoxy/GoAwayEdge/blob/main/LICENSE). So you are allowed to use freely and modify the application. I will not be responsible for any outcome. Proceed with any action at your own risk.
 
 <hr>
-<h6 align="center">© 2018 - 2024 valnoxy. All Rights Reserved. 
+<h6 align="center">© 2018 - 2025 valnoxy. All Rights Reserved. 
 <br>
 By Jonas Günner &lt;jonas@exploitox.de&gt;</h6>
 <p align="center">

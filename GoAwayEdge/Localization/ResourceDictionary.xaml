@@ -7,6 +7,9 @@
     <system:String x:Key="Exit">Exit</system:String>
     <system:String x:Key="Yes">Yes</system:String>
     <system:String x:Key="No">No</system:String>
+    <system:String x:Key="Default">Default</system:String>
+    <system:String x:Key="Warning">Warning</system:String>
+    <system:String x:Key="Cancel">Cancel</system:String>
 
     <!-- Welcome -->
     <system:String x:Key="WelcomeTitle">Welcome</system:String>
@@ -23,6 +26,12 @@
     <system:String x:Key="LicenseAccept">I accept this license.</system:String>
     <system:String x:Key="LicenseDecline">I decline this license.</system:String>
 
+    <!-- Redirect or Remove -->
+    <system:String x:Key="RedirectRemoveTitle">Redirect or Remove?</system:String>
+    <system:String x:Key="RedirectRemoveDescription">Do you want to redirect all calls from Edge to another browser, or completely remove Edge?</system:String>
+    <system:String x:Key="RedirectEverythingTitle">Redirect everything</system:String>
+    <system:String x:Key="RedirectEverythingDescription">Redirect all calls from Edge to your favorite browser.</system:String>
+
     <!-- Settings -->
     <system:String x:Key="SettingsTitle">Settings</system:String>
     <system:String x:Key="SettingsEdgeChannelTitle">Edge Channel</system:String>
@@ -34,6 +43,10 @@
     <system:String x:Key="SettingsCustomSearchEngineDescription">Please enter the query URL from the search engine.</system:String>
     <system:String x:Key="SettingsMSEdgeUninstallTitle">Remove Microsoft Edge (Stable)</system:String>
     <system:String x:Key="SettingsMSEdgeUninstallDescription">Remove Microsoft Edge completely from the system.</system:String>
+    <system:String x:Key="SettingsControlPanelTitle">Install Control Panel</system:String>
+    <system:String x:Key="SettingsControlPanelDescription">Install the Control Panel to configure GoAwayEdge more easily.</system:String>
+    <system:String x:Key="SettingsUninstallEdgeWarningDescription">Removing Microsoft Edge can cause serious system issues, as it’s deeply integrated into Windows and essential for many features, including updates, help files, and some apps. Deleting it could result in instability or broken functionality.\n\nOnly proceed if you fully understand the risks and have a reliable backup or restore point in place.</system:String>
+    <system:String x:Key="SettingsUninstallEdgeBtn">Remove Microsoft Edge</system:String>
 
     <!-- Setup in progress -->
     <system:String x:Key="SetupProgressTitle">Installation in progress ...</system:String>
@@ -42,9 +55,38 @@
     <!-- Setup finished -->
     <system:String x:Key="SetupFinishedTitle">Installation completed!</system:String>
     <system:String x:Key="SetupFinishedDescription">Simply open this Installer, if you want to customize GoAwayEdge again.</system:String>
+    <system:String x:Key="SetupFinishedDescriptionWithControlPanel">Simply open this installer or the Control Panel if you want to customize GoAwayEdge again.</system:String>
     <system:String x:Key="UninstallFinishedTitle">Uninstallation completed!</system:String>
     <system:String x:Key="UninstallFinishedDescription">GoAwayEdge has been successfully removed from the system.</system:String>
     <system:String x:Key="DonateButton">Donate via PayPal</system:String>
+
+    <!-- Control Panel -->
+    <system:String x:Key="ControlPanelTitle">GoAwayEdge Control Panel</system:String>
+    <system:String x:Key="ControlPanelWelcome">Welcome to GoAwayEdge</system:String>
+    <system:String x:Key="ControlPanelWelcomeEdgeTitle">Microsoft Edge</system:String>
+    <system:String x:Key="ControlPanelWelcomeCopilotTitle">Windows Copilot</system:String>
+    <system:String x:Key="ControlPanelWelcomeEdgeDescription">Manage Search Engines and more.</system:String>
+    <system:String x:Key="ControlPanelWelcomeCopilotDescription">Manage Hotkeys and more.</system:String>
+    <system:String x:Key="ControlPanelEdgePowerTitle">Enable/Disable GoAwayEdge</system:String>
+    <system:String x:Key="ControlPanelEdgePowerDescription">Deactivate the forwarding of search queries to other browsers.</system:String>
+    <system:String x:Key="ControlPanelEdgePowerEnable">Enable GoAwayEdge</system:String>
+    <system:String x:Key="ControlPanelEdgePowerDisable">Disable GoAwayEdge</system:String>
+    <system:String x:Key="ControlPanelCopilotProviderTitle">AI Provider</system:String>
+    <system:String x:Key="ControlPanelCopilotProviderDescription">Change the provider to your favorite AI (or to your favorite website).</system:String>
+    <system:String x:Key="ControlPanelCustomCopilotProviderTitle">Custom AI Provider</system:String>
+    <system:String x:Key="ControlPanelCustomCopilotProviderDescription">Please enter the URL from the AI Provider (or your favorite website).</system:String>
+    <system:String x:Key="ControlPanelWeatherProviderTitle">Weather Service</system:String>
+    <system:String x:Key="ControlPanelWeatherProviderDescription">Change the service to your favorite Weather website.</system:String>
+    <system:String x:Key="ControlPanelCustomWeatherProviderTitle">Custom Weather Service</system:String>
+    <system:String x:Key="ControlPanelCustomWeatherProviderDescription">Please enter the URL from the Weather Service.</system:String>
+    <system:String x:Key="CopilotKeyTitle">Copilot Key</system:String>
+    <system:String x:Key="ControlPanelHotkeyExternalProgramTitle">External Program</system:String>
+    <system:String x:Key="ControlPanelHotkeyExternalProgramDescription">Run an external application when you press the Copilot key.</system:String>
+    <system:String x:Key="ControlPanelHotkeyExternalProgramPathTitle">Path to Application</system:String>
+    <system:String x:Key="ControlPanelHotkeyExternalProgramPathDescription">Select the application you want to run.</system:String>
+    <system:String x:Key="ControlPanelHotkeyExternalProgramArgsTitle">Arguments</system:String>
+    <system:String x:Key="ControlPanelHotkeyExternalProgramArgsDescription">Define the arguments of your application.</system:String>
+    <system:String x:Key="ControlPanelHotkeyExternalProgramNoSource">No source selected</system:String>
 
     <!-- Error Handling / Notifications -->
     <system:String x:Key="FailedInitialization">Initialization failed: {0}</system:String>
@@ -64,5 +106,10 @@
     <system:String x:Key="IfeoUpdateSuccessfulDescription">The alternative startup file of Edge has been successfully updated.</system:String>
     <system:String x:Key="IfeoCreateSuccessfulTitle">Creation successful</system:String>
     <system:String x:Key="IfeoCreateSuccessfulDescription">The alternative startup file of Edge has been successfully created.</system:String>
+    <system:String x:Key="MessageGoAwayEdgeEnabled">GoAwayEdge was successfully enabled on this system.</system:String>
+    <system:String x:Key="MessageGoAwayEdgeDisabled">GoAwayEdge was successfully disabled on this system.</system:String>
+    <system:String x:Key="FailedSetAppEnabled">Could not enable GoAwayEdge on this system: {0}</system:String>
+    <system:String x:Key="FailedSetAppDisabled">Could not disable GoAwayEdge on this system: {0}</system:String>
+    <system:String x:Key="FailedFlushSetting">Could not apply the settings: {0}</system:String>
 
 </ResourceDictionary>

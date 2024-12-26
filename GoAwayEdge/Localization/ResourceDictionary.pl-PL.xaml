@@ -1,4 +1,3 @@
-﻿<?xml version="1.0"?>
 <ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:system="clr-namespace:System;assembly=mscorlib">
     <system:String x:Key="Title">GoAwayEdge Installer</system:String>
     <system:String x:Key="Next">Następny</system:String>
@@ -6,7 +5,6 @@
     <system:String x:Key="Exit">Wyjście</system:String>
     <system:String x:Key="Yes">Tak</system:String>
     <system:String x:Key="No">Nie</system:String>
-
     <!-- Welcome -->
     <system:String x:Key="WelcomeTitle">Witamy</system:String>
     <system:String x:Key="WelcomeDescription">Instalator wykona wszystkie niezbędne kroki, aby zainstalować GoAwayEdge w systemie. Po instalacji wszystkie połączenia Edge zostaną przekierowane do przeglądarki. Wybierz żądaną opcję, aby kontynuować.</system:String>
@@ -15,13 +13,11 @@
     <system:String x:Key="SettingsUninstallTitle">Odinstaluj</system:String>
     <system:String x:Key="SettingsUninstallDescription">Odinstaluj GoAwayEdge i przywróć funkcjonalność Edge.</system:String>
     <system:String x:Key="SettingsUninstallUseInstaller">Użyj Instalatora, aby odinstalować GoAwayEdge.</system:String>
-
     <!-- License -->
     <system:String x:Key="LicenseTitle">Licencja</system:String>
     <system:String x:Key="LicenseNote">Prosimy o zapoznanie się z poniższą licencją. Przed kontynuowaniem instalacji należy zaakceptować warunki licencji.</system:String>
     <system:String x:Key="LicenseAccept">Akceptuję tę licencję.</system:String>
     <system:String x:Key="LicenseDecline">Odrzucam tę licencję.</system:String>
-
     <!-- Settings -->
     <system:String x:Key="SettingsTitle">Ustawienia</system:String>
     <system:String x:Key="SettingsEdgeChannelTitle">Kanał krawędziowy</system:String>
@@ -33,18 +29,15 @@
     <system:String x:Key="SettingsCustomSearchEngineDescription">Wprowadź adres URL zapytania z wyszukiwarki.</system:String>
     <system:String x:Key="SettingsMSEdgeUninstallTitle">Usuń Microsoft Edge (stabilny)</system:String>
     <system:String x:Key="SettingsMSEdgeUninstallDescription">Całkowicie usuń Microsoft Edge z systemu.</system:String>
-
     <!-- Setup in progress -->
     <system:String x:Key="SetupProgressTitle">Instalacja w toku ...</system:String>
     <system:String x:Key="SetupProgressDescription">Poczekaj na zakończenie instalacji.</system:String>
-
     <!-- Setup finished -->
     <system:String x:Key="SetupFinishedTitle">Instalacja zakończona!</system:String>
     <system:String x:Key="SetupFinishedDescription">Po prostu otwórz ten instalator, jeśli chcesz ponownie dostosować GoAwayEdge.</system:String>
     <system:String x:Key="UninstallFinishedTitle">Dezinstalacja zakończona!</system:String>
     <system:String x:Key="UninstallFinishedDescription">GoAwayEdge został pomyślnie usunięty z systemu.</system:String>
     <system:String x:Key="DonateButton">Przekaż darowiznę przez PayPal</system:String>
-
     <!-- Error Handling / Notifications -->
     <system:String x:Key="FailedInitialization">Inicjalizacja nie powiodła się: {0}</system:String>
     <system:String x:Key="FailedInstallation">Instalacja nie powiodła się: {0}</system:String>
@@ -62,5 +55,48 @@
     <system:String x:Key="IfeoUpdateSuccessfulDescription">Wersja Edge inna niż IEFO została pomyślnie zaktualizowana.</system:String>
     <system:String x:Key="IfeoCreateSuccessfulTitle">Tworzenie zakończone sukcesem</system:String>
     <system:String x:Key="IfeoCreateSuccessfulDescription">Wersja Edge bez IFO została pomyślnie utworzona.</system:String>
-
+    <system:String x:Key="SkipUpdate">Pomiń tę wersję</system:String>
+    <system:String x:Key="RedirectRemoveDescription">Czy chcesz przekierować wszystkie połączenia z Edge do innej przeglądarki lub całkowicie usunąć Edge?</system:String>
+    <system:String x:Key="ControlPanelCopilotProviderTitle">Dostawca AI</system:String>
+    <system:String x:Key="ControlPanelHotkeyExternalProgramDescription">Uruchomienie zewnętrznej aplikacji po naciśnięciu przycisku Copilot.</system:String>
+    <system:String x:Key="SettingsUninstallEdgeWarningDescription">Usunięcie przeglądarki Microsoft Edge może spowodować poważne problemy systemowe, ponieważ jest ona głęboko zintegrowana z systemem Windows i niezbędna dla wielu funkcji, w tym aktualizacji, plików pomocy i niektórych aplikacji. Usunięcie go może spowodować niestabilność lub uszkodzenie funkcji.\n\nKontynuuj tylko wtedy, gdy w pełni rozumiesz ryzyko i masz niezawodną kopię zapasową lub punkt przywracania.</system:String>
+    <system:String x:Key="ControlPanelCustomWeatherProviderDescription">Wprowadź adres URL z serwisu pogodowego.</system:String>
+    <system:String x:Key="MessageGoAwayEdgeEnabled">GoAwayEdge został pomyślnie włączony w tym systemie.</system:String>
+    <system:String x:Key="ControlPanelHotkeyExternalProgramPathDescription">Wybierz aplikację, którą chcesz uruchomić.</system:String>
+    <system:String x:Key="ControlPanelHotkeyExternalProgramArgsTitle">Argumenty</system:String>
+    <system:String x:Key="ControlPanelHotkeyExternalProgramArgsDescription">Zdefiniuj argumenty swojej aplikacji.</system:String>
+    <system:String x:Key="ControlPanelHotkeyExternalProgramNoSource">Nie wybrano źródła</system:String>
+    <system:String x:Key="MessageGoAwayEdgeDisabled">Funkcja GoAwayEdge została pomyślnie wyłączona w tym systemie.</system:String>
+    <system:String x:Key="SettingsControlPanelTitle">Instalacja panelu sterowania</system:String>
+    <system:String x:Key="SettingsControlPanelDescription">Zainstaluj Panel sterowania, aby łatwiej skonfigurować GoAwayEdge.</system:String>
+    <system:String x:Key="ControlPanelCopilotProviderDescription">Zmień dostawcę na swojego ulubionego AI (lub na swoją ulubioną stronę internetową).</system:String>
+    <system:String x:Key="ControlPanelCustomCopilotProviderTitle">Dostawca niestandardowej sztucznej inteligencji</system:String>
+    <system:String x:Key="Default">Domyślny</system:String>
+    <system:String x:Key="Warning">Ostrzeżenie</system:String>
+    <system:String x:Key="Cancel">Anuluj</system:String>
+    <system:String x:Key="RedirectRemoveTitle">Przekierować czy usunąć?</system:String>
+    <system:String x:Key="RedirectEverythingTitle">Przekieruj wszystko</system:String>
+    <system:String x:Key="RedirectEverythingDescription">Przekieruj wszystkie połączenia z Edge do swojej ulubionej przeglądarki.</system:String>
+    <system:String x:Key="SettingsUninstallEdgeBtn">Usuń Microsoft Edge</system:String>
+    <system:String x:Key="ControlPanelTitle">Panel sterowania GoAwayEdge</system:String>
+    <system:String x:Key="ControlPanelWelcome">Witamy w GoAwayEdge</system:String>
+    <system:String x:Key="ControlPanelWelcomeEdgeTitle">Microsoft Edge</system:String>
+    <system:String x:Key="ControlPanelWelcomeCopilotTitle">Windows Copilot</system:String>
+    <system:String x:Key="ControlPanelWelcomeEdgeDescription">Zarządzanie wyszukiwarkami i nie tylko.</system:String>
+    <system:String x:Key="ControlPanelWelcomeCopilotDescription">Zarządzanie skrótami klawiszowymi i nie tylko.</system:String>
+    <system:String x:Key="ControlPanelEdgePowerTitle">Włączanie/wyłączanie GoAwayEdge</system:String>
+    <system:String x:Key="ControlPanelEdgePowerDescription">Dezaktywacja przekazywania zapytań wyszukiwania do innych przeglądarek.</system:String>
+    <system:String x:Key="ControlPanelEdgePowerEnable">Włącz GoAwayEdge</system:String>
+    <system:String x:Key="ControlPanelEdgePowerDisable">Wyłącz GoAwayEdge</system:String>
+    <system:String x:Key="ControlPanelCustomCopilotProviderDescription">Wprowadź adres URL z dostawcy AI (lub swojej ulubionej strony internetowej).</system:String>
+    <system:String x:Key="ControlPanelWeatherProviderTitle">Serwis pogodowy</system:String>
+    <system:String x:Key="ControlPanelWeatherProviderDescription">Zmień usługę na swoją ulubioną witrynę pogodową.</system:String>
+    <system:String x:Key="ControlPanelCustomWeatherProviderTitle">Niestandardowa usługa pogodowa</system:String>
+    <system:String x:Key="CopilotKeyTitle">Copilot Key</system:String>
+    <system:String x:Key="ControlPanelHotkeyExternalProgramTitle">Program zewnętrzny</system:String>
+    <system:String x:Key="ControlPanelHotkeyExternalProgramPathTitle">Ścieżka do aplikacji</system:String>
+    <system:String x:Key="FailedSetAppEnabled">Nie można włączyć GoAwayEdge w tym systemie: {0}</system:String>
+    <system:String x:Key="FailedSetAppDisabled">Nie można wyłączyć GoAwayEdge w tym systemie: {0}</system:String>
+    <system:String x:Key="FailedFlushSetting">Nie można zastosować ustawień: {0}</system:String>
+    <system:String x:Key="SetupFinishedDescriptionWithControlPanel">Po prostu otwórz ten instalator lub Panel sterowania, jeśli chcesz ponownie dostosować GoAwayEdge.</system:String>
 </ResourceDictionary>

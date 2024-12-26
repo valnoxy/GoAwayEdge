@@ -1,0 +1,78 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <Geometry x:Key="MicrosoftEdgeLogoGeometry1">F1 M256,256z M0,0z M235.7,195.5A93.7,93.7,0,0,1,225.1,200.2A101.9,101.9,0,0,1,189.2,206.6C141.9,206.6,100.7,174.1,100.7,132.3A31.5,31.5,0,0,1,117.1,105C74.3,106.8 63.3,151.4 63.3,177.5 63.3,251.5 131.4,258.9 146.1,258.9 154,258.9 165.9,256.6 173.1,254.3L174.4,253.9A128.3,128.3,0,0,0,241,201.1A4,4,0,0,0,235.7,195.5z</Geometry>
+    <Geometry x:Key="MicrosoftEdgeLogoGeometry2">F1 M256,256z M0,0z M235.7,195.5A93.7,93.7,0,0,1,225.1,200.2A101.9,101.9,0,0,1,189.2,206.6C141.9,206.6,100.7,174.1,100.7,132.3A31.5,31.5,0,0,1,117.1,105C74.3,106.8 63.3,151.4 63.3,177.5 63.3,251.5 131.4,258.9 146.1,258.9 154,258.9 165.9,256.6 173.1,254.3L174.4,253.9A128.3,128.3,0,0,0,241,201.1A4,4,0,0,0,235.7,195.5z</Geometry>
+    <Geometry x:Key="MicrosoftEdgeLogoGeometry3">F1 M256,256z M0,0z M110.3,246.3A79.2,79.2,0,0,1,87.6,225A80.7,80.7,0,0,1,117.1,105C120.3,103.5,125.6,100.9,132.7,101A32.4,32.4,0,0,1,158.4,114A31.9,31.9,0,0,1,164.7,132.7C164.7,132.5 189.2,53.1 84.7,53.1 40.8,53.1 4.69999999999999,94.7 4.69999999999999,131.3A130.2,130.2,0,0,0,16.8,187.3A128,128,0,0,0,173.2,254.3A75.5,75.5,0,0,1,110.4,246.3z</Geometry>
+    <Geometry x:Key="MicrosoftEdgeLogoGeometry4">F1 M256,256z M0,0z M110.3,246.3A79.2,79.2,0,0,1,87.6,225A80.7,80.7,0,0,1,117.1,105C120.3,103.5,125.6,100.9,132.7,101A32.4,32.4,0,0,1,158.4,114A31.9,31.9,0,0,1,164.7,132.7C164.7,132.5 189.2,53.1 84.7,53.1 40.8,53.1 4.69999999999999,94.7 4.69999999999999,131.3A130.2,130.2,0,0,0,16.8,187.3A128,128,0,0,0,173.2,254.3A75.5,75.5,0,0,1,110.4,246.3z</Geometry>
+    <Geometry x:Key="MicrosoftEdgeLogoGeometry5">F1 M256,256z M0,0z M157,153.8C156.1,154.8 153.6,156.3 153.6,159.4 153.6,162 155.3,164.6 158.4,166.7 172.7,176.7 199.8,175.3 199.9,175.3A59.6,59.6,0,0,0,230.2,167A61.4,61.4,0,0,0,260.6,114.1C260.9,91.7 252.6,76.8 249.3,70.2 228,28.8 182.3,5 132.6,5A128,128,0,0,0,4.59999999999999,131.2C5.09999999999999,94.7 41.4,65.2 84.6,65.2 88.1,65.2 108.1,65.5 126.6,75.2A72.6,72.6,0,0,1,157.5,104.5C163.6,115.1 164.7,128.6 164.7,134 164.7,139.4 162,147.3 156.9,153.9z</Geometry>
+    <Geometry x:Key="MicrosoftEdgeLogoGeometry6">F1 M256,256z M0,0z M157,153.8C156.1,154.8 153.6,156.3 153.6,159.4 153.6,162 155.3,164.6 158.4,166.7 172.7,176.7 199.8,175.3 199.9,175.3A59.6,59.6,0,0,0,230.2,167A61.4,61.4,0,0,0,260.6,114.1C260.9,91.7 252.6,76.8 249.3,70.2 228,28.8 182.3,5 132.6,5A128,128,0,0,0,4.59999999999999,131.2C5.09999999999999,94.7 41.4,65.2 84.6,65.2 88.1,65.2 108.1,65.5 126.6,75.2A72.6,72.6,0,0,1,157.5,104.5C163.6,115.1 164.7,128.6 164.7,134 164.7,139.4 162,147.3 156.9,153.9z</Geometry>
+    <DrawingGroup x:Key="MicrosoftEdgeLogoDrawingGroup" ClipGeometry="M0,0 V256 H256 V0 H0 Z">
+        <DrawingGroup Transform="1,0,0,1,-4.6,-5">
+            <GeometryDrawing Geometry="{StaticResource MicrosoftEdgeLogoGeometry1}">
+                <GeometryDrawing.Brush>
+                    <LinearGradientBrush StartPoint="63.3,84" EndPoint="241.7,84" MappingMode="Absolute" SpreadMethod="Pad" Opacity="1" Transform="1,0,0,-1,0,266">
+                        <GradientStop Color="#FF0C59A4" Offset="0" />
+                        <GradientStop Color="#FF114A8B" Offset="1" />
+                    </LinearGradientBrush>
+                </GeometryDrawing.Brush>
+            </GeometryDrawing>
+        </DrawingGroup>
+        <DrawingGroup Transform="1,0,0,1,-4.6,-5">
+            <GeometryDrawing Geometry="{StaticResource MicrosoftEdgeLogoGeometry2}">
+                <GeometryDrawing.Brush>
+                    <RadialGradientBrush Center="161.8,68.9" RadiusX="95.4" RadiusY="95.4" GradientOrigin="161.8,68.9" MappingMode="Absolute" SpreadMethod="Pad" Opacity="0.35" Transform="1,0,0,-0.95,0,248.8">
+                        <GradientStop Color="#00000000" Offset="0.7" />
+                        <GradientStop Color="#80000000" Offset="0.9" />
+                        <GradientStop Color="#FF000000" Offset="1" />
+                    </RadialGradientBrush>
+                </GeometryDrawing.Brush>
+            </GeometryDrawing>
+        </DrawingGroup>
+        <DrawingGroup Transform="1,0,0,1,-4.6,-5">
+            <GeometryDrawing Geometry="{StaticResource MicrosoftEdgeLogoGeometry3}">
+                <GeometryDrawing.Brush>
+                    <LinearGradientBrush StartPoint="157.3,161.4" EndPoint="46,40.1" MappingMode="Absolute" SpreadMethod="Pad" Opacity="1" Transform="1,0,0,-1,0,266">
+                        <GradientStop Color="#FF1B9DE2" Offset="0" />
+                        <GradientStop Color="#FF1595DF" Offset="0.2" />
+                        <GradientStop Color="#FF0680D7" Offset="0.7" />
+                        <GradientStop Color="#FF0078D4" Offset="1" />
+                    </LinearGradientBrush>
+                </GeometryDrawing.Brush>
+            </GeometryDrawing>
+        </DrawingGroup>
+        <DrawingGroup Transform="1,0,0,1,-4.6,-5">
+            <GeometryDrawing Geometry="{StaticResource MicrosoftEdgeLogoGeometry4}">
+                <GeometryDrawing.Brush>
+                    <RadialGradientBrush Center="-340.3,63" RadiusX="143.2" RadiusY="143.2" GradientOrigin="-340.3,63" MappingMode="Absolute" SpreadMethod="Pad" Opacity="0.41" Transform="0.15,-0.99,-0.8,-0.12,176.6,-125.4">
+                        <GradientStop Color="#00000000" Offset="0.8" />
+                        <GradientStop Color="#80000000" Offset="0.9" />
+                        <GradientStop Color="#FF000000" Offset="1" />
+                    </RadialGradientBrush>
+                </GeometryDrawing.Brush>
+            </GeometryDrawing>
+        </DrawingGroup>
+        <DrawingGroup Transform="1,0,0,1,-4.6,-5">
+            <GeometryDrawing Geometry="{StaticResource MicrosoftEdgeLogoGeometry5}">
+                <GeometryDrawing.Brush>
+                    <RadialGradientBrush Center="113.4,570.2" RadiusX="202.4" RadiusY="202.4" GradientOrigin="113.4,570.2" MappingMode="Absolute" SpreadMethod="Pad" Opacity="1" Transform="-0.04,1,2.13,0.08,-1179.5,-106.7">
+                        <GradientStop Color="#FF35C1F1" Offset="0" />
+                        <GradientStop Color="#FF34C1ED" Offset="0.1" />
+                        <GradientStop Color="#FF2FC2DF" Offset="0.2" />
+                        <GradientStop Color="#FF2BC3D2" Offset="0.3" />
+                        <GradientStop Color="#FF36C752" Offset="0.7" />
+                    </RadialGradientBrush>
+                </GeometryDrawing.Brush>
+            </GeometryDrawing>
+        </DrawingGroup>
+        <DrawingGroup Transform="1,0,0,1,-4.6,-5">
+            <GeometryDrawing Geometry="{StaticResource MicrosoftEdgeLogoGeometry6}">
+                <GeometryDrawing.Brush>
+                    <RadialGradientBrush Center="376.5,568" RadiusX="97.3" RadiusY="97.3" GradientOrigin="376.5,568" MappingMode="Absolute" SpreadMethod="Pad" Opacity="1" Transform="0.28,0.96,0.78,-0.23,-303.8,-148.5">
+                        <GradientStop Color="#FF66EB6E" Offset="0" />
+                        <GradientStop Color="#0066EB6E" Offset="1" />
+                    </RadialGradientBrush>
+                </GeometryDrawing.Brush>
+            </GeometryDrawing>
+        </DrawingGroup>
+    </DrawingGroup>
+    <DrawingImage x:Key="MicrosoftEdge" Drawing="{StaticResource MicrosoftEdgeLogoDrawingGroup}" />
+</ResourceDictionary>

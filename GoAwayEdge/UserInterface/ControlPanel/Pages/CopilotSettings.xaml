@@ -1,0 +1,138 @@
+﻿<Page x:Class="GoAwayEdge.UserInterface.ControlPanel.Pages.CopilotSettings"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:GoAwayEdge.UserInterface.ControlPanel.Pages"
+      xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="800"
+      Title="CopilotSettings">
+
+    <ScrollViewer VerticalScrollBarVisibility="Auto" Margin="12">
+        <StackPanel>
+            <ui:TextBlock FontTypography="Subtitle" Text="{DynamicResource SettingsTitle}" Foreground="{DynamicResource TextFillColorPrimaryBrush}"/>
+            <StackPanel Margin="0,5,0,0" x:Name="CopilotProviderStackPanel">
+                <ui:CardControl>
+                    <ui:CardControl.Icon>
+                        <ui:ImageIcon Source="{DynamicResource CopilotIcon}" Width="24"/>
+                    </ui:CardControl.Icon>
+                    <ui:CardControl.Header>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Column="0" VerticalAlignment="Center">
+                                <TextBlock
+                                    FontSize="13"
+                                    FontWeight="Medium"
+                                    Text="{DynamicResource ControlPanelCopilotProviderTitle}" />
+                                <TextBlock
+                                    FontSize="12"
+                                    Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                                    Text="{DynamicResource ControlPanelCopilotProviderDescription}" />
+                            </StackPanel>
+                            <ComboBox Grid.Column="1" x:Name="CopilotProviderBox" Width="180" SelectionChanged="CopilotProviderBox_OnSelectionChanged"/>
+                        </Grid>
+                    </ui:CardControl.Header>
+                </ui:CardControl>
+            </StackPanel>
+            <StackPanel Margin="0,10,0,0" x:Name="CustomSearchPanel" Visibility="Collapsed">
+                <ui:CardControl Icon="{ui:SymbolIcon SearchSettings20}">
+                    <ui:CardControl.Header>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Column="0" VerticalAlignment="Center">
+                                <TextBlock
+                                    FontSize="13"
+                                    FontWeight="Medium"
+                                    Text="{DynamicResource ControlPanelCustomCopilotProviderTitle}" />
+                                <TextBlock
+                                    FontSize="12"
+                                    Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                                    Text="{DynamicResource ControlPanelCustomCopilotProviderDescription}"/>
+                            </StackPanel>
+                            <ui:SymbolIcon Grid.Column="1" x:Name="CustomUrlStatus" Margin="0,0,10,0" FontSize="18"/>
+                            <ui:TextBox Grid.Column="2" Width="300" x:Name="QueryProviderTextBox" PlaceholderText="https://example.com" TextChanged="QueryProviderTextBox_OnTextChanged"/>
+                        </Grid>
+                    </ui:CardControl.Header>
+                </ui:CardControl>
+            </StackPanel>
+
+            <ui:TextBlock FontTypography="Subtitle" Margin="0,10,0,0" Text="{DynamicResource CopilotKeyTitle}" Foreground="{DynamicResource TextFillColorPrimaryBrush}" Visibility="Hidden"/>
+            <StackPanel Margin="0,5,0,0" Visibility="Hidden">
+                <ui:CardExpander Icon="{ui:SymbolIcon AppGeneric24}" IsExpanded="true">
+                    <ui:CardExpander.Header>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Column="0" VerticalAlignment="Center">
+                                <TextBlock
+                                    FontSize="13"
+                                    FontWeight="Medium"
+                                    Text="{DynamicResource ControlPanelHotkeyExternalProgramTitle}" />
+                                <TextBlock
+                                    FontSize="12"
+                                    Text="{DynamicResource ControlPanelHotkeyExternalProgramDescription}" />
+                            </StackPanel>
+                        </Grid>
+                    </ui:CardExpander.Header>
+                    <StackPanel>
+                        <ui:CardControl Icon="{ui:SymbolIcon WindowApps24}" Margin="0,5,0,0">
+                            <ui:CardControl.Header>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="Auto" />
+                                        <ColumnDefinition Width="Auto" />
+                                    </Grid.ColumnDefinitions>
+                                    <StackPanel Grid.Column="0" VerticalAlignment="Center">
+                                        <TextBlock FontSize="13"
+                                                   FontWeight="Medium"
+                                                   Text="{DynamicResource ControlPanelHotkeyExternalProgramPathTitle}" />
+                                        <TextBlock FontSize="12"
+                                                   Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                                                   Text="{DynamicResource ControlPanelHotkeyExternalProgramPathDescription}" />
+                                    </StackPanel>
+                                    <ui:SymbolIcon Grid.Column="1" x:Name="ExternalAppStatus" Margin="0,0,10,0" FontSize="18"/>
+                                    <ui:TextBox Grid.Column="2" Width="300" Height="35" Margin="10,0,0,0" Icon="{ui:SymbolIcon Settings24}" x:Name="ExternalAppTextBox" TextChanged="ExternalAppTextBox_OnTextChanged"/>
+                                </Grid>
+                            </ui:CardControl.Header>
+                        </ui:CardControl>
+                        <ui:CardControl Icon="{ui:SymbolIcon Settings24}" Margin="0,5,0,0">
+                            <ui:CardControl.Header>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="Auto" />
+                                        <ColumnDefinition Width="Auto" />
+                                    </Grid.ColumnDefinitions>
+                                    <StackPanel Grid.Column="0" VerticalAlignment="Center">
+                                        <TextBlock FontSize="13"
+                                                   FontWeight="Medium"
+                                                   Text="{DynamicResource ControlPanelHotkeyExternalProgramArgsTitle}" />
+                                        <TextBlock FontSize="12"
+                                                   Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                                                   Text="{DynamicResource ControlPanelHotkeyExternalProgramArgsDescription}" />
+                                    </StackPanel>
+                                    <TextBlock FontSize="12"
+                                               Grid.Column="1"
+                                               VerticalAlignment="Center"
+                                               Foreground="{DynamicResource TextFillColorTertiaryBrush}"/>
+                                    <ui:TextBox Grid.Column="2" Width="300" Height="35" Margin="10,0,0,0" Icon="{ui:SymbolIcon Settings24}" x:Name="ExternalAppArgsTextBox" TextChanged="ExternalAppArgsTextBox_OnTextChanged"/>
+                                </Grid>
+                            </ui:CardControl.Header>
+                        </ui:CardControl>
+                    </StackPanel>
+                </ui:CardExpander>
+            </StackPanel>
+        </StackPanel>
+    </ScrollViewer>
+</Page>

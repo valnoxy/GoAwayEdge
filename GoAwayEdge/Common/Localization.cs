@@ -1,5 +1,5 @@
-﻿using System.Diagnostics;
-using System.Windows;
+﻿using System.Windows;
+using GoAwayEdge.Common.Debugging;
 
 namespace GoAwayEdge.Common
 {
@@ -7,11 +7,13 @@ namespace GoAwayEdge.Common
     {
         public static void LoadLanguage()
         {
-            // Set current language model
+            // Override language for testing
+            const string overrideLanguage = "";
+
             var language = Thread.CurrentThread.CurrentCulture.ToString();
             var dict = new ResourceDictionary();
-            Logging.Log($"Trying to load language: " + language);
-            Debug.WriteLine("Trying to load language: " + language);
+            if (!string.IsNullOrEmpty(overrideLanguage)) language = overrideLanguage;
+            Logging.Log("Trying to load language: " + language);
             dict.Source = language switch
             {
                 "en-US" => new Uri("/GoAwayEdge;component/Localization/ResourceDictionary.xaml", UriKind.Relative),
@@ -21,6 +23,12 @@ namespace GoAwayEdge.Common
                 "it-IT" => new Uri("/GoAwayEdge;component/Localization/ResourceDictionary.it-IT.xaml", UriKind.Relative),
                 "pl-PL" => new Uri("/GoAwayEdge;component/Localization/ResourceDictionary.pl-PL.xaml", UriKind.Relative),
                 "ko-KR" => new Uri("/GoAwayEdge;component/Localization/ResourceDictionary.ko-KR.xaml", UriKind.Relative),
+                "pt-BR" => new Uri("/GoAwayEdge;component/Localization/ResourceDictionary.pt-BR.xaml", UriKind.Relative),
+                "da-DK" => new Uri("/GoAwayEdge;component/Localization/ResourceDictionary.da-DK.xaml", UriKind.Relative),
+                "ja-JP" => new Uri("/GoAwayEdge;component/Localization/ResourceDictionary.ja-JP.xaml", UriKind.Relative),
+                "nl-NL" => new Uri("/GoAwayEdge;component/Localization/ResourceDictionary.nl-NL.xaml", UriKind.Relative),
+                "pt-PT" => new Uri("/GoAwayEdge;component/Localization/ResourceDictionary.pt-PT.xaml", UriKind.Relative),
+                "ro-RO" => new Uri("/GoAwayEdge;component/Localization/ResourceDictionary.ro-RO.xaml", UriKind.Relative),
                 _ => new Uri("/GoAwayEdge;component/Localization/ResourceDictionary.xaml", UriKind.Relative)
             };
             try
@@ -35,6 +43,13 @@ namespace GoAwayEdge.Common
                 messageUi.ShowDialog();
                 Environment.Exit(1);
             }
+
+            if (dict.Source ==
+                new Uri("/GoAwayEdge;component/Localization/ResourceDictionary.xaml", UriKind.Relative) &&
+                language != "en-US")
+            {
+                Logging.Log($"No localization file found for language {language}, falling back to English ...", Logging.LogLevel.WARNING);
+            }
         }
 
         public static string LocalizeValue(string value)
@@ -42,7 +57,16 @@ namespace GoAwayEdge.Common
             try
             {
                 var localizedValue = (string)Application.Current.Resources[value]!;
-                return string.IsNullOrEmpty(localizedValue) ? value : localizedValue;
+
+                if (string.IsNullOrEmpty(localizedValue))
+                    return value;
+
+                if (localizedValue.Contains("\\n"))
+                {
+                    return localizedValue.Replace("\\n", "\n");
+                }
+
+                return localizedValue;
             }
             catch (Exception ex)
             {
@@ -55,11 +79,17 @@ namespace GoAwayEdge.Common
         {
             var localizedValue = LocalizeValue(value);
 
-            if (args is not { Length: > 0 }) return localizedValue;
-            
+            if (args is not { Length: > 0 })
+                return localizedValue;
+
             try
             {
                 localizedValue = string.Format(localizedValue, args);
+
+                if (localizedValue.Contains("\\n"))
+                {
+                    localizedValue = localizedValue.Replace("\\n", "\n");
+                }
             }
             catch (FormatException ex)
             {
@@ -69,5 +99,6 @@ namespace GoAwayEdge.Common
 
             return localizedValue;
         }
+
     }
 }

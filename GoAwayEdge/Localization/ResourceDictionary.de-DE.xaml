@@ -1,4 +1,3 @@
-<?xml version="1.0"?>
 <ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:system="clr-namespace:System;assembly=mscorlib">
     <system:String x:Key="Title">GoAwayEdge-Installationsprogramm</system:String>
     <system:String x:Key="Next">Weiter</system:String>
@@ -6,7 +5,9 @@
     <system:String x:Key="Exit">Beenden</system:String>
     <system:String x:Key="Yes">Ja</system:String>
     <system:String x:Key="No">Nein</system:String>
-
+    <system:String x:Key="Default">Standard</system:String>
+    <system:String x:Key="Warning">Warnung</system:String>
+    <system:String x:Key="Cancel">Abbrechen</system:String>
     <!-- Welcome -->
     <system:String x:Key="WelcomeTitle">Willkommen</system:String>
     <system:String x:Key="WelcomeDescription">Das Installationsprogramm führt alle notwendigen Schritte durch, um GoAwayEdge auf Ihrem System zu installieren. Nach der Installation werden alle Edge-Aufrufe an Ihren Browser weitergeleitet. Bitte wählen Sie die gewünschte Option, um fortzufahren.</system:String>
@@ -15,17 +16,20 @@
     <system:String x:Key="SettingsUninstallTitle">Deinstallieren</system:String>
     <system:String x:Key="SettingsUninstallDescription">Deinstalliere GoAwayEdge und wiederherstelle die Edge-Funktionalität.</system:String>
     <system:String x:Key="SettingsUninstallUseInstaller">Bitte verwenden Sie den Installer, um GoAwayEdge zu deinstallieren.</system:String>
-
     <!-- License -->
     <system:String x:Key="LicenseTitle">Lizenz</system:String>
     <system:String x:Key="LicenseNote">Bitte lesen Sie die folgende Lizenz. Sie müssen die Lizenzbedingungen akzeptieren, bevor Sie mit der Installation fortfahren können.</system:String>
     <system:String x:Key="LicenseAccept">Ich akzeptiere diese Lizenz.</system:String>
     <system:String x:Key="LicenseDecline">Ich lehne diese Lizenz ab.</system:String>
-
+    <!-- Redirect or Remove -->
+    <system:String x:Key="RedirectRemoveTitle">Umleiten oder Entfernen?</system:String>
+    <system:String x:Key="RedirectRemoveDescription">Sollen alle Aufrufe von Edge auf einen anderen Browser umgeleitet werden, oder soll Edge vollständig entfernt werden?</system:String>
+    <system:String x:Key="RedirectEverythingTitle">Alles umleiten (Empfohlen)</system:String>
+    <system:String x:Key="RedirectEverythingDescription">Leite alle Aufrufe von Edge auf deinen Lieblingsbrowser um.</system:String>
     <!-- Settings -->
     <system:String x:Key="SettingsTitle">Einstellungen</system:String>
-    <system:String x:Key="SettingsEdgeChannelTitle">Edge Channel</system:String>
-    <system:String x:Key="SettingsEdgeChannelDescription">Wählen Sie den installierten Microsoft Edge Channel aus.</system:String>
+    <system:String x:Key="SettingsEdgeChannelTitle">Edge Kanal</system:String>
+    <system:String x:Key="SettingsEdgeChannelDescription">Wählen Sie den installierten Microsoft Edge Kanal aus.</system:String>
     <system:String x:Key="SettingsSearchEngineTitle">Suchmaschine</system:String>
     <system:String x:Key="SettingsSearchEngineDescription">Wählen Sie Ihre bevorzugte Suchmaschine.</system:String>
     <system:String x:Key="SettingsSearchEngineCustomItem">Benutzerdefiniert</system:String>
@@ -33,18 +37,18 @@
     <system:String x:Key="SettingsCustomSearchEngineDescription">Bitte geben Sie die Anfrage-URL der Suchmaschine ein.</system:String>
     <system:String x:Key="SettingsMSEdgeUninstallTitle">Microsoft Edge (Stabil) entfernen</system:String>
     <system:String x:Key="SettingsMSEdgeUninstallDescription">Entferne Microsoft Edge vollständig von Ihrem System.</system:String>
-
+    <system:String x:Key="SettingsUninstallEdgeWarningDescription">Das Entfernen von Microsoft Edge kann zu schwerwiegenden Systemproblemen führen, da es tief in Windows integriert ist und für viele Funktionen, einschließlich Updates, Hilfedateien und einige Anwendungen, unerlässlich ist. Das Löschen kann zu Instabilität oder defekten Funktionen führen.\n\nFahren Sie nur fort, wenn Sie sich der Risiken bewusst sind und über eine zuverlässige Sicherung oder einen Wiederherstellungspunkt verfügen.</system:String>
+    <system:String x:Key="SettingsUninstallEdgeBtn">Microsoft Edge entfernen</system:String>
     <!-- Setup in progress -->
     <system:String x:Key="SetupProgressTitle">Installation läuft ...</system:String>
     <system:String x:Key="SetupProgressDescription">Bitte warten Sie, bis die Installation abgeschlossen ist.</system:String>
-
     <!-- Setup finished -->
     <system:String x:Key="SetupFinishedTitle">Installation abgeschlossen!</system:String>
     <system:String x:Key="SetupFinishedDescription">Öffnen Sie das Installationsprogramm, wenn Sie GoAwayEdge erneut anpassen möchten.</system:String>
+    <system:String x:Key="SetupFinishedDescriptionWithControlPanel">Öffnen Sie das Installationsprogramm oder das Kontrollpanel, wenn Sie GoAwayEdge erneut anpassen möchten.</system:String>
     <system:String x:Key="UninstallFinishedTitle">Deinstallation abgeschlossen!</system:String>
     <system:String x:Key="UninstallFinishedDescription">GoAwayEdge wurde erfolgreich vom System entfernt.</system:String>
     <system:String x:Key="DonateButton">Über PayPal spenden</system:String>
-
     <!-- Error Handling / Notifications -->
     <system:String x:Key="FailedInitialization">Initialisierung fehlgeschlagen: {0}</system:String>
     <system:String x:Key="FailedInstallation">Installation fehlgeschlagen: {0}</system:String>
@@ -52,7 +56,7 @@
     <system:String x:Key="FailedUpdate">Aktualisierung fehlgeschlagen: {0}</system:String>
     <system:String x:Key="FailedInstallationGeneric">Installation fehlgeschlagen! Bitte versuchen Sie es erneut.</system:String>
     <system:String x:Key="FailedEdgeRemoval">Die Entfernung von Microsoft Edge ist fehlgeschlagen! Bitte versuchen Sie es erneut.</system:String>
-    <system:String x:Key="FailedRegisterIFEO">&quot;Image File Execution Option&quot; für '{0}' konnte nicht registriert werden. Bitte versuchen Sie es erneut.</system:String>
+    <system:String x:Key="FailedRegisterIFEO">"Image File Execution Option" für '{0}' konnte nicht registriert werden. Bitte versuchen Sie es erneut.</system:String>
     <system:String x:Key="NewUpdateAvailable">Eine neue Version von GoAwayEdge (v{0}) ist verfügbar. Dieses Update enthält neue Funktionen, behebt Fehler und gewährleistet die Funktionalität dieser Anwendung.</system:String>
     <system:String x:Key="NewNonIfeoUpdate">Microsoft Edge wurde aktualisiert und GoAwayEdge muss die alternative Startdatei aktualisieren, um die Edge-Funktionalität zu gewährleisten.</system:String>
     <system:String x:Key="MissingIfeoFile">Die alternative Startdatei von Edge fehlt und muss kopiert werden, um die Edge-Funktionalität zu gewährleisten. Jetzt kopieren?</system:String>
@@ -62,5 +66,38 @@
     <system:String x:Key="IfeoUpdateSuccessfulDescription">Die alternative Startdatei von Edge wurde erfolgreich aktualisiert.</system:String>
     <system:String x:Key="IfeoCreateSuccessfulTitle">Erstellung erfolgreich</system:String>
     <system:String x:Key="IfeoCreateSuccessfulDescription">Die alternative Startdatei von Edge wurde erfolgreich erstellt.</system:String>
-
+    <system:String x:Key="SkipUpdate">Version überspringen</system:String>
+    <system:String x:Key="ControlPanelTitle">GoAwayEdge Kontrollpanel</system:String>
+    <system:String x:Key="ControlPanelWelcomeEdgeTitle">Microsoft Edge</system:String>
+    <system:String x:Key="ControlPanelWelcomeCopilotTitle">Windows Copilot</system:String>
+    <system:String x:Key="ControlPanelWelcomeEdgeDescription">Verwalte Suchmaschinen und mehr.</system:String>
+    <system:String x:Key="ControlPanelWelcomeCopilotDescription">Verwalte Hotkeys und mehr.</system:String>
+    <system:String x:Key="ControlPanelEdgePowerTitle">Aktiviere/Deaktiviere GoAwayEdge</system:String>
+    <system:String x:Key="ControlPanelEdgePowerEnable">Aktiviere GoAwayEdge</system:String>
+    <system:String x:Key="ControlPanelEdgePowerDisable">Deaktiviere GoAwayEdge</system:String>
+    <system:String x:Key="ControlPanelWeatherProviderTitle">Wetterdienst</system:String>
+    <system:String x:Key="ControlPanelWeatherProviderDescription">Wechsel den Anbieter zu Ihres bevorzugten Wetterdienstes.</system:String>
+    <system:String x:Key="ControlPanelCustomWeatherProviderTitle">Benutzerdefinierter Wetterdienst</system:String>
+    <system:String x:Key="ControlPanelCustomWeatherProviderDescription">Bitte geben Sie die URL des Wetterdienstes ein.</system:String>
+    <system:String x:Key="MessageGoAwayEdgeDisabled">GoAwayEdge wurde auf diesem System erfolgreich deaktiviert.</system:String>
+    <system:String x:Key="FailedSetAppEnabled">GoAwayEdge konnte auf diesem System nicht aktiviert werden: {0}</system:String>
+    <system:String x:Key="SettingsControlPanelDescription">Installiere das Kontrollpanel, um GoAwayEdge einfacher zu konfigurieren.</system:String>
+    <system:String x:Key="SettingsControlPanelTitle">Kontrollpanel installieren</system:String>
+    <system:String x:Key="ControlPanelWelcome">Willkommen bei GoAwayEdge</system:String>
+    <system:String x:Key="ControlPanelEdgePowerDescription">Deaktiviere die Weiterleitung von Suchanfragen an anderen Browsern.</system:String>
+    <system:String x:Key="MessageGoAwayEdgeEnabled">GoAwayEdge wurde auf diesem System erfolgreich aktiviert.</system:String>
+    <system:String x:Key="FailedSetAppDisabled">GoAwayEdge konnte auf diesem System nicht deaktiviert werden: {0}</system:String>
+    <system:String x:Key="ControlPanelCopilotProviderTitle">KI Anbieter</system:String>
+    <system:String x:Key="ControlPanelCopilotProviderDescription">Wechsel den Anbieter Ihrer bevorzugten KI (oder zu Ihrer bevorzugten Webseite).</system:String>
+    <system:String x:Key="ControlPanelCustomCopilotProviderTitle">Benutzerdefinierter KI Anbieter</system:String>
+    <system:String x:Key="ControlPanelCustomCopilotProviderDescription">Bitte gebe die URL des KI-Anbieters (oder einer Webseite) ein.</system:String>
+    <system:String x:Key="FailedFlushSetting">Die Einstellungen konnten nicht übernommen werden: {0}</system:String>
+    <system:String x:Key="CopilotKeyTitle">Copilot Key</system:String>
+    <system:String x:Key="ControlPanelHotkeyExternalProgramTitle">Externe Anwendung</system:String>
+    <system:String x:Key="ControlPanelHotkeyExternalProgramPathTitle">Pfad zur Anwendung</system:String>
+    <system:String x:Key="ControlPanelHotkeyExternalProgramPathDescription">Wählen Sie die Anwendung, die Sie ausführen möchten.</system:String>
+    <system:String x:Key="ControlPanelHotkeyExternalProgramArgsTitle">Argumente</system:String>
+    <system:String x:Key="ControlPanelHotkeyExternalProgramArgsDescription">Definieren Sie die Argumente Ihrer Anwendung.</system:String>
+    <system:String x:Key="ControlPanelHotkeyExternalProgramDescription">Führe beim Drücken der Copilot-Taste eine externe Anwendung aus.</system:String>
+    <system:String x:Key="ControlPanelHotkeyExternalProgramNoSource">Keine Quelle ausgewählt</system:String>
 </ResourceDictionary>
