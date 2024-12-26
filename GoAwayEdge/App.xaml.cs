@@ -47,11 +47,11 @@ namespace GoAwayEdge
                 case 1 when args.Contains("--debug"):
                 {
                     if (args.Contains("--debug"))
-                            IsDebug = true;
+                        IsDebug = true;
                     if (IsAdministrator() == false)
                     {
                         ElevateAsAdmin();
-                        Environment.Exit(0);
+                        Environment.Exit(740);
                         return;
                     }
 
@@ -71,7 +71,7 @@ namespace GoAwayEdge
                         if (IsAdministrator() == false)
                         {
                             ElevateAsAdmin(string.Join(" ", args));
-                            Environment.Exit(0);
+                            Environment.Exit(740);
                             return;
                         }
 
@@ -79,7 +79,7 @@ namespace GoAwayEdge
                         if (RegistryConfig.GetKey("ControlPanelIsInstalled") != "True")
                         {
                             Logging.Log("Control Panel is not allowed on this system, exiting ...", Logging.LogLevel.ERROR);
-                            Environment.Exit(0);
+                            Environment.Exit(1);
                             return;
                         }
 
@@ -111,6 +111,8 @@ namespace GoAwayEdge
 
                     if (args.Contains("-s")) // Silent Installation
                     {
+                        Configuration.InitialEnvironment();
+
                         foreach (var arg in args)
                         {
                             if (arg.StartsWith("-e:"))
@@ -146,13 +148,12 @@ namespace GoAwayEdge
 
                         if (IsAdministrator() == false)
                         {
-                            ElevateAsAdmin(string.Join(" ", args));
-                            Environment.Exit(0);
+                            var elevatedProcess = ElevateAndWait(string.Join(" ", args));
+                            Environment.Exit(elevatedProcess);
                             return;
                         }
 
                         Configuration.InstallControlPanel = true;
-                        Configuration.InitialEnvironment();
                         var result = InstallRoutine.Install(null);
                         Environment.Exit(result);
                     }
@@ -160,8 +161,8 @@ namespace GoAwayEdge
                     {
                         if (IsAdministrator() == false)
                         {
-                            ElevateAsAdmin(string.Join(" ", args));
-                            Environment.Exit(0);
+                            var elevatedProcess = ElevateAndWait(string.Join(" ", args));
+                            Environment.Exit(elevatedProcess);
                             return;
                         }
                         var result = InstallRoutine.Uninstall(null);
@@ -236,7 +237,10 @@ namespace GoAwayEdge
                                     ifeoMessageUi.ShowDialog();
 
                                     if (ifeoMessageUi.Summary == "Btn1")
+                                    {
                                         ElevateAsAdmin("--update");
+                                        Environment.Exit(740);
+                                    }
                                     
                                     Environment.Exit(0);
                                 }
@@ -267,6 +271,24 @@ namespace GoAwayEdge
                 Arguments = arguments
             };
             Process.Start(startInfo);
+        }
+
+        private static int ElevateAndWait(string? arguments = null)
+        {
+            // Restart program and run as admin
+            var exeName = Process.GetCurrentProcess().MainModule?.FileName;
+            if (exeName == null) return -1;
+            var startInfo = new ProcessStartInfo(exeName)
+            {
+                Verb = "runas",
+                UseShellExecute = true,
+                Arguments = arguments
+            };
+            var p = new Process();
+            p.StartInfo = startInfo;
+            p.Start();
+            p.WaitForExit();
+            return p.ExitCode;
         }
 
         private static string? ParseCustomUrl(string argument, int count)
