@@ -76,7 +76,7 @@ You can install GoAwayEdge silently by parsing the following arguments:
 | ------------------------ | ------------------------------------------------------------------------------------------------------------------------------ |
 | `-s`                     | Silent installation                                                                                                            |
 | `-e:<Engine>`            | Specify the Search Engine: `Google` (default), `Bing`, `DuckDuckGo`, `Yahoo`, `Yandex`, `Ecosia`, `Ask`, `Qwant`, `Perplexity` |
-| `-a:<AI Service>`        | Specify the AI Service: `Default`, `Copilot`, `ChatGPT`, `Gemini`, `GitHub_Copilot`, `Grok`,                                   |
+| `-a:<AI Service>`        | Specify the AI Service: `Default`, `Copilot`, `ChatGPT`, `Gemini`, `GitHub_Copilot`, `Grok`                                    |
 | `-w:<Weather Service>`   | Specify the Weather Service: `Default`, `WeatherCom`, `AccuWeather`                                                            |
 | `--search-url:<Url>`     | Custom search query url (ex: `https://google.com/search?q=`)                                                                   |
 | `--ai-url:<Url>`         | Custom AI website (ex: `https://chatgpt.com`)                                                                                  |
