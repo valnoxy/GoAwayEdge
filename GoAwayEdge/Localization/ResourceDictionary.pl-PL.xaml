@@ -98,4 +98,5 @@
     <system:String x:Key="FailedSetAppEnabled">Nie można włączyć GoAwayEdge w tym systemie: {0}</system:String>
     <system:String x:Key="FailedSetAppDisabled">Nie można wyłączyć GoAwayEdge w tym systemie: {0}</system:String>
     <system:String x:Key="FailedFlushSetting">Nie można zastosować ustawień: {0}</system:String>
+    <system:String x:Key="SetupFinishedDescriptionWithControlPanel">Po prostu otwórz ten instalator lub Panel sterowania, jeśli chcesz ponownie dostosować GoAwayEdge.</system:String>
 </ResourceDictionary>
