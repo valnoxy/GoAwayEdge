@@ -92,4 +92,5 @@
     <system:String x:Key="ControlPanelWelcomeCopilotDescription">Gestionați comenzile rapide și multe altele.</system:String>
     <system:String x:Key="ControlPanelEdgePowerTitle">Activare/Dezactivare GoAwayEdge</system:String>
     <system:String x:Key="ControlPanelEdgePowerEnable">Activați GoAwayEdge</system:String>
+    <system:String x:Key="SetupFinishedDescriptionWithControlPanel">Pur și simplu deschideți acest program de instalare sau panoul de control dacă doriți să personalizați din nou GoAwayEdge.</system:String>
 </ResourceDictionary>
