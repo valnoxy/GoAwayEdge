@@ -98,4 +98,5 @@
     <system:String x:Key="ControlPanelWeatherProviderTitle">Servicio Meteorológico</system:String>
     <system:String x:Key="ControlPanelCustomWeatherProviderTitle">Servicio Meteorológico Personalizado</system:String>
     <system:String x:Key="ControlPanelCustomWeatherProviderDescription">Introduzca la URL del Servicio Meteorológico.</system:String>
+    <system:String x:Key="SetupFinishedDescriptionWithControlPanel">Simplemente abre este instalador o el Panel de Control si quieres personalizar GoAwayEdge de nuevo.</system:String>
 </ResourceDictionary>
