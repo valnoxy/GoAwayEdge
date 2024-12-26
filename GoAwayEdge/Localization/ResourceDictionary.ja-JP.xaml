@@ -92,4 +92,5 @@
     <system:String x:Key="WelcomeDescription">インストーラは、GoAwayEdgeをシステムにインストールするために必要なすべての手順を実行します。インストール後、すべてのEdgeコールがブラウザにリダイレクトされます。続行するには、希望のオプションを選択してください。</system:String>
     <system:String x:Key="Default">デフォルト</system:String>
     <system:String x:Key="SettingsUninstallTitle">アンインストール</system:String>
+    <system:String x:Key="SetupFinishedDescriptionWithControlPanel">GoAwayEdgeを再度カスタマイズしたい場合は、このインストーラーまたはコントロールパネルを開くだけです。</system:String>
 </ResourceDictionary>
