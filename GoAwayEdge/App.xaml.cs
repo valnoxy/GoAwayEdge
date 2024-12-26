@@ -50,7 +50,7 @@ namespace GoAwayEdge
                             IsDebug = true;
                     if (IsAdministrator() == false)
                     {
-                            ElevateAsAdmin();
+                        ElevateAsAdmin();
                         Environment.Exit(0);
                         return;
                     }
@@ -70,7 +70,7 @@ namespace GoAwayEdge
                     {
                         if (IsAdministrator() == false)
                         {
-                                ElevateAsAdmin(string.Join(" ", args));
+                            ElevateAsAdmin(string.Join(" ", args));
                             Environment.Exit(0);
                             return;
                         }
@@ -113,25 +113,47 @@ namespace GoAwayEdge
                     {
                         foreach (var arg in args)
                         {
-                            if (arg.StartsWith("-se:"))
+                            if (arg.StartsWith("-e:"))
                                 Configuration.Search = ArgumentParse.ParseSearchEngine(arg);
-                            if (arg.Contains("--url:"))
+                            if (arg.Contains("--search-url:"))
                             {
-                                Configuration.CustomQueryUrl = ParseCustomSearchEngine(arg);
-                                Configuration.Search = !string.IsNullOrEmpty(Configuration.CustomQueryUrl) ? SearchEngine.Custom : SearchEngine.Google;
+                                Configuration.CustomQueryUrl = ParseCustomUrl(arg, 13);
+                                Configuration.Search = !string.IsNullOrEmpty(Configuration.CustomQueryUrl)
+                                    ? SearchEngine.Custom
+                                    : SearchEngine.Google;
+                            }
+
+                            if (arg.Contains("-a:"))
+                                Configuration.AiProvider = ArgumentParse.ParseAiProvider(arg);
+                            if (arg.Contains("--ai-url:"))
+                            {
+                                Configuration.CustomAiProviderUrl = ParseCustomUrl(arg, 9);
+                                Configuration.AiProvider = !string.IsNullOrEmpty(Configuration.CustomAiProviderUrl)
+                                    ? AiProvider.Custom
+                                    : AiProvider.Default;
+                            }
+
+                            if (arg.Contains("-w:"))
+                                Configuration.WeatherProvider = ArgumentParse.ParseWeatherProvider(arg);
+                            if (arg.Contains("--weather-url:"))
+                            {
+                                Configuration.CustomWeatherProviderUrl = ParseCustomUrl(arg, 14);
+                                Configuration.WeatherProvider = !string.IsNullOrEmpty(Configuration.CustomWeatherProviderUrl)
+                                    ? WeatherProvider.Custom
+                                    : WeatherProvider.Default;
                             }
                         }
 
                         if (IsAdministrator() == false)
                         {
-                                ElevateAsAdmin(string.Join(" ", args));
+                            ElevateAsAdmin(string.Join(" ", args));
                             Environment.Exit(0);
                             return;
                         }
 
                         Configuration.InitialEnvironment();
-                        InstallRoutine.Install(null);
-                        Environment.Exit(0);
+                        var result = InstallRoutine.Install(null);
+                        Environment.Exit(result);
                     }
                     if (args.Contains("-u"))
                     {
@@ -191,7 +213,7 @@ namespace GoAwayEdge
                                     ifeoMessageUi.ShowDialog();
 
                                     if (ifeoMessageUi.Summary == "Btn1")
-                                            ElevateAsAdmin("--update");
+                                        ElevateAsAdmin("--update");
 
                                     Environment.Exit(0);
                                 }
@@ -207,7 +229,7 @@ namespace GoAwayEdge
                                     ifeoMessageUi.ShowDialog();
 
                                     if (ifeoMessageUi.Summary == "Btn1")
-                                            ElevateAsAdmin("--update");
+                                        ElevateAsAdmin("--update");
                                     
                                     Environment.Exit(0);
                                 }
@@ -240,9 +262,9 @@ namespace GoAwayEdge
             Process.Start(startInfo);
         }
 
-        private static string? ParseCustomSearchEngine(string argument)
+        private static string? ParseCustomUrl(string argument, int count)
         {
-            var argParsed = argument.Remove(0, 6);
+            var argParsed = argument.Remove(0, count);
             var result = Uri.TryCreate(argParsed, UriKind.Absolute, out var uriResult)
                          && (uriResult.Scheme == Uri.UriSchemeHttp || uriResult.Scheme == Uri.UriSchemeHttps);
             return result ? argParsed : null;

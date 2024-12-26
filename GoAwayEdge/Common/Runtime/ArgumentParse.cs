@@ -211,7 +211,11 @@ namespace GoAwayEdge.Common.Runtime
 
         public static AiProvider ParseAiProvider(string argument)
         {
-            return argument.ToLower() switch
+            var arg = argument;
+            if (argument.StartsWith("-a:"))
+                arg = argument.Remove(0, 3);
+
+            return arg.ToLower() switch
             {
                 "default" => AiProvider.Default,
                 "copilot" => AiProvider.Copilot,
@@ -227,8 +231,8 @@ namespace GoAwayEdge.Common.Runtime
         public static SearchEngine ParseSearchEngine(string argument)
         {
             var arg = argument;
-            if (argument.StartsWith("-se:"))
-                arg = argument.Remove(0, 4);
+            if (argument.StartsWith("-e:"))
+                arg = argument.Remove(0, 3);
 
             return arg.ToLower() switch
             {
@@ -248,7 +252,11 @@ namespace GoAwayEdge.Common.Runtime
 
         public static WeatherProvider ParseWeatherProvider(string argument)
         {
-            return argument.ToLower() switch
+            var arg = argument;
+            if (argument.StartsWith("-w:"))
+                arg = argument.Remove(0, 3);
+
+            return arg.ToLower() switch
             {
                 "default" => WeatherProvider.Default,
                 "weathercom" => WeatherProvider.WeatherCom,

@@ -19,6 +19,10 @@ namespace GoAwayEdge.UserInterface.Setup.Pages
             Installer.ContentWindow!.NextBtn.Content = !string.IsNullOrEmpty(exitResource)
                 ? exitResource : "Exit";
 
+            var setupDescriptionResource = Configuration.InstallControlPanel ?
+                (string)Application.Current.MainWindow!.FindResource("SetupFinishedDescriptionWithControlPanel") : (string)Application.Current.MainWindow!.FindResource("SetupFinishedDescription");
+            SetupDescription.Text = setupDescriptionResource;
+
             if (Configuration.Uninstall)
             {
                 Dispatcher.Invoke(() =>

@@ -23,7 +23,7 @@ namespace GoAwayEdge.UserInterface.Setup.Pages
             }
             else
             {
-                applyBackgroundWorker.DoWork += InstallRoutine.Install;
+                applyBackgroundWorker.DoWork += InstallRoutine_Install;
             }
             applyBackgroundWorker.ProgressChanged += ApplyBackgroundWorker_ProgressChanged;
             applyBackgroundWorker.RunWorkerAsync();
@@ -35,6 +35,11 @@ namespace GoAwayEdge.UserInterface.Setup.Pages
             {
                 Installer.ContentWindow?.FrameWindow.NavigationService.Navigate(new InstallationSuccess());
             }
+        }
+
+        private static void InstallRoutine_Install(object? sender, DoWorkEventArgs e)
+        {
+            e.Result = InstallRoutine.Install(sender, e);
         }
     }
 }

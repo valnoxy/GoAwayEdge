@@ -19,7 +19,7 @@ namespace GoAwayEdge.Common.Installation
             public static partial void SHChangeNotify(uint wEventId, uint uFlags, IntPtr dwItem1, IntPtr dwItem2);
         }
 
-        public static void Install(object? sender, DoWorkEventArgs? e = null)
+        public static int Install(object? sender, DoWorkEventArgs? e = null)
         {
             var worker = sender as BackgroundWorker;
 
@@ -40,7 +40,7 @@ namespace GoAwayEdge.Common.Installation
                     messageUi.ShowDialog();
                 });
                 Environment.Exit(1);
-                return;
+                return 1;
             }
 
             // Apply registry key
@@ -108,7 +108,7 @@ namespace GoAwayEdge.Common.Installation
                         messageUi.ShowDialog();
                     });
                     Environment.Exit(1);
-                    return;
+                    return 1;
                 }
             }
             catch (Exception ex)
@@ -121,7 +121,7 @@ namespace GoAwayEdge.Common.Installation
                     messageUi.ShowDialog();
                 });
                 Environment.Exit(1);
-                return;
+                return 1;
             }
 
             // Kill Microsoft Edge processes
@@ -142,7 +142,7 @@ namespace GoAwayEdge.Common.Installation
                         messageUi.ShowDialog();
                     });
                     Environment.Exit(1);
-                    return;
+                    return 1;
                 }
             }
             else if (!Configuration.NoEdgeInstalled)
@@ -163,7 +163,7 @@ namespace GoAwayEdge.Common.Installation
                         messageUi.ShowDialog();
                     });
                     Environment.Exit(1);
-                    return;
+                    return 1;
                 }
             }
 
@@ -201,7 +201,7 @@ namespace GoAwayEdge.Common.Installation
                     messageUi.ShowDialog();
                 });
                 Environment.Exit(1);
-                return;
+                return 1;
             }
 
             // Register Uninstall data
@@ -216,7 +216,7 @@ namespace GoAwayEdge.Common.Installation
                     messageUi.ShowDialog();
                 });
                 Environment.Exit(1);
-                return;
+                return 1;
             }
 
             // Create Shortcut for Control Panel
@@ -235,6 +235,7 @@ namespace GoAwayEdge.Common.Installation
             worker?.ReportProgress(100, "");
             Logging.Log("Installation finished.");
             Console.WriteLine("Installation finished.");
+            return 0;
         }
 
         public static void Uninstall(object? sender, DoWorkEventArgs? e = null)
@@ -417,9 +418,15 @@ namespace GoAwayEdge.Common.Installation
                 }
             }
 
-            catch (Exception e)
+            catch (Exception ex)
             {
-                MessageBox.Show(e.ToString());
+                Logging.Log("Failed to copy itself: " + ex, Logging.LogLevel.ERROR);
+                Application.Current.Dispatcher.Invoke(() =>
+                {
+                    var errorMessage = LocalizationManager.LocalizeValue("FailedInstallation", ex.Message);
+                    var messageUi = new MessageUi("GoAwayEdge", errorMessage, "OK");
+                    messageUi.ShowDialog();
+                });
                 return false;
             }
 

@@ -65,7 +65,6 @@ namespace GoAwayEdge.UserInterface.Setup
                     NextBtn.IsEnabled = false;
                     BackBtn.IsEnabled = true;
                     FrameWindow.Content = _redirectOrRemovePage;
-                    SettingPage = new Settings();
                     break;
             }
         }
@@ -81,7 +80,7 @@ namespace GoAwayEdge.UserInterface.Setup
                     FrameWindow.Content = LicensePage;
                     break;
                 case Settings:
-                    NextBtn.IsEnabled = true;
+                    NextBtn.IsEnabled = false;
                     BackBtn.IsEnabled = true;
                     FrameWindow.Content = _redirectOrRemovePage;
                     break;
