@@ -19,7 +19,7 @@ namespace GoAwayEdge.UserInterface.Setup.Pages
             applyBackgroundWorker.WorkerSupportsCancellation = true;
             if (Configuration.Uninstall)
             {
-                applyBackgroundWorker.DoWork += InstallRoutine.Uninstall;
+                applyBackgroundWorker.DoWork += InstallRoutine_Uninstall;
             }
             else
             {
@@ -40,6 +40,11 @@ namespace GoAwayEdge.UserInterface.Setup.Pages
         private static void InstallRoutine_Install(object? sender, DoWorkEventArgs e)
         {
             e.Result = InstallRoutine.Install(sender, e);
+        }
+
+        private static void InstallRoutine_Uninstall(object? sender, DoWorkEventArgs e)
+        {
+            e.Result = InstallRoutine.Uninstall(sender, e);
         }
     }
 }

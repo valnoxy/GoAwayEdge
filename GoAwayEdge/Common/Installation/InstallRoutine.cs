@@ -238,7 +238,7 @@ namespace GoAwayEdge.Common.Installation
             return 0;
         }
 
-        public static void Uninstall(object? sender, DoWorkEventArgs? e = null)
+        public static int Uninstall(object? sender, DoWorkEventArgs? e = null)
         {
             var worker = sender as BackgroundWorker;
             Logging.Log("Start uninstallation ...");
@@ -261,7 +261,7 @@ namespace GoAwayEdge.Common.Installation
                         messageUi.ShowDialog();
                     });
                     Environment.Exit(1);
-                    return;
+                    return 1;
                 }
                 Process.Start(new ProcessStartInfo
                 {
@@ -269,7 +269,7 @@ namespace GoAwayEdge.Common.Installation
                     Arguments = "-u",
                     UseShellExecute = true
                 });
-                Environment.Exit(0);
+                Environment.Exit(3010);
             }
 
             // Remove installation directory
@@ -288,7 +288,7 @@ namespace GoAwayEdge.Common.Installation
                     messageUi.ShowDialog();
                 });
                 Environment.Exit(1);
-                return;
+                return 1;
             }
 
             // Remove user directory
@@ -310,7 +310,7 @@ namespace GoAwayEdge.Common.Installation
                     messageUi.ShowDialog();
                 });
                 Environment.Exit(1);
-                return;
+                return 1;
             }
 
             // Remove Ifeo & Uri handler from registry
@@ -359,7 +359,7 @@ namespace GoAwayEdge.Common.Installation
                     messageUi.ShowDialog();
                 });
                 Environment.Exit(1);
-                return;
+                return 1;
             }
 
             // Clean up Task Scheduler
@@ -402,6 +402,7 @@ namespace GoAwayEdge.Common.Installation
             worker?.ReportProgress(100, "");
             Logging.Log("Uninstallation finished.");
             Console.WriteLine("Uninstallation finished.");
+            return 0;
         }
 
         internal static bool CopyItself(string pathTo, bool overwrite = false)

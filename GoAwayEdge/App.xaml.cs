@@ -151,14 +151,21 @@ namespace GoAwayEdge
                             return;
                         }
 
+                        Configuration.InstallControlPanel = true;
                         Configuration.InitialEnvironment();
                         var result = InstallRoutine.Install(null);
                         Environment.Exit(result);
                     }
                     if (args.Contains("-u"))
                     {
-                        InstallRoutine.Uninstall(null);
-                        Environment.Exit(0);
+                        if (IsAdministrator() == false)
+                        {
+                            ElevateAsAdmin(string.Join(" ", args));
+                            Environment.Exit(0);
+                            return;
+                        }
+                        var result = InstallRoutine.Uninstall(null);
+                        Environment.Exit(result);
                     }
                     if (args.Contains("--update"))
                     {
