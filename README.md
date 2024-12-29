@@ -62,14 +62,19 @@ Here are some key points about GoAwayEdge:
 Feel free to explore the code, contribute, or simply enjoy a browser experience free from unexpected Edge encounters! 🚀
 
 # 🤸 Installation methods
-## 💿 1. Install normally
+## 💿 1. Default Installation
 1. Download the latest version from [GitHub](https://github.com/valnoxy/GoAwayEdge/releases).
 2. Start the application.
 3. Accept the license.
 4. Customize GoAwayEdge as you like.
 5. Done!
 
-## 🤫 2. Silent Installation
+## 📦 2. Package Manager
+| Package Manager          | Command                               |
+| ------------------------ | ------------------------------------- |
+| winget                   | `winget install Exploitox.GoAwayEdge`<br>You can also pre-configure GoAwayEdge with `--custom`: `winget install goawayedge --custom "-e:DuckDuckGo"` |                        
+
+## 🤫 3. Silent Installation
 You can install GoAwayEdge silently by parsing the following arguments:
 
 | Switch                   | Description                                                                                                                    |
