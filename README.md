@@ -51,7 +51,7 @@
 > This application will modify the system. I won't be responsible for any damage you've done yourself trying to use this application.
 
 # 🚀Introduction
-GoAwayEdge is designed for those who, like me, aren’t fans of Microsoft Edge. If you find yourself constantly annoyed by Edge popping up unexpectedly, fear not! This clever utility redirects all Edge-related calls to your preferred browser, ensuring a seamless browsing experience.
+GoAwayEdge is designed for those who, like me, aren’t fans of Microsoft Edge or Windows Copilot. If you find yourself constantly annoyed by Edge popping up unexpectedly, fear not! This clever utility redirects all Edge-related calls to your preferred browser, ensuring a seamless browsing experience.
 
 Here are some key points about GoAwayEdge:
 
@@ -105,11 +105,13 @@ You can also silently uninstall GoAwayEdge by parsing the following argument:
 GoAwayEdge.exe -u
 ```
 
-# 🖼️ Screenshot
+# 🖼️ Screenshots
 <img src="https://dl.exploitox.de/goawayedge/GoAwayEdge_Screenshot2.png" alt="GoAwayEdge Setup" width=650>
+<img src="https://dl.exploitox.de/goawayedge/GoAwayEdge_Screenshot3_Bar.png" alt="Copilot Replacement" width=300>
 
 # 🙏 Libraries
 This project uses the following libraries:
+- [ManagedShell](https://github.com/cairoshell/ManagedShell)
 - [Microsoft.Toolkit.Uwp.Notification](https://github.com/CommunityToolkit/WindowsCommunityToolkit)
 - [TaskScheduler](https://github.com/dahall/taskscheduler)
 - [WPF-UI](https://github.com/lepoco/wpfui)
