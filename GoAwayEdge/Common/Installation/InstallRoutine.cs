@@ -185,7 +185,7 @@ namespace GoAwayEdge.Common.Installation
                 }
 
                 var td = ts.NewTask();
-                td.RegistrationInfo.Description = "Checks for new versions and validates non-IEFO file.";
+                td.RegistrationInfo.Description = "Checks for new GoAwayEdge version.";
                 td.Triggers.Add(new LogonTrigger { Delay = TimeSpan.FromMinutes(5) });
                 td.Principal.RunLevel = TaskRunLevel.Highest;
                 td.Actions.Add(new ExecAction(Path.Combine(Configuration.InstallDir, "GoAwayEdge.exe"), "--update", Configuration.InstallDir));

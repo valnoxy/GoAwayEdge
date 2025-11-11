@@ -1,6 +1,6 @@
 ﻿/*
  * GoAwayEdge
- * Copyright (c) 2018 - 2025 Exploitox (valnoxy).
+ * Copyright (c) 2018 - 2026 Exploitox (valnoxy).
  *
  * GoAwayEdge is licensed under MIT License (https://github.com/valnoxy/GoAwayEdge/blob/main/LICENSE).
  * So you are allowed to use freely and modify the application.
@@ -204,49 +204,6 @@ namespace GoAwayEdge
                             }
                         }
 
-                        // Validate Ifeo binary
-                        var binaryStatus = Updater.ValidateIfeoBinary();
-                        switch (binaryStatus)
-                        {
-                            case 0: // validated
-                                break;
-                            case 1: // failed validation
-                                if (IsAdministrator() == false)
-                                {
-                                    var updateNonIfeoMessage = LocalizationManager.LocalizeValue("NewNonIfeoUpdate");
-                                    var remindMeLaterBtn = LocalizationManager.LocalizeValue("RemindMeLater");
-                                    var installUpdateBtn = LocalizationManager.LocalizeValue("InstallUpdate");
-
-                                    var ifeoMessageUi = new MessageUi("GoAwayEdge", updateNonIfeoMessage, installUpdateBtn, remindMeLaterBtn);
-                                    ifeoMessageUi.ShowDialog();
-
-                                    if (ifeoMessageUi.Summary == "Btn1")
-                                        ElevateAsAdmin("--update");
-
-                                    Environment.Exit(0);
-                                }
-                                Updater.ModifyIfeoBinary(ModifyAction.Update);
-                                break;
-                            case 2: // missing
-                                if (IsAdministrator() == false)
-                                {
-                                    var ifeoMissingMessage = LocalizationManager.LocalizeValue("MissingIfeoFile");
-                                    var yesBtn = LocalizationManager.LocalizeValue("Yes");
-                                    var noBtn = LocalizationManager.LocalizeValue("No");
-                                    var ifeoMessageUi = new MessageUi("GoAwayEdge", ifeoMissingMessage, yesBtn, noBtn);
-                                    ifeoMessageUi.ShowDialog();
-
-                                    if (ifeoMessageUi.Summary == "Btn1")
-                                    {
-                                        ElevateAsAdmin("--update");
-                                        Environment.Exit(740);
-                                    }
-                                    
-                                    Environment.Exit(0);
-                                }
-                                Updater.ModifyIfeoBinary(ModifyAction.Create);
-                                break;
-                        }
                         Environment.Exit(0);
                     }
 

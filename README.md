@@ -38,7 +38,7 @@
     <a href="https://translate.valnoxy.dev/engage/goawayedge/">Help me translate</a>
     <br />
     <br />
-    🎉 Version 2.0.0 is out. Check out the release notes
+    🎉 Version 2.0.1 is out. Check out the release notes
     <a href="https://github.com/valnoxy/GoAwayEdge/releases">here</a>.
     <br />
     <br />
@@ -121,7 +121,7 @@ This project uses the following libraries:
 GoAwayEdge is licensed under [MIT](https://github.com/valnoxy/GoAwayEdge/blob/main/LICENSE). So you are allowed to use freely and modify the application. I will not be responsible for any outcome. Proceed with any action at your own risk.
 
 <hr>
-<h6 align="center">© 2018 - 2025 valnoxy. All Rights Reserved. 
+<h6 align="center">© 2018 - 2026 valnoxy. All Rights Reserved. 
 <br>
 By Jonas Günner &lt;jonas@exploitox.de&gt;</h6>
 <p align="center">
