@@ -38,7 +38,7 @@ namespace GoAwayEdge.Common.Runtime
 
 #if DEBUG
             var uriMessageUi = new MessageUi("GoAwayEdge",
-                "Got extracted and decoded url variable from Microsoft-Edge Protocol:\n\n" + encodedUrl, "OK", isMainThread: true);
+                "Got extracted and decoded url variable from Microsoft Edge Protocol:\n\n" + encodedUrl, "OK", isMainThread: true);
             uriMessageUi.ShowDialog();
 #endif
             var uri = new Uri(encodedUrl);

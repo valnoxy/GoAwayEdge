@@ -1,11 +1,7 @@
 ﻿using System.Diagnostics;
 using System.IO;
-using System.Net;
 using System.Net.Http;
 using System.Reflection;
-using System.Security.Cryptography;
-using Microsoft.Toolkit.Uwp.Notifications;
-using Microsoft.Win32;
 using Newtonsoft.Json;
 
 namespace GoAwayEdge.Common.Installation
@@ -24,110 +20,6 @@ namespace GoAwayEdge.Common.Installation
             public string? name { get; set; }
         }
 
-
-        /// <summary>
-        /// Validates if the installed IFEO-Binary is identical with the Edge-Binary.
-        /// </summary>
-        /// <returns>
-        ///     Integer value if the Binary is identical, not identical or missing.
-        ///     0 : true (also reported if Edge is not installed)
-        ///     1 : false
-        ///     2 : missing
-        /// </returns>
-        public static int ValidateIfeoBinary()
-        {
-            if (Configuration.NoEdgeInstalled) return 0;
-
-            var key = Registry.LocalMachine.OpenSubKey(
-                @"SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\msedge.exe\0");
-            if (key == null)
-            {
-                Console.WriteLine("Registry key not found.");
-                return 2;
-            }
-
-            var binaryPath = (string)key.GetValue("FilterFullPath")!;
-            if (string.IsNullOrEmpty(binaryPath))
-            {
-                Console.WriteLine("FilterFullPath value not found.");
-                return 2;
-            }
-
-            var edgeBinaryPath = Path.Combine(Path.GetDirectoryName(binaryPath)!, "msedge.exe");
-            var ifeoBinaryPath = Path.Combine(Path.GetDirectoryName(binaryPath)!, "msedge_non_ifeo.exe");
-
-            if (File.Exists(ifeoBinaryPath))
-            {
-                var edgeHash = CalculateMd5(edgeBinaryPath);
-                var ifeoHash = CalculateMd5(ifeoBinaryPath);
-#if DEBUG
-                if (edgeHash != ifeoHash)
-                {
-                    var messageUi = new MessageUi("GoAwayEdge",
-                        $"The Edge Hash ({edgeHash}) and Ifeo Hash ({ifeoHash}) are not identical. Validation failed!", "OK", isMainThread: true);
-                    messageUi.ShowDialog();
-                }
-#endif
-                return edgeHash != ifeoHash ? 1 : 0;
-            }
-
-            Console.WriteLine($"Ifeo binary does not exist: {ifeoBinaryPath}");
-            return 2;
-        }
-
-        /// <summary>
-        /// Modifies the Ifeo binary.
-        /// </summary>
-        public static void ModifyIfeoBinary(ModifyAction action)
-        {
-            switch (action)
-            {
-                case ModifyAction.Update:
-                {
-                    try
-                    {
-                        File.Copy(FileConfiguration.EdgePath, FileConfiguration.NonIfeoPath, true);
-
-                        var title = LocalizationManager.LocalizeValue("IfeoUpdateSuccessfulTitle");
-                        var description = LocalizationManager.LocalizeValue("IfeoUpdateSuccessfulDescription");
-                        new ToastContentBuilder()
-                            .AddText(title)
-                            .AddText(description)
-                            .Show();
-                    }
-                    catch (Exception ex)
-                    {
-                        var message = LocalizationManager.LocalizeValue("FailedUpdate", ex.Message);
-                        var messageUi = new MessageUi("GoAwayEdge", message, "OK", isMainThread: true);
-                        messageUi.ShowDialog();
-                    }
-                    break;
-                }
-                case ModifyAction.Create:
-                {
-                    try
-                    {
-                        File.Copy(FileConfiguration.EdgePath, FileConfiguration.NonIfeoPath, true);
-
-                        var title = LocalizationManager.LocalizeValue("IfeoCreateSuccessfulTitle");
-                        var description = LocalizationManager.LocalizeValue("IfeoCreateSuccessfulDescription");
-                        new ToastContentBuilder()
-                            .AddText(title)
-                            .AddText(description)
-                            .Show();
-                    }
-                    catch (Exception ex)
-                    {
-                        var message = LocalizationManager.LocalizeValue("FailedUpdate", ex.Message);
-                        var messageUi = new MessageUi("GoAwayEdge", message, "OK", isMainThread: true);
-                        messageUi.ShowDialog();
-                    }
-                    break;
-                }
-                default:
-                    throw new ArgumentOutOfRangeException(nameof(action), action, null);
-            }
-        }
 
         /// <summary>
         /// Checks if a newer version of GoAwayEdge exists.
@@ -227,15 +119,6 @@ namespace GoAwayEdge.Common.Installation
             }
 
             return false;
-        }
-
-
-        private static string CalculateMd5(string filename)
-        {
-            using var md5 = MD5.Create();
-            using var stream = File.OpenRead(filename);
-            var hash = md5.ComputeHash(stream);
-            return BitConverter.ToString(hash).Replace("-", "").ToLowerInvariant();
         }
     }
 }

@@ -22,7 +22,7 @@ namespace GoAwayEdge.Common.Runtime
             if (RegistryConfig.GetKey("Enabled") == "False")
             {
                 // Redirect to Edge
-                StartProcess(FileConfiguration.NonIfeoPath, argumentJoin, "GoAwayEdge is disabled. Redirecting everything to Edge ...");
+                StartProcess(FileConfiguration.EdgePath, argumentJoin, "GoAwayEdge is disabled. Redirecting everything to Edge ...");
                 return;
             }
 
@@ -33,11 +33,11 @@ namespace GoAwayEdge.Common.Runtime
             }
             else if (isOnlyEdge)
             {
-                StartProcess(FileConfiguration.NonIfeoPath, "", "Opening Microsoft Edge without any arguments.");
+                StartProcess(FileConfiguration.EdgePath, "", "Opening Microsoft Edge without any arguments.");
             }
             else if (isFile)
             {
-                StartProcess(FileConfiguration.NonIfeoPath, $"--single-argument {singleArgument}", $"Opening '{singleArgument}' with Edge.");
+                StartProcess(FileConfiguration.EdgePath, $"--single-argument {singleArgument}", $"Opening '{singleArgument}' with Edge.");
             }
             else if (isApp)
             {
@@ -55,7 +55,7 @@ namespace GoAwayEdge.Common.Runtime
                         return;
                     }
                 }
-                StartProcess(FileConfiguration.NonIfeoPath, singleArgument, $"Opening PWA Application with following arguments: '{singleArgument}'.");
+                StartProcess(FileConfiguration.EdgePath, singleArgument, $"Opening PWA Application with following arguments: '{singleArgument}'.");
             }
         }
 
@@ -182,6 +182,18 @@ namespace GoAwayEdge.Common.Runtime
         /// <param name="debugMessage">The debug message to display.</param>
         private static void StartProcess(string fileName, string arguments, string debugMessage)
         {
+            // Find the newest version of Edge
+            var fileNamePath = Path.GetDirectoryName(fileName);
+            var edgeAppPath = GetLatestVersionDirectoryPath(fileNamePath!);
+            if (string.IsNullOrEmpty(edgeAppPath))
+            {
+                DebugMessage.DisplayDebugMessage("GoAwayEdge", "Could not find the latest version of Edge.");
+            }
+            else
+            {
+                fileName = Path.Combine(edgeAppPath!, "msedge.exe");
+            }
+
             var p = new Process
             {
                 StartInfo = new ProcessStartInfo
@@ -195,6 +207,47 @@ namespace GoAwayEdge.Common.Runtime
 
             DebugMessage.DisplayDebugMessage("GoAwayEdge", debugMessage);
             p.Start();
+        }
+
+        public static string? GetLatestVersionDirectoryPath(string parentDirectoryPath)
+        {
+            if (!Directory.Exists(parentDirectoryPath))
+            {
+                return null;
+            }
+
+            var versionToPathMap = new Dictionary<Version, string>();
+
+            try
+            {
+                var directories = Directory.GetDirectories(parentDirectoryPath);
+
+                foreach (var dirPath in directories)
+                {
+                    var versionNameString = new DirectoryInfo(dirPath).Name;
+                    if (Version.TryParse(versionNameString, out var version))
+                    {
+                        versionToPathMap[version] = dirPath;
+                    }
+                }
+
+                if (versionToPathMap.Any())
+                {
+                    var latestVersion = versionToPathMap.Keys.Max();
+                    if (latestVersion != null) return versionToPathMap[latestVersion];
+                }
+                else
+                {
+                    return null;
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"An error has occurred: {ex.Message}");
+                return null;
+            }
+
+            return null;
         }
 
         public static EdgeChannel ParseEdgeChannel(string argument)
