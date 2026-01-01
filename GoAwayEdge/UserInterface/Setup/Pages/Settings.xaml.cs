@@ -1,6 +1,6 @@
-﻿using System.Windows;
+﻿using GoAwayEdge.Common;
+using System.Windows;
 using System.Windows.Controls;
-using GoAwayEdge.Common;
 using Wpf.Ui.Controls;
 
 namespace GoAwayEdge.UserInterface.Setup.Pages

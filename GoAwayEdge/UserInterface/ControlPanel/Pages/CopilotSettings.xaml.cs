@@ -1,7 +1,7 @@
-﻿using System.IO;
+﻿using GoAwayEdge.Common;
+using System.IO;
 using System.Windows;
 using System.Windows.Controls;
-using GoAwayEdge.Common;
 using Wpf.Ui.Controls;
 
 namespace GoAwayEdge.UserInterface.ControlPanel.Pages
@@ -65,7 +65,7 @@ namespace GoAwayEdge.UserInterface.ControlPanel.Pages
                     RegistryConfig.SetKey("ExternalApp", Configuration.CopilotExternalApp, userSetting: true);
                 else
                     RegistryConfig.RemoveKey("ExternalApp", userSetting: true);
-                
+
                 if (Configuration.CopilotExternalAppArgument != null)
                     RegistryConfig.SetKey("ExternalAppArgs", Configuration.CopilotExternalAppArgument, userSetting: true);
                 else
@@ -152,7 +152,7 @@ namespace GoAwayEdge.UserInterface.ControlPanel.Pages
         private void ExternalAppArgsTextBox_OnTextChanged(object sender, TextChangedEventArgs e)
         {
             if (ExternalAppStatus.Symbol != SymbolRegular.CheckmarkCircle24) return;
-            
+
             Configuration.CopilotExternalAppArgument = ExternalAppArgsTextBox.Text;
             FlushSettings();
         }

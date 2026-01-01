@@ -1,6 +1,6 @@
-﻿using System.Windows;
-using GoAwayEdge.Common;
+﻿using GoAwayEdge.Common;
 using GoAwayEdge.Common.Debugging;
+using System.Windows;
 using Wpf.Ui;
 using Wpf.Ui.Controls;
 using Wpf.Ui.Extensions;
@@ -45,7 +45,7 @@ namespace GoAwayEdge.UserInterface.Setup.Pages
                 }
             );
             if (result != ContentDialogResult.Primary) return;
-            
+
             Logging.Log("User pressed 'Remove Microsoft Edge'");
             Configuration.UninstallEdge = true;
             Installer.SettingPage = new Settings();

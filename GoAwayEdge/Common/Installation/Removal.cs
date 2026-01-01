@@ -1,7 +1,7 @@
-using System.Diagnostics;
-using System.IO;
 using GoAwayEdge.Common.Debugging;
 using Microsoft.Win32;
+using System.Diagnostics;
+using System.IO;
 
 namespace GoAwayEdge.Common.Installation
 {

@@ -1,7 +1,7 @@
-﻿using System.Globalization;
+﻿using Newtonsoft.Json;
+using System.Globalization;
 using System.Text;
 using System.Web;
-using Newtonsoft.Json;
 
 namespace GoAwayEdge.Common.Runtime
 {
@@ -36,7 +36,7 @@ namespace GoAwayEdge.Common.Runtime
             var language = Thread.CurrentThread.CurrentCulture.ToString(); // Country code (full case)
             if (locObject == null)
                 return "";
-                    
+
             var lat = locObject.Y.ToString(CultureInfo.InvariantCulture).Replace(",", ".");
             var lon = locObject.X.ToString(CultureInfo.InvariantCulture).Replace(",", ".");
             var placeholders = new Dictionary<string, string>
@@ -47,7 +47,7 @@ namespace GoAwayEdge.Common.Runtime
                 { "longitude", lon }
             };
 
-            var weatherProviderUrl = Configuration.WeatherProvider == WeatherProvider.Custom 
+            var weatherProviderUrl = Configuration.WeatherProvider == WeatherProvider.Custom
                 ? Configuration.CustomWeatherProviderUrl : Configuration.GetEnumDescription(Configuration.WeatherProvider);
 
             weatherProviderUrl = placeholders.Aggregate(weatherProviderUrl, (current, placeholder) => current.Replace($"{{{placeholder.Key}}}", placeholder.Value));

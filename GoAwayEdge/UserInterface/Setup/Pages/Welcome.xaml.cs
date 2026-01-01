@@ -1,6 +1,6 @@
-﻿using System.IO;
+﻿using GoAwayEdge.Common;
+using System.IO;
 using System.Windows;
-using GoAwayEdge.Common;
 
 namespace GoAwayEdge.UserInterface.Setup.Pages
 {

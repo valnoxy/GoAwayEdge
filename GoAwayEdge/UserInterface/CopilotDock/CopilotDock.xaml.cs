@@ -1,11 +1,11 @@
-﻿using System.Diagnostics;
-using System.IO;
-using System.Windows;
-using GoAwayEdge.Common;
+﻿using GoAwayEdge.Common;
 using GoAwayEdge.Common.Debugging;
 using ManagedShell;
 using ManagedShell.AppBar;
 using Microsoft.Web.WebView2.Core;
+using System.Diagnostics;
+using System.IO;
+using System.Windows;
 using Wpf.Ui.Controls;
 using static GoAwayEdge.Common.AiProvider;
 
@@ -37,7 +37,7 @@ namespace GoAwayEdge.UserInterface.CopilotDock
             {
                 var userProfilePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "valnoxy", "GoAwayEdge");
                 Directory.CreateDirectory(userProfilePath);
-                
+
                 var webView2Environment = await CoreWebView2Environment.CreateAsync(userDataFolder: userProfilePath);
                 await WebView.EnsureCoreWebView2Async(webView2Environment);
 

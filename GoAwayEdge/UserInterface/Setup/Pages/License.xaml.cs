@@ -1,5 +1,5 @@
-﻿using System.Windows;
-using GoAwayEdge.Common;
+﻿using GoAwayEdge.Common;
+using System.Windows;
 
 namespace GoAwayEdge.UserInterface.Setup.Pages
 {

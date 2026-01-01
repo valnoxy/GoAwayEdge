@@ -1,11 +1,10 @@
-﻿using System.ComponentModel;
-using System.IO;
-using System.IO.Pipes;
-using System.Runtime.InteropServices;
-using System.Windows;
-using GoAwayEdge.Common.Debugging;
+﻿using GoAwayEdge.Common.Debugging;
 using ManagedShell;
 using Microsoft.Win32;
+using System.ComponentModel;
+using System.IO;
+using System.IO.Pipes;
+using System.Windows;
 
 namespace GoAwayEdge.Common
 {
@@ -13,28 +12,28 @@ namespace GoAwayEdge.Common
     {
         [Description("https://google.com/search?q=")]
         Google,
-        
+
         [Description("https://bing.com/search?q=")]
         Bing,
-        
+
         [Description("https://duckduckgo.com/?q=")]
         DuckDuckGo,
-        
+
         [Description("https://search.yahoo.com/search?p=")]
         Yahoo,
-        
+
         [Description("https://yandex.com/search/?text=")]
         Yandex,
-        
+
         [Description("https://ecosia.org/search?q=")]
         Ecosia,
-        
+
         [Description("https://ask.com/web?q=")]
         Ask,
-        
+
         [Description("https://qwant.com/?q=")]
         Qwant,
-        
+
         [Description("https://perplexity.ai/search?copilot=false&q=")]
         Perplexity,
 
@@ -50,16 +49,16 @@ namespace GoAwayEdge.Common
 
         [Description("https://chatgpt.com/")]
         ChatGPT,
-        
+
         [Description("https://gemini.google.com/")]
         Gemini,
-        
+
         [Description("https://github.com/copilot")]
         GitHub_Copilot,
-        
+
         [Description("https://x.com/i/grok")]
         Grok,
-        
+
         Custom
     }
 
@@ -174,6 +173,7 @@ namespace GoAwayEdge.Common
                 {
                     Logging.Log("An error has occurred while reading the registry: " + ex.Message, Logging.LogLevel.ERROR);
                 }
+
                 Logging.Log($"Value of EdgePath: {FileConfiguration.EdgePath}");
                 Logging.Log($"Value of NonIfeoPath: {FileConfiguration.NonIfeoPath}");
                 Logging.Log($"Value of Channel: {Channel}");
@@ -230,7 +230,7 @@ namespace GoAwayEdge.Common
         public static List<string> GetEdgeChannels()
         {
             var list = (from edgeChannel in (EdgeChannel[])Enum.GetValues(typeof(EdgeChannel))
-                select edgeChannel.ToString()).ToList();
+                        select edgeChannel.ToString()).ToList();
             return list;
         }
 
@@ -243,8 +243,8 @@ namespace GoAwayEdge.Common
         public static List<string> GetSearchEngines()
         {
             var list = (from searchEngine in (SearchEngine[])Enum.GetValues(typeof(SearchEngine))
-                where searchEngine != SearchEngine.Custom
-                select searchEngine.ToString()).ToList();
+                        where searchEngine != SearchEngine.Custom
+                        select searchEngine.ToString()).ToList();
 
             try
             {
@@ -269,8 +269,8 @@ namespace GoAwayEdge.Common
         public static List<string> GetAiProviders()
         {
             var list = (from aiProvider in (AiProvider[])Enum.GetValues(typeof(AiProvider))
-                where aiProvider != AiProvider.Custom && aiProvider != AiProvider.Default
-                select aiProvider.ToString().Replace("_", " ")).ToList();
+                        where aiProvider != AiProvider.Custom && aiProvider != AiProvider.Default
+                        select aiProvider.ToString().Replace("_", " ")).ToList();
 
             try
             {
@@ -306,8 +306,8 @@ namespace GoAwayEdge.Common
         public static List<string> GetWeatherProviders()
         {
             var list = (from weatherProvider in (WeatherProvider[])Enum.GetValues(typeof(WeatherProvider))
-                where weatherProvider != WeatherProvider.Custom && weatherProvider != WeatherProvider.Default
-                select weatherProvider.ToString().Replace("_", " ")).ToList();
+                        where weatherProvider != WeatherProvider.Custom && weatherProvider != WeatherProvider.Default
+                        select weatherProvider.ToString().Replace("_", " ")).ToList();
 
             try
             {
@@ -418,7 +418,7 @@ namespace GoAwayEdge.Common
                 {
                     key = Registry.LocalMachine.CreateSubKey(RegistryPath, RegistryKeyPermissionCheck.ReadWriteSubTree);
                 }
-                key.SetValue(option, value, valueKind); 
+                key.SetValue(option, value, valueKind);
             }
             catch (Exception ex)
             {

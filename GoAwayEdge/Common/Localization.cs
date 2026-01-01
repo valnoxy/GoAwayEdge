@@ -1,5 +1,5 @@
-﻿using System.Windows;
-using GoAwayEdge.Common.Debugging;
+﻿using GoAwayEdge.Common.Debugging;
+using System.Windows;
 
 namespace GoAwayEdge.Common
 {

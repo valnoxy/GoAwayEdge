@@ -1,12 +1,12 @@
-﻿using System.ComponentModel;
+﻿using GoAwayEdge.Common.Debugging;
+using Microsoft.Win32;
+using Microsoft.Win32.TaskScheduler;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Windows;
-using GoAwayEdge.Common.Debugging;
-using Microsoft.Win32;
-using Microsoft.Win32.TaskScheduler;
 
 namespace GoAwayEdge.Common.Installation
 {
@@ -95,7 +95,7 @@ namespace GoAwayEdge.Common.Installation
                 }
 
                 status = Register.ImageFileExecutionOption(
-                    Register.IfeoType.msedge, 
+                    Register.IfeoType.msedge,
                     Path.Combine(Configuration.InstallDir, "GoAwayEdge.exe"),
                     msEdge);
                 if (!status)
@@ -343,7 +343,7 @@ namespace GoAwayEdge.Common.Installation
                     @"SOFTWARE\valnoxy", true);
                 generalKey?.DeleteSubKeyTree("GoAwayEdge");
                 generalKey?.Close();
-                
+
                 var currentUserKey = Registry.CurrentUser.OpenSubKey(
                     @"SOFTWARE\valnoxy", true);
                 currentUserKey?.DeleteSubKeyTree("GoAwayEdge");

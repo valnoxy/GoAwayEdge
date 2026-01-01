@@ -1,5 +1,5 @@
-﻿using System.ComponentModel;
-using GoAwayEdge.Common;
+﻿using GoAwayEdge.Common;
+using System.ComponentModel;
 using InstallRoutine = GoAwayEdge.Common.Installation.InstallRoutine;
 
 namespace GoAwayEdge.UserInterface.Setup.Pages

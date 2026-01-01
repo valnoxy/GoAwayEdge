@@ -1,6 +1,4 @@
-using GoAwayEdge.UserInterface.ControlPanel.Pages;
 using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Reflection;
 using System.Security.Principal;
@@ -43,7 +41,7 @@ namespace GoAwayEdge.UserInterface.ControlPanel
             var accountToken = WindowsIdentity.GetCurrent().Token;
             var windowsIdentity = new WindowsIdentity(accountToken);
             UserName.Text = windowsIdentity.Name;
-            
+
             // Time & Date
             _timer.Tick += UpdateTimeAndDate_Tick!;
             _timer.Start();

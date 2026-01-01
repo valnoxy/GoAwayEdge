@@ -1,20 +1,4 @@
-﻿/*
- * Copyright (c) 2021 Exploitox Team
- *
- * Module Name:
- *      Logging.cs
- *
- * Description:
- *      This class is responsible for initializing the logging system.
- *
- * Author:
- *      Jonas Günner (valnoxy)      20-Sep-2021
- *
- * Notes:
- *      Backported from: https://git.heydu.net/valnoxy/xorieos/-/blob/main/srv03rtm/base/ntsetup/winnt32/modernsetup/common/logging.cs
- */
-
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.IO;
 using System.Reflection;
 
@@ -37,7 +21,7 @@ namespace GoAwayEdge.Common.Debugging
 
             // Fetching the current log file
             _logFile = Path.Combine(LogPath, $"log_{DateTime.Now:yyyy-MM-dd}.txt");
-            
+
             var version = Assembly.GetExecutingAssembly().GetName().Version!;
             Log($"GoAwayEdge {version.Major}.{version.Minor}.{version.Build} (Build {version.Revision})");
             Log("Logging system initialized");

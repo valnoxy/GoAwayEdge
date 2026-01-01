@@ -2,8 +2,6 @@
 using GoAwayEdge.Common.Debugging;
 using GoAwayEdge.Common.Runtime;
 using ManagedShell.AppBar;
-using System.Windows;
-using ManagedShell;
 
 namespace GoAwayEdge.UserInterface.CopilotDock
 {

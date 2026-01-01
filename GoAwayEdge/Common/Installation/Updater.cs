@@ -1,8 +1,8 @@
-﻿using System.Diagnostics;
+﻿using Newtonsoft.Json;
+using System.Diagnostics;
 using System.IO;
 using System.Net.Http;
 using System.Reflection;
-using Newtonsoft.Json;
 
 namespace GoAwayEdge.Common.Installation
 {

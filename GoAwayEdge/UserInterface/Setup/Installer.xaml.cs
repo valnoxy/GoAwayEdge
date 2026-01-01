@@ -1,7 +1,7 @@
-﻿using System.Reflection;
-using System.Windows;
-using GoAwayEdge.Common;
+﻿using GoAwayEdge.Common;
 using GoAwayEdge.UserInterface.Setup.Pages;
+using System.Reflection;
+using System.Windows;
 
 namespace GoAwayEdge.UserInterface.Setup
 {

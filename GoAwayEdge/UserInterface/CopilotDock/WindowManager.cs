@@ -1,8 +1,8 @@
-﻿using System.Windows;
-using System.Windows.Threading;
-using GoAwayEdge.Common.Debugging;
+﻿using GoAwayEdge.Common.Debugging;
 using ManagedShell;
 using ManagedShell.AppBar;
+using System.Windows;
+using System.Windows.Threading;
 
 namespace GoAwayEdge.UserInterface.CopilotDock;
 

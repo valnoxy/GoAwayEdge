@@ -1,7 +1,7 @@
-﻿using System.Diagnostics;
+﻿using GoAwayEdge.Common.Debugging;
+using System.Diagnostics;
 using System.IO;
 using System.Text.RegularExpressions;
-using GoAwayEdge.Common.Debugging;
 
 namespace GoAwayEdge.Common.Runtime
 {
@@ -18,11 +18,13 @@ namespace GoAwayEdge.Common.Runtime
             var quotedArgs = args.Select(arg => arg.Contains(" ") ? $"\"{arg}\"" : arg);
             var argumentJoin = string.Join(" ", quotedArgs);
             DebugMessage.DisplayDebugMessage("GoAwayEdge", $"The following args are redirected (CTRL+C to copy):\n\n{argumentJoin}");
+            Logging.Log($"Arguments received: {argumentJoin}");
 
             if (RegistryConfig.GetKey("Enabled") == "False")
             {
                 // Redirect to Edge
                 StartProcess(FileConfiguration.EdgePath, argumentJoin, "GoAwayEdge is disabled. Redirecting everything to Edge ...");
+                Logging.Log("GoAwayEdge is disabled! Arguments are redirected to Edge.");
                 return;
             }
 

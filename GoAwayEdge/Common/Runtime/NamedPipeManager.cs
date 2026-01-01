@@ -1,6 +1,6 @@
-﻿using System.IO.Pipes;
+﻿using GoAwayEdge.Common.Debugging;
+using System.IO.Pipes;
 using System.Text;
-using GoAwayEdge.Common.Debugging;
 
 namespace GoAwayEdge.Common.Runtime
 {
@@ -27,7 +27,7 @@ namespace GoAwayEdge.Common.Runtime
                         {
                             Logging.Log("Waiting for client connection...");
                             pipeServer.WaitForConnection();
-                            
+
                             Logging.Log("Client connected.");
                             var buffer = new byte[256];
                             while (pipeServer.IsConnected)
