@@ -1,0 +1,17 @@
+<Solution>
+  <Configurations>
+    <Platform Name="ARM64" />
+    <Platform Name="x64" />
+    <Platform Name="x86" />
+  </Configurations>
+  <Project Path="GoAwayEdge.Helper.Package/GoAwayEdge.Helper.Package.wapproj" Type="c7167f0d-bc9f-4e6e-afe1-012c56b48db5">
+    <Build Project="false" />
+    <Deploy />
+  </Project>
+  <Project Path="GoAwayEdge.Helper/GoAwayEdge.Helper.csproj">
+    <Platform Solution="*|x64" Project="x64" />
+    <Platform Solution="*|x86" Project="x86" />
+    <Build Project="false" />
+  </Project>
+  <Project Path="GoAwayEdge/GoAwayEdge.csproj" />
+</Solution>

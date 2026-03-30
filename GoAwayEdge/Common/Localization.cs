@@ -41,7 +41,7 @@ namespace GoAwayEdge.Common
                 var messageUi = new MessageUi("GoAwayEdge",
                     $"Failed to load language: {ex.Message}", "OK", isMainThread: true);
                 messageUi.ShowDialog();
-                Environment.Exit(1);
+                Configuration.SafeShutdown(1);
             }
 
             if (dict.Source ==

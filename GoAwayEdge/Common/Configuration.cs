@@ -221,6 +221,12 @@ namespace GoAwayEdge.Common
             }
         }
 
+        public static void SafeShutdown(int exitCode)
+        {
+            ShellManager?.Dispose();
+            Environment.Exit(exitCode);
+        }
+
         /// <summary>
         ///     Get a list of all available Edge Channels.
         /// </summary>

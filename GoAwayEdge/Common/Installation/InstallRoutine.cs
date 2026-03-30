@@ -39,7 +39,7 @@ namespace GoAwayEdge.Common.Installation
                     var messageUi = new MessageUi("GoAwayEdge", errorMessage, "OK");
                     messageUi.ShowDialog();
                 });
-                Environment.Exit(1);
+                Configuration.SafeShutdown(1);
                 return 1;
             }
 
@@ -107,7 +107,7 @@ namespace GoAwayEdge.Common.Installation
                         var messageUi = new MessageUi("GoAwayEdge", errorMessage, "OK");
                         messageUi.ShowDialog();
                     });
-                    Environment.Exit(1);
+                    Configuration.SafeShutdown(1);
                     return 1;
                 }
             }
@@ -120,7 +120,7 @@ namespace GoAwayEdge.Common.Installation
                     var messageUi = new MessageUi("GoAwayEdge", errorMessage, "OK");
                     messageUi.ShowDialog();
                 });
-                Environment.Exit(1);
+                Configuration.SafeShutdown(1);
                 return 1;
             }
 
@@ -141,7 +141,7 @@ namespace GoAwayEdge.Common.Installation
                         var messageUi = new MessageUi("GoAwayEdge", errorMessage, "OK");
                         messageUi.ShowDialog();
                     });
-                    Environment.Exit(1);
+                    Configuration.SafeShutdown(1);
                     return 1;
                 }
             }
@@ -162,7 +162,7 @@ namespace GoAwayEdge.Common.Installation
                         var messageUi = new MessageUi("GoAwayEdge", errorMessage, "OK");
                         messageUi.ShowDialog();
                     });
-                    Environment.Exit(1);
+                    Configuration.SafeShutdown(1);
                     return 1;
                 }
             }
@@ -200,7 +200,7 @@ namespace GoAwayEdge.Common.Installation
                     var messageUi = new MessageUi("GoAwayEdge", errorMessage, "OK");
                     messageUi.ShowDialog();
                 });
-                Environment.Exit(1);
+                Configuration.SafeShutdown(1);
                 return 1;
             }
 
@@ -215,7 +215,7 @@ namespace GoAwayEdge.Common.Installation
                     var messageUi = new MessageUi("GoAwayEdge", errorMessage, "OK");
                     messageUi.ShowDialog();
                 });
-                Environment.Exit(1);
+                Configuration.SafeShutdown(1);
                 return 1;
             }
 
@@ -260,7 +260,7 @@ namespace GoAwayEdge.Common.Installation
                         var messageUi = new MessageUi("GoAwayEdge", errorMessage, "OK");
                         messageUi.ShowDialog();
                     });
-                    Environment.Exit(1);
+                    Configuration.SafeShutdown(1);
                     return 1;
                 }
                 Process.Start(new ProcessStartInfo
@@ -269,7 +269,7 @@ namespace GoAwayEdge.Common.Installation
                     Arguments = "-u",
                     UseShellExecute = true
                 });
-                Environment.Exit(3010);
+                Configuration.SafeShutdown(3010);
             }
 
             // Remove installation directory
@@ -287,7 +287,7 @@ namespace GoAwayEdge.Common.Installation
                     var messageUi = new MessageUi("GoAwayEdge", errorMessage, "OK");
                     messageUi.ShowDialog();
                 });
-                Environment.Exit(1);
+                Configuration.SafeShutdown(1);
                 return 1;
             }
 
@@ -309,7 +309,7 @@ namespace GoAwayEdge.Common.Installation
                     var messageUi = new MessageUi("GoAwayEdge", errorMessage, "OK");
                     messageUi.ShowDialog();
                 });
-                Environment.Exit(1);
+                Configuration.SafeShutdown(1);
                 return 1;
             }
 
@@ -358,7 +358,7 @@ namespace GoAwayEdge.Common.Installation
                     var messageUi = new MessageUi("GoAwayEdge", errorMessage, "OK");
                     messageUi.ShowDialog();
                 });
-                Environment.Exit(1);
+                Configuration.SafeShutdown(1);
                 return 1;
             }
 

@@ -66,12 +66,12 @@ namespace GoAwayEdge.UserInterface.CopilotDock
 
                 // Dock was closed
                 Logging.Log("Closed CopilotDock");
-                Environment.Exit(0);
+                Configuration.SafeShutdown(0);
             }
             else
             {
                 PipeManager.SendMessage("BringToFront");
-                Environment.Exit(0); // Exit the second instance
+                Configuration.SafeShutdown(0); // Exit the second instance
             }
         }
     }
