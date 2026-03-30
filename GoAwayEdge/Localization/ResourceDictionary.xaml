@@ -32,6 +32,12 @@
     <system:String x:Key="RedirectEverythingTitle">Redirect everything</system:String>
     <system:String x:Key="RedirectEverythingDescription">Redirect all calls from Edge to your favorite browser.</system:String>
 
+    <!-- Remove AI -->
+    <system:String x:Key="AiRemovalTitle">Disable Windows AI??</system:String>
+    <system:String x:Key="AiRemovalDescription">Should all or some of the Windows AI features be disabled?</system:String>
+    <system:String x:Key="AiRemovalYesTitle">Redirect everything</system:String>
+    <system:String x:Key="AiRedirectEverythingDescription">Redirect all calls from Edge to your favorite browser.</system:String>
+
     <!-- Settings -->
     <system:String x:Key="SettingsTitle">Settings</system:String>
     <system:String x:Key="SettingsEdgeChannelTitle">Edge Channel</system:String>

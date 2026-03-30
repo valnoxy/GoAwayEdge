@@ -67,6 +67,9 @@
 		<Compile Update="UserInterface\ControlPanel\Pages\CopilotSettings.xaml.cs">
 			<SubType>Code</SubType>
 		</Compile>
+		<Compile Update="UserInterface\Setup\Pages\AiRemoval.xaml.cs">
+		  <SubType>Code</SubType>
+		</Compile>
 		<Compile Update="UserInterface\Setup\Pages\RedirectOrRemove.xaml.cs">
 		  <SubType>Code</SubType>
 		</Compile>

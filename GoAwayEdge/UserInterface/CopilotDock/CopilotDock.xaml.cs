@@ -64,7 +64,7 @@ namespace GoAwayEdge.UserInterface.CopilotDock
                 Configuration.ShellManager.Dispose();
             }
 
-            Environment.Exit(0);
+            Configuration.SafeShutdown(0);
         }
 
         private void DockButton_OnClick(object sender, RoutedEventArgs e)

@@ -51,13 +51,13 @@ namespace GoAwayEdge
                         if (IsAdministrator() == false)
                         {
                             ElevateAsAdmin();
-                            Environment.Exit(740);
+                            Configuration.SafeShutdown(740);
                             return;
                         }
 
                         var installer = new UserInterface.Setup.Installer();
                         installer.ShowDialog();
-                        Environment.Exit(0);
+                        Configuration.SafeShutdown(0);
                         break;
                     }
                 case > 0:
@@ -65,13 +65,13 @@ namespace GoAwayEdge
                         if (args.Contains("--debug"))
                             IsDebug = true;
                         if (args.Contains("-ToastActivated")) // Clicked on notification, ignore it.
-                            Environment.Exit(0);
+                            Configuration.SafeShutdown(0);
                         if (args.Contains("--control-panel"))
                         {
                             if (IsAdministrator() == false)
                             {
                                 ElevateAsAdmin(string.Join(" ", args));
-                                Environment.Exit(740);
+                                Configuration.SafeShutdown(740);
                                 return;
                             }
 
@@ -79,14 +79,14 @@ namespace GoAwayEdge
                             if (RegistryConfig.GetKey("ControlPanelIsInstalled") != "True")
                             {
                                 Logging.Log("Control Panel is not allowed on this system, exiting ...", Logging.LogLevel.ERROR);
-                                Environment.Exit(1);
+                                Configuration.SafeShutdown(1);
                                 return;
                             }
 
                             Configuration.InitialEnvironment();
                             var controlCenter = new UserInterface.ControlPanel.ControlPanel();
                             controlCenter.ShowDialog();
-                            Environment.Exit(0);
+                            Configuration.SafeShutdown(0);
                         }
 
                         if (args.Contains("--copilot-dock"))
@@ -98,14 +98,14 @@ namespace GoAwayEdge
                                 DebugMessage.DisplayDebugMessage("GoAwayEdge",
                                     $"Opening AI Provider '{Configuration.AiProvider}' (Triggered with argument) ...");
                                 UserInterface.CopilotDock.InterfaceManager.ShowDock();
-                                Environment.Exit(0);
+                                Configuration.SafeShutdown(0);
                             }
                             else
                             {
                                 IsDebug = true;
                                 DebugMessage.DisplayDebugMessage("GoAwayEdge",
                                     "You cannot open the Copilot dock if your AI provider is set to default");
-                                Environment.Exit(1);
+                                Configuration.SafeShutdown(1);
                             }
                         }
 
@@ -149,36 +149,36 @@ namespace GoAwayEdge
                             if (IsAdministrator() == false)
                             {
                                 var elevatedProcess = ElevateAndWait(string.Join(" ", args));
-                                Environment.Exit(elevatedProcess);
+                                Configuration.SafeShutdown(elevatedProcess);
                                 return;
                             }
 
                             Configuration.InstallControlPanel = true;
                             var result = InstallRoutine.Install(null);
-                            Environment.Exit(result);
+                            Configuration.SafeShutdown(result);
                         }
                         if (args.Contains("-u"))
                         {
                             if (IsAdministrator() == false)
                             {
                                 var elevatedProcess = ElevateAndWait(string.Join(" ", args));
-                                Environment.Exit(elevatedProcess);
+                                Configuration.SafeShutdown(elevatedProcess);
                                 return;
                             }
                             var result = InstallRoutine.Uninstall(null);
-                            Environment.Exit(result);
+                            Configuration.SafeShutdown(result);
                         }
                         if (args.Contains("--update"))
                         {
                             var statusEnv = Configuration.InitialEnvironment();
-                            if (statusEnv == false) Environment.Exit(1);
+                            if (statusEnv == false) Configuration.SafeShutdown(1);
 
                             // Check for app update
                             var updateAvailable = Updater.CheckForAppUpdate();
 
                             var updateSkipped = RegistryConfig.GetKey("SkipVersion");
                             if (updateAvailable == updateSkipped)
-                                Environment.Exit(0);
+                                Configuration.SafeShutdown(0);
 
                             if (!string.IsNullOrEmpty(updateAvailable))
                             {
@@ -194,17 +194,17 @@ namespace GoAwayEdge
                                     case "Btn1":
                                         {
                                             var updateResult = Updater.UpdateClient();
-                                            if (!updateResult) Environment.Exit(0);
+                                            if (!updateResult) Configuration.SafeShutdown(0);
                                             break;
                                         }
                                     case "Btn3":
                                         RegistryConfig.SetKey("SkipVersion", updateAvailable);
-                                        Environment.Exit(0);
+                                        Configuration.SafeShutdown(0);
                                         break;
                                 }
                             }
 
-                            Environment.Exit(0);
+                            Configuration.SafeShutdown(0);
                         }
 
                         break;
@@ -213,7 +213,7 @@ namespace GoAwayEdge
 
             Configuration.InitialEnvironment();
             ArgumentParse.Parse(args);
-            Environment.Exit(0);
+            Configuration.SafeShutdown(0);
         }
 
         private static void ElevateAsAdmin(string? arguments = null)

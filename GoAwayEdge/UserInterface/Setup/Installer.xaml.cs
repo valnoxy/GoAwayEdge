@@ -54,7 +54,7 @@ namespace GoAwayEdge.UserInterface.Setup
             switch (FrameWindow.Content)
             {
                 case InstallationSuccess:
-                    Environment.Exit(0);
+                    Configuration.SafeShutdown(0);
                     break;
                 case Settings:
                     NextBtn.IsEnabled = false;

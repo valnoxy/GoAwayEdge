@@ -196,6 +196,12 @@ namespace GoAwayEdge.Common
             }
         }
 
+        public static void SafeShutdown(int exitCode)
+        {
+            ShellManager?.Dispose();
+            Environment.Exit(exitCode);
+        }
+
         public static bool IsCopilotDockPipeAvailable()
         {
             try
