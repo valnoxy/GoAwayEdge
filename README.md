@@ -1,3 +1,35 @@
+
+<div align="right">
+  <details>
+    <summary >🌐 Language</summary>
+    <div>
+      <div align="center">
+        <a href="https://openaitx.github.io/view.html?user=valnoxy&project=GoAwayEdge&lang=en">English</a>
+        | <a href="https://openaitx.github.io/view.html?user=valnoxy&project=GoAwayEdge&lang=zh-CN">简体中文</a>
+        | <a href="https://openaitx.github.io/view.html?user=valnoxy&project=GoAwayEdge&lang=zh-TW">繁體中文</a>
+        | <a href="https://openaitx.github.io/view.html?user=valnoxy&project=GoAwayEdge&lang=ja">日本語</a>
+        | <a href="https://openaitx.github.io/view.html?user=valnoxy&project=GoAwayEdge&lang=ko">한국어</a>
+        | <a href="https://openaitx.github.io/view.html?user=valnoxy&project=GoAwayEdge&lang=hi">हिन्दी</a>
+        | <a href="https://openaitx.github.io/view.html?user=valnoxy&project=GoAwayEdge&lang=th">ไทย</a>
+        | <a href="https://openaitx.github.io/view.html?user=valnoxy&project=GoAwayEdge&lang=fr">Français</a>
+        | <a href="https://openaitx.github.io/view.html?user=valnoxy&project=GoAwayEdge&lang=de">Deutsch</a>
+        | <a href="https://openaitx.github.io/view.html?user=valnoxy&project=GoAwayEdge&lang=es">Español</a>
+        | <a href="https://openaitx.github.io/view.html?user=valnoxy&project=GoAwayEdge&lang=it">Italiano</a>
+        | <a href="https://openaitx.github.io/view.html?user=valnoxy&project=GoAwayEdge&lang=ru">Русский</a>
+        | <a href="https://openaitx.github.io/view.html?user=valnoxy&project=GoAwayEdge&lang=pt">Português</a>
+        | <a href="https://openaitx.github.io/view.html?user=valnoxy&project=GoAwayEdge&lang=nl">Nederlands</a>
+        | <a href="https://openaitx.github.io/view.html?user=valnoxy&project=GoAwayEdge&lang=pl">Polski</a>
+        | <a href="https://openaitx.github.io/view.html?user=valnoxy&project=GoAwayEdge&lang=ar">العربية</a>
+        | <a href="https://openaitx.github.io/view.html?user=valnoxy&project=GoAwayEdge&lang=fa">فارسی</a>
+        | <a href="https://openaitx.github.io/view.html?user=valnoxy&project=GoAwayEdge&lang=tr">Türkçe</a>
+        | <a href="https://openaitx.github.io/view.html?user=valnoxy&project=GoAwayEdge&lang=vi">Tiếng Việt</a>
+        | <a href="https://openaitx.github.io/view.html?user=valnoxy&project=GoAwayEdge&lang=id">Bahasa Indonesia</a>
+        | <a href="https://openaitx.github.io/view.html?user=valnoxy&project=GoAwayEdge&lang=as">অসমীয়া</
+      </div>
+    </div>
+  </details>
+</div>
+
 <div align="center">
 
   <!-- PROJECT LOGO -->
